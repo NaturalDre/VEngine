@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="RPG_Maker_VX_RTP_Tileset_by_telles0808" tilewidth="16" tileheight="16">
+  <image source="Tilesets/RPG_Maker_VX_RTP_Tileset_by_telles0808.png" width="1024" height="2016"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztz8sRggAUxdCnXSk2ptAYn8ZAFly6yJvJ4kzWmatqaW6LPY7mTj9Q/GDxg8UPFj9Y/GDxg8UPFj9Y/GDxg8UPFj9Y/GDxg8UPFj9Y/GDxg8UPFj9Y/GC5P+ZH1RJr426xxxH/xj3j9ax6x9C4n/jGL8bGneICd/k0Lg==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="50" height="50">
+  <object type="PlayerSpawn" x="288" y="400" width="32" height="32"/>
+  <object name="transport_TownA" x="352" y="0" width="64" height="32"/>
+ </objectgroup>
+ <objectgroup name="Physics" width="50" height="50" visible="0">
+  <properties>
+   <property name="type" value="physicslayer"/>
+  </properties>
+  <object x="0" y="-16" width="816" height="16"/>
+  <object x="-16" y="-16" width="16" height="816"/>
+  <object x="-16" y="736" width="816" height="64"/>
+  <object x="800" y="0" width="16" height="800"/>
+ </objectgroup>
+</map>
