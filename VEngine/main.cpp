@@ -3,17 +3,10 @@
 #include "vengine\GUI\VengineGUI.h"
 #include "vengine\Level\VengineLevelLoader.h"
 #include "vengine\Level\VengineMap.h"
+#include <vengine\Script\Script.h>
+#include <vengine\BindToLua.h>
+
 #include <iostream>
-
-struct A
-{
-
-};
-
-struct B: public A
-{
-
-};
 
 int main() 
 {
@@ -26,6 +19,10 @@ int main()
 	VE::GetGUIMgr().SetGUI(new VE::CVengineGUI);
 	// Set the level loader for the app
 	VE::GetLvlMgr().SetLevelLoader(new VE::CVengineLevelLoader);
+	// Bind classes
+	VE::GetScriptMgr().BindToLua(BindCPPToLua);
+	VE::GetScriptMgr().SetProvideGlobals(ProvideGlobals);
+
 	// Run the app
 	if (int ret = app->Run())
 		return ret;

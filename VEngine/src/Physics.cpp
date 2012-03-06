@@ -4,6 +4,7 @@
 #include <vengine\ContactListener.h>
 #include <vengine\DebugDraw.h>
 #include <vengine\Utility.h>
+#include <vengine\Tiled.h>
 
 namespace VE
 {
@@ -13,22 +14,11 @@ namespace VE
 	const float TIMESTEP(1.0f / Global::FPS);
 	const b2Vec2 GRAVITY(0, 30);
 
-	////////////////////////////////
-	////////// TILED OBJECT ////////
-	////////////////////////////////
 
-	Utility::TiledObject::TiledObject(Utility::TiledObject&& rhs)
-				: name(rhs.name)
-				, type(rhs.type)
-				, x(rhs.x)
-				, y(rhs.y)
-				, width(rhs.width)
-				, height(rhs.height)
-				, properties(std::move(rhs.properties)) { }
 
 	CPhysicsManager::CPhysicsManager(void)
 	{
-		m_world.reset(new b2World(b2Vec2(0, 10)));
+		m_world.reset(new b2World(GRAVITY));
 		if (!m_world)
 			throw("Unable to allocate memory for b2World");
 		m_contactListener.reset(new CContactListener);
@@ -75,6 +65,12 @@ namespace VE
 		return posPix - GetRenderMgr().GetCam()->GetTopLeftPix();
 	}
 
+	void Utility::b2BodyDtor::operator()(b2Body* body)
+	{
+		if (body)
+			GetPhysMgr().GetWorld()->DestroyBody(body);
+	}
+
 	//// How many vertices does this polygon contain?
 	//size_t GetVertCount(const LuaPlus::LuaObject obj)
 	//{
@@ -101,7 +97,7 @@ namespace VE
 
 	int Utility::CreateSolidGround(lua_State* L)
 	{
-		Utility::TiledObject data = Utility::ToTiledObject(L);
+		Tiled::TiledObject data = Tiled::ToTiledObject(L);
 
 		b2Vec2 pos = Utility::GetWorldCenterMtrs(data);
 		//b2Vec2 pos(data.x, data.y);
@@ -122,7 +118,7 @@ namespace VE
 		fd.friction = DEFAULTFRICTION;
 		body->CreateFixture(&fd);
 
-		GetLvlMgr().GetLevelLoader()->AddBody(body);
+		GetLvlMgr().AddBody(body);
 
 		return 0;
 		//b2Vec2 pos(0,0);

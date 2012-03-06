@@ -63,7 +63,7 @@ namespace VE
 		{
 			pControl = static_cast<Gwen::Controls::Button*>(pControl);
 			const std::string filename = ngm->GetComboBox()->GetSelectedItem()->GetName();
-			GetLvlMgr().GetLevelLoader()->LoadLevel(filename);
+			GetLvlMgr().LoadLevel(filename);
 		}
 	}
 

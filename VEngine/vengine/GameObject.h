@@ -36,6 +36,8 @@ namespace NE
 		 *	object.
 		 */
 		virtual void Interact(void) { }
+		//
+		void AttachScript(VE::CLuaScript* script);
 
 	public:
 		// Position of this object. Should be overriden.

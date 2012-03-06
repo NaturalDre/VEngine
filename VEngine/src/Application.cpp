@@ -81,6 +81,7 @@ namespace VE
 		{
 			// Time since last frame
 			m_deltaTime = al_current_time() - m_lastUpdateTime;
+			++m_ingameTicks;
 			// Objects are being updated therefore a redraw is needed.
 			m_needRedraw = true;
 
@@ -189,6 +190,7 @@ namespace VE
 
 	CApplication::CApplication(void)
 		: m_deltaTime(0.0)
+		, m_ingameTicks(0.0)
 	{
 
 	}

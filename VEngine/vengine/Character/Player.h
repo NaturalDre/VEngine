@@ -5,8 +5,11 @@
 #include <vengine\Animation\BasicAnimation.h>
 #include <vengine\Physics.h>
 #include <vengine\Utility.h>
+#include <vengine\InputListener.h>
 #include <memory>
+#include <vector>
 #include <lua.hpp>
+#include <vengine\Application.h>
 
 struct ALLEGRO_BITMAP;
 
@@ -21,22 +24,77 @@ namespace VE
 {
 	class CPlayer: public ICharacter
 	{
-	public:
+	protected:
+		//////////////////////
+		//////// Input ///////
+		//////////////////////
+		class Input: public IInputListener
+		{
+			friend CPlayer;
+		protected:
+			void OnUpdate(void);
+
+			void OnKeyDown(int keyCode);
+			void OnKeyUp(int keyCode);
+
+			void OnMouseButtonDown(ALLEGRO_EVENT* ev);
+			void OnMouseButtonUp(ALLEGRO_EVENT* ev);
+
+			void OnMouseMoved(ALLEGRO_EVENT* ev);
+		public:
+			Input(CPlayer* player);
+			~Input(void);
+
+
+			// Is the left key down right now?
+			bool IsLKeyDown(void) { return m_moveLKeyDown; }
+			// Is the right key down right now?
+			bool IsRKeyDown(void) { return m_moveRKeyDown; }
+			// Are both the left and right keys down right now?
+			bool IsBothLRKeysDown(void) { return (m_moveLKeyDown && m_moveRKeyDown); }
+			// Did the left key go down this frame?
+			bool LKeyDownThisFrame(void) { return (GetApp()->GetIngameTicks() == m_frameMoveLPressed); }
+			// Did the right key go down this frame?
+			bool RKeyDownThisFrame(void) { return (GetApp()->GetIngameTicks() == m_frameMoveRPressed); }
+
+			bool IsJumpKeyDown(void) { return m_jumpKeyDown; }
+			bool IsUseKeyDown(void) { return m_useKeyDown; }
+			bool IsLeftMouseDown(void) { return m_leftMouseDown; }
+
+			bool IsKeyDown(int keyCode);
+			bool KeyDownThisFrame(int keyCode);
+		private:
+			CPlayer* m_player;
+			std::vector<bool> m_keys;
+			std::vector<double> m_frameKeyDown;
+			// These variables keep track of which frame a key was last pressed.
+			double m_frameMoveRPressed;
+			double m_frameMoveLPressed;
+			double m_frameMoveUpPressed;
+			double m_frameMoveDownPressed;
+
+			// These variables keep track of whether a key is down right now
+			bool m_moveRKeyDown;
+			bool m_moveLKeyDown;
+			bool m_jumpKeyDown;
+			bool m_moveDownKeyDown;
+			bool m_useKeyDown;
+
+			bool m_leftMouseDown;
+		};
 		//////////////////////
 		////// Render ////////
 		//////////////////////
 		class Render
 		{
 			friend CPlayer;
-		protected:
-
 		public:
 			/* 
-			 * Pass player object to render. Does not own.
-			 * Only a player object should be creating these.
-			 * Must be deleted before player object is to avoid
-			 * using the player pointer after it has been freed.
-			 */
+			* Pass player object to render. Does not own.
+			* Only a player object should be creating these.
+			* Must be deleted before player object is to avoid
+			* using the player pointer after it has been freed.
+			*/
 			Render(CPlayer* player);
 			// Destructor
 			~Render(void);
@@ -51,9 +109,9 @@ namespace VE
 		void Interact(void);
 
 	protected:
-			void CreateBody(b2Vec2& posMtrs, float widthMtrs, float heightMtrs);
-			void CreateBody(const Utility::TiledObject& data);
-			static CPlayer* Create(void);
+		void CreateBody(b2Vec2& posMtrs, float widthMtrs, float heightMtrs);
+		void CreateBody(const Tiled::TiledObject& data);
+		static CPlayer* Create(void);
 
 	public:	
 		// Destructor
@@ -70,7 +128,9 @@ namespace VE
 		// Draws the player at render time
 		std::unique_ptr<IRenderListener> m_render;
 		// 
-		std::unique_ptr<b2Body, Utility::b2BodyDtor> m_body;
+		//std::unique_ptr<b2Body, Utility::b2BodyDtor> m_body;
+		// 
+		CPlayer::Input m_input;
 	};
 }
 #endif

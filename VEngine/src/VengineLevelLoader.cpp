@@ -36,10 +36,8 @@ namespace VE
 	void CVengineLevelLoader::UnloadCurrentLevel(void)
 	{
 		m_currentLevel.reset();
-		FreeGameObjects();
-		FreeBodies();
-		GetObjMgr().SetPlayer(nullptr);
-		GetRenderMgr().GetCam()->SetTarget(nullptr);
+		//GetObjMgr().SetPlayer(nullptr);
+		//GetRenderMgr().GetCam()->SetTarget(nullptr);
 	}
 
 	void CVengineLevelLoader::Logic(void)

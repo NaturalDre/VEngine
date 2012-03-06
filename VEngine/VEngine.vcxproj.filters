@@ -22,9 +22,6 @@
     <Filter Include="Header Files\Vengine">
       <UniqueIdentifier>{817de16a-328f-47ea-9b55-62036bb652ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\GUI">
-      <UniqueIdentifier>{b1b0d08b-ce94-44e2-8daf-cc0b9bcbd161}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vengine">
       <UniqueIdentifier>{1c6035d2-ac2d-4533-b723-a7bc8d1e34a3}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,15 @@
     </Filter>
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{85ae445d-61a6-4ae9-adbe-6d57467fd229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TLPP">
+      <UniqueIdentifier>{63143352-9711-4a90-b879-96548fe561fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TLPP">
+      <UniqueIdentifier>{7e03d460-4c2c-4513-855c-f23caf0af283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Animation\GUI">
+      <UniqueIdentifier>{b1b0d08b-ce94-44e2-8daf-cc0b9bcbd161}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,10 +85,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI.cpp">
-      <Filter>Source Files\GUI</Filter>
+      <Filter>Source Files\Animation\GUI</Filter>
     </ClCompile>
     <ClCompile Include="src\GUIMainMenu.cpp">
-      <Filter>Source Files\GUI</Filter>
+      <Filter>Source Files\Animation\GUI</Filter>
     </ClCompile>
     <ClCompile Include="src\VengineLevel.cpp">
       <Filter>Source Files\Vengine</Filter>
@@ -128,6 +134,18 @@
     </ClCompile>
     <ClCompile Include="src\DebugDraw.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tiled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BindToLua.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vengine\TLPP\tolua_Application.cpp">
+      <Filter>Source Files\TLPP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +250,15 @@
     </ClInclude>
     <ClInclude Include="vengine\DebugDraw.h">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\Tiled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\BindToLua.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\TLPP\tolua_Application.h">
+      <Filter>Header Files\TLPP</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

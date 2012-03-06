@@ -81,6 +81,7 @@
     <ClCompile Include="src\AnimationBase.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BasicAnimation.cpp" />
+    <ClCompile Include="src\BindToLua.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Character.cpp" />
     <ClCompile Include="src\ContactListener.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\InputListener.cpp" />
     <ClCompile Include="src\Level.cpp" />
+    <ClCompile Include="src\LevelLoader.cpp" />
     <ClCompile Include="src\LuaScript.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
     <ClCompile Include="src\Physics.cpp" />
@@ -101,17 +103,20 @@
     <ClCompile Include="src\RenderListener.cpp" />
     <ClCompile Include="src\Script.cpp" />
     <ClCompile Include="src\ScriptObject.cpp" />
+    <ClCompile Include="src\Tiled.cpp" />
     <ClCompile Include="src\Tilelayer.cpp" />
     <ClCompile Include="src\Utility.cpp" />
     <ClCompile Include="src\VengineGUI.cpp" />
     <ClCompile Include="src\VengineLevel.cpp" />
     <ClCompile Include="src\VengineLevelLoader.cpp" />
     <ClCompile Include="src\VengineMap.cpp" />
+    <ClCompile Include="vengine\TLPP\tolua_Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vengine\Animation\AnimationBase.h" />
     <ClInclude Include="vengine\Animation\BasicAnimation.h" />
     <ClInclude Include="vengine\Application.h" />
+    <ClInclude Include="vengine\BindToLua.h" />
     <ClInclude Include="vengine\Camera.h" />
     <ClInclude Include="vengine\Character\Character.h" />
     <ClInclude Include="vengine\Character\Player.h" />
@@ -141,6 +146,8 @@
     <ClInclude Include="vengine\Script\LuaScript.h" />
     <ClInclude Include="vengine\Script\Script.h" />
     <ClInclude Include="vengine\Script\ScriptObject.h" />
+    <ClInclude Include="vengine\Tiled.h" />
+    <ClInclude Include="vengine\TLPP\tolua_Application.h" />
     <ClInclude Include="vengine\Utility.h" />
     <ClInclude Include="vengine\Vengine.h" />
   </ItemGroup>

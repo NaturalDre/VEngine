@@ -32,12 +32,15 @@ namespace VE
 		// 
 		virtual void Pause(void) { }
 		//
-		GAMESTATE GetGameState(void) { return m_state; }
+		GAMESTATE GetGameState(void) const { return m_state; }
 		//
-		double DeltaTime(void) { return m_deltaTime; }
+		double DeltaTime(void) const { return m_deltaTime; }
+		//
+		double GetIngameTicks(void) const { return m_ingameTicks; }
 	protected:
 		//double m_gametime;
 		double m_deltaTime;
+		double m_ingameTicks;
 		GAMESTATE m_state;
 	};
 

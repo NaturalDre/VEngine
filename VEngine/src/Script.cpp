@@ -3,6 +3,7 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include <tolua++.h>
+#include <vengine\Application.h>
 
 namespace VE
 {
@@ -12,12 +13,30 @@ namespace VE
 		namespace File
 		{
 			const std::string LS_CLASS("Scripts/VLib/class.lua");
-			const std::string LS_SCRIPT("Scripts/VLib/script.lua");
 		}
+	}
+	void ProvideGlobal(lua_State* L, const char* key)
+	{
+		// STK: table?
+		if (!lua_istable(L, -1))
+			throw(std::exception("Value at top of stack is not table. \nScript.cpp. \nProvideGlobal."));
+		// STK: table
+		lua_getglobal(L, key);
+		// STK: table value
+		lua_setfield(L, -2, key);
+		// STK: table
+	}
+
+	void ProvideGlobals(lua_State* L)
+	{
+		ProvideGlobal(L, "print");
+		ProvideGlobal(L, "io");
+		//ProvideGlobal(L, "App");
 	}
 
 	CScriptManager::CScriptManager(void)
 		: m_L(nullptr)
+		, m_GiveGlobals(nullptr)
 	{
 		m_L = lua_open();
 		luaL_openlibs(m_L);
@@ -40,12 +59,6 @@ namespace VE
 				const char* error = lua_tostring(m_L, -1);
 				lua_pop(m_L, 1);
 				throw(LuaError(Script::File::LS_CLASS, __FILE__, error, __LINE__));
-			}
-			if (!Utility::L_BufferAndLoad(Script::File::LS_SCRIPT, m_L))
-			{
-				const char* error = lua_tostring(m_L, -1);
-				lua_pop(m_L, 1);
-				throw(LuaError(Script::File::LS_SCRIPT, __FILE__, error, __LINE__));
 			}
 		}
 		catch(LuaError& e)
@@ -71,40 +84,45 @@ namespace VE
 			return nullptr;
 
 		const std::string scriptID = Utility::StripFilename(filename);
-		lua_getglobal(m_L, "SetupScript");
-		// STK: func?
-		if (!lua_isfunction(m_L, -1))
-		{
-			Utility::ReportError("SetupScript is not an function.", filename);
-			exit(EXIT_FAILURE);
-		}
-		// STK: func
-		lua_pushstring(m_L, scriptID.c_str());
-		// STK: func string
-		if (lua_pcall(m_L, 1, 1, 0))
+
+		auto buffer = Utility::FileToBuffer(filename);
+		if (luaL_loadbuffer(m_L, buffer.data(), buffer.size(), nullptr))
 		{
 			const char* error = lua_tostring(m_L, -1);
-			lua_pop(m_L, 1);
-			Utility::ReportError(error, filename, __FILE__);
-			exit(EXIT_FAILURE);
+			lua_pop(m_L, -1);
+			throw(std::exception(error));
 		}
-		// STK: table?
-		if (!lua_istable(m_L, -1))
-			abort();
-		// STK: table
-		lua_setglobal(m_L, "env");
-		// STK: 
-		Utility::L_BufferAndLoad(filename, m_L);
+
+		// STK: func
+		lua_createtable(m_L, 0, 1);
+		// STK: func table
+		ProvideGlobals(m_L);
+		if (m_GiveGlobals)
+			m_GiveGlobals(m_L);
+		// STK: func table
+		lua_pushvalue(m_L, -1);
+		// STK: func table table
+		lua_setfield(m_L, LUA_REGISTRYINDEX, scriptID.c_str());
+		// STK: func table
+		lua_setfenv(m_L, -2);
+		// STK: func
+		lua_pcall(m_L, 0, 0, 0);
 		// STK:
-		lua_pushnil(m_L);
-		lua_setglobal(m_L, "env");
 
-		CLuaScript* script(CLuaScript::Create(scriptID));
-
+		CLuaScript* script(new CLuaScript(scriptID));
 		m_registeredScripts.push_back(script);
 		return script;
 	}
 
+	void CScriptManager::BindToLua(void(*func)(lua_State*))
+	{
+		func(m_L);
+	}
+
+	//void CScriptManager::ProvideGlobalsForScript(void(*func)(lua_State* L))
+	//{
+	//	func(m_L);
+	//}
 	CScriptManager& GetScriptMgr(void)
 	{
 		static CScriptManager instance;

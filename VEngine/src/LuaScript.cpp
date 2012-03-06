@@ -12,6 +12,28 @@ namespace VE
 			const std::string OnUpdate = "OnUpdate";
 		}
 	}
+
+	bool CLuaScript::L_GetFunction(lua_State* L, const char* scriptID, const char* function)
+	{
+		// STK: --
+		lua_getfield(L, LUA_REGISTRYINDEX, scriptID);
+		// STK: -- table?
+		if (!lua_istable(L, -1))
+		{
+			lua_pop(L, 1);
+			throw(std::exception((std::string("L_GetFunction: The top object on the stack is not a table.\n") +  __FILE__ "\n" + scriptID).c_str()));
+		}
+		// STK: -- table
+		lua_getfield(L, -1, function);
+		// STK: -- function?
+		if (!lua_isfunction(L, -1))
+		{
+			lua_pop(L, 1);
+			return false;
+		}
+		// STK: -- function
+		return true;
+	}
 	CLuaScript::CLuaScript(const std::string& filename)
 		: m_scriptID(filename)
 	{
@@ -23,70 +45,28 @@ namespace VE
 
 	}
 
-	bool CLuaScript::GetTable(lua_State* L, const std::string& scriptID)
-	{
-		lua_getglobal(L, "ScriptTable");
-		// STK: -- table?
-		if (!lua_istable(L, -1))
-			return false;
-		// STK: -- table
-		lua_insert(L, 1);
-		// STK: table --
-		lua_pushstring(L, scriptID.c_str());
-		// STK: table? -- string
-		lua_rawget(L, 1);
-		// STK: table -- table?
-		if (!lua_istable(L, -1))
-			return false;
-		// STK: table -- table
-		lua_remove(L, 1);
-		// STK: -- table
-		lua_insert(L, 1);
-		// STK: table --
-		return true;
-	}
-
 	void CLuaScript::CallUpdate(void)
 	{
 		lua_State* L = GetScriptMgr().GetState();
-
-		if (GetTable(L, m_scriptID))
-		{
-			// STK: table --
-			lua_pushstring(L, Script::Var::OnUpdate.c_str());
-			// STK: table -- string
-			lua_rawget(L, 1);
-			// STK: table -- function?
-			if(lua_pcall(L, 0, 0, 0))
-			{
-				const char* error = lua_tostring(L, -1);
-				lua_pop(L, 1);
-				Utility::ReportError(error, Script::Var::OnUpdate + " is not a function of this script.", m_scriptID);
-			}
-			// STK: table -- 
-			lua_remove(L, 1);
-			// STK: --
-		}
+		if (L_GetFunction(L, m_scriptID.c_str(), Script::Var::OnUpdate.c_str()))
+			lua_pcall(L, 0, 0, 0);
 	}
 
-	CLuaScript* CLuaScript::Create(const std::string& scriptID)
-	{
-		return new CLuaScript(scriptID);
-	}
+	//CLuaScript* CLuaScript::Create(const std::string& scriptID)
+	//{
+	//	return new CLuaScript(scriptID);
+	//}
 
 	LuaError::LuaError(const std::string& msg, const std::string& lfile, const std::string& cfile,  size_t cline)
 		: error(msg)
 		, luafile(lfile)
 		, cppfile(cfile)
 	{
-		//std::array<char, 4> v;
-		//const char* line = itoa(cline, v.data(), 10);
-		//error = (("Lua File: " + lfile + "\n" + msg + "\n\nCPP File: " + cfile + "\nCPP File Line: " + v.data()).c_str());
+
 	}
 
 	const char* LuaError::what() const throw()
 	{
-		//error = ("CPP File: " + cppfile + "\nLua File: " + luafile + "\nError: " + error);
 		return error.c_str();
 	}
 }

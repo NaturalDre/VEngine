@@ -5,6 +5,7 @@
 #include <lua.hpp>
 #include <string>
 #include <map>
+#include <vengine\Tiled.h>
 
 const float DEFAULTDENSITY(0.3f);
 const float DEFAULTFRICTION(0.3f);
@@ -98,47 +99,12 @@ namespace VE
 
 	namespace Utility
 	{
-		/*
-		 * struct TiledObject
-		 *
-		 * This represents the 'object' table that is found in Tiled's exort of
-		 * an 'objectlayer'.
-		 *
-		 */
-		struct TiledObject
+		// b2Body delete functor
+		struct b2BodyDtor
 		{
-			TiledObject(void): x(0), y(0), width(0), height(0) {}
-			TiledObject(TiledObject&& rhs);
-
-			std::string name;
-			std::string type;
-			float x;
-			float y;
-			float width;
-			float height;
-			std::map<const std::string, std::string> properties;
+			void operator()(b2Body* body);
 		};
-		/*
-		 * ToTiledObject()
-		 *
-		 * Returns an C++ represenation of the Lua table export of
-		 * Tiled's object table found within its 'objecylayer'.
-		 *
-		 * Params:
-		 *		lua_State* L: The lua_State where the 'object' table is.
-		 *
-		 * Notes:
-		 *		The table MUST be at position 1 on the stack. It MUST also
-		 *		actually be an object from Tiled's objectlayer or exceptions
-		 *		will be thrown.
-		 *
-		 * Throws:
-		 *		std::exception:	If the value at position 1 on the stack is
-		 *						is not a table.
-		 *		LuaError:	If the table does not have one or more of the requires
-		 *					keys a TiledObject MUST have. (The ones defined in the struct)
-		 */
-		TiledObject ToTiledObject(lua_State* L);
+
 		/* 
 		 * GameToScreenPosPix()
 		 * 
@@ -190,7 +156,7 @@ namespace VE
 		//	Tiled does not position it's objects using the center of the object like Box2D tends 
 		//	to do. So we need a helper function to do that for us and return it in meters.
 		//*	
-		inline b2Vec2 GetWorldCenterMtrs(const TiledObject& obj) 
+		inline b2Vec2 GetWorldCenterMtrs(const Tiled::TiledObject& obj) 
 		{ 
 			b2Vec2 pos(obj.x, obj.y);
 			return TiledToBoxCoords(pos, obj.width, obj.height);
