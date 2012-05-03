@@ -35,95 +35,7 @@ namespace VE
 		return (body->GetLinearVelocity().y > 0);
 	}
 
-	////////////////////////////
-	//////// INPUT /////////////
-	////////////////////////////
-
-	CPlayerInput::CPlayerInput(CPlayer* player)
-		: m_player(player)
-		, m_moveRKeyDown(false)
-		, m_moveLKeyDown(false)
-		, m_jumpKeyDown(false)
-		, m_moveDownKeyDown(false)
-		, m_useKeyDown(false)
-	{
-		assert(m_player != nullptr);
-		m_keys.resize(ALLEGRO_KEY_MAX, false);
-		m_frameKeyDown.resize(ALLEGRO_KEY_MAX, 0);
-	}
-
-	CPlayerInput::~CPlayerInput(void)
-	{
-
-	}
-
-	void CPlayerInput::OnUpdate(void)
-	{
-		/*
-		/	Since keyboards don't always auto repeat when a key is held down
-		/	the input component needs to check if the relevant keys have not been
-		/	released and call the associated functions
-		*/
-		if (m_jumpKeyDown)
-			OnKeyDown(ALLEGRO_KEY_W);
-		if (m_moveRKeyDown)
-			OnKeyDown(ALLEGRO_KEY_D);
-		if (m_moveLKeyDown)
-			OnKeyDown(ALLEGRO_KEY_A);
-		if (m_moveDownKeyDown)
-			OnKeyDown(ALLEGRO_KEY_S);
-	}
-	void CPlayerInput::OnKeyDown(int keyCode)
-	{
-		m_keys[keyCode] = true;
-		//Plus one because this function happens outside and before the update function, thus it's 1 frame behind. 
-		// (CApplication's update function increments the game tick)
-		m_frameKeyDown[keyCode] = GetApp()->GetIngameTicks() + 1;
-	}
-
-	void CPlayerInput::OnKeyUp(int keyCode)
-	{
-		m_keys[keyCode] = false;
-	}
-
-	bool CPlayerInput::IsKeyDown(int keyCode)
-	{
-		assert(keyCode < ALLEGRO_KEY_MAX);
-		return m_keys[keyCode];
-	}
-
-	bool CPlayerInput::KeyDownThisFrame(int keyCode)
-	{
-		assert(keyCode < ALLEGRO_KEY_MAX);
-		return (m_frameKeyDown[keyCode] == GetApp()->GetIngameTicks());
-	}
-
-	////////////////////////////
-	///////// RENDER ///////////
-	////////////////////////////
-
-	CPlayerRender::CPlayerRender(CPlayer* player)
-		: m_player(player)
-		, m_animation("Images/test.png", 1, 6, 10)
-	{
-		m_animation.SetAlpha(16,32,48);
-	}
-
-	CPlayerRender::~CPlayerRender(void)
-	{
-
-	}
-
-	void CPlayerRender::Draw(void)
-	{
-		// Test code below
-		VE::Draw(m_animation.GetFrame(), b2Vec2(1, 38), 0);
-	}
-
-	/////////////////////////////
-	/////// CPlayer /////////////
-	/////////////////////////////
-
+	// CPlayer Definitions
 	CPlayer::CPlayer(void)
 		: m_input(nullptr) // 'this' isn't used in Input's constructor so the warning by the compiler may be ignored.
 		, m_feetFixture(nullptr)
@@ -310,5 +222,89 @@ namespace VE
 		lua_pop(L, 1);
 		// STK:
 		return 0;
+	}
+
+
+	////////////////////////////
+	//////// INPUT /////////////
+	////////////////////////////
+
+	CPlayerInput::CPlayerInput(CPlayer* player)
+		: m_player(player)
+		, m_moveRKeyDown(false)
+		, m_moveLKeyDown(false)
+		, m_jumpKeyDown(false)
+		, m_moveDownKeyDown(false)
+		, m_useKeyDown(false)
+	{
+		assert(m_player != nullptr);
+		m_keys.resize(ALLEGRO_KEY_MAX, false);
+		m_frameKeyDown.resize(ALLEGRO_KEY_MAX, 0);
+	}
+
+	CPlayerInput::~CPlayerInput(void)
+	{
+
+	}
+
+	void CPlayerInput::OnUpdate(void)
+	{
+		/*
+		/	Since keyboards don't always auto repeat when a key is held down
+		/	the input component needs to check if the relevant keys have not been
+		/	released and call the associated functions
+		*/
+		if (m_jumpKeyDown)
+			OnKeyDown(ALLEGRO_KEY_W);
+		if (m_moveRKeyDown)
+			OnKeyDown(ALLEGRO_KEY_D);
+		if (m_moveLKeyDown)
+			OnKeyDown(ALLEGRO_KEY_A);
+		if (m_moveDownKeyDown)
+			OnKeyDown(ALLEGRO_KEY_S);
+	}
+	void CPlayerInput::OnKeyDown(int keyCode)
+	{
+		m_keys[keyCode] = true;
+		//Plus one because this function happens outside and before the update function, thus it's 1 frame behind. 
+		// (CApplication's update function increments the game tick)
+		m_frameKeyDown[keyCode] = GetApp()->GetIngameTicks() + 1;
+	}
+
+	void CPlayerInput::OnKeyUp(int keyCode)
+	{
+		m_keys[keyCode] = false;
+	}
+
+	bool CPlayerInput::IsKeyDown(int keyCode)
+	{
+		assert(keyCode < ALLEGRO_KEY_MAX);
+		return m_keys[keyCode];
+	}
+
+	bool CPlayerInput::KeyDownThisFrame(int keyCode)
+	{
+		assert(keyCode < ALLEGRO_KEY_MAX);
+		return (m_frameKeyDown[keyCode] == GetApp()->GetIngameTicks());
+	}
+
+
+	// CPlayerRender Definitions
+	CPlayerRender::CPlayerRender(CPlayer* player)
+		: m_player(player)
+		, m_animation("Images/test.png", 1, 6, 10)
+	{
+		m_animation.SetAlpha(16,32,48);
+	}
+
+	CPlayerRender::~CPlayerRender(void)
+	{
+
+	}
+
+	void CPlayerRender::Draw(void)
+	{
+		// Test code below
+		VE::Draw(m_animation.GetFrame(), b2Vec2(1, 38), 0);
 	}
 }
