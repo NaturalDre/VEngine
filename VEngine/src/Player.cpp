@@ -3,7 +3,10 @@
 #include <vengine\Utility.h>
 #include <vengine\ObjectManager.h>
 #include <vengine\Render\Render.h>
+#include <vengine\Script\Script.h>
+#include <vengine\GameTypes.h>
 
+#include <iostream>
 namespace VE
 {
 	bool MovingLeft(b2Body* body)
@@ -35,11 +38,6 @@ namespace VE
 	////////////////////////////
 	//////// INPUT /////////////
 	////////////////////////////
-	enum  PLAYERCONTROLS {
-		PL_JUMP = ALLEGRO_KEY_W
-		, PL_LEFT = ALLEGRO_KEY_A
-		, PL_RIGHT = ALLEGRO_KEY_D
-	};
 
 	CPlayer::Input::Input(CPlayer* player)
 		: m_player(player)
@@ -105,9 +103,20 @@ namespace VE
 
 	CPlayer::Render::Render(CPlayer* player)
 		: m_player(player)
-		, m_animation(4, 4, 5)
+		, m_animation("Images/test.png", 1, 6, 10)
+	{
+		m_animation.SetAlpha(16,32,48);
+	}
+
+	CPlayer::Render::~Render(void)
 	{
 
+	}
+
+	void CPlayer::Render::Draw(void)
+	{
+		// Test code below
+		VE::Draw(m_animation.GetFrame(), b2Vec2(1, 38), 0);
 	}
 
 	/////////////////////////////
@@ -115,9 +124,10 @@ namespace VE
 	/////////////////////////////
 
 	CPlayer::CPlayer(void)
-		: m_input(this) // 'this' isn't used in Input's constructor
+		: m_input(this) // 'this' isn't used in Input's constructor so the warning by the compiler may be ignored.
+		, m_feetFixture(nullptr)
 	{
-
+		m_render.reset(new CPlayer::Render(this));
 	}
 
 	CPlayer::~CPlayer(void)
@@ -130,9 +140,19 @@ namespace VE
 
 	}
 
+	bool CPlayer::IsGrounded(void) const
+	{
+		if (!m_feetTouching.empty())
+			return true;
+		return false;
+	}
+
 	void CPlayer::OnUpdate(void)
 	{
 		m_input.OnUpdate();
+
+		if (m_input.IsJumpKeyDown() && IsGrounded())
+			GetBody()->ApplyForceToCenter(b2Vec2(0, -300 * GetBody()->GetMass()));
 
 		{
 			float desiredVel = 0.0f;
@@ -143,30 +163,109 @@ namespace VE
 			else if(m_input.IsKeyDown(PL_LEFT) || m_input.LKeyDownThisFrame())
 				desiredVel = -GetMoveSpeed().x;
 
-			MoveX(desiredVel);
+			if (desiredVel - GetBody()->GetLinearVelocity().x != 0)
+				MoveX(desiredVel);
 		}
+	}
+
+	void CPlayer::OnBeginContact(b2Contact* contact)
+	{
+
+		b2Fixture* us(nullptr);
+		b2Fixture* them(nullptr);
+
+		if (contact->GetFixtureA()->GetBody() == GetBody())
+		{
+			us = contact->GetFixtureA();
+			them = contact->GetFixtureB();
+		}
+		else
+		{
+			us = contact->GetFixtureB();
+			them = contact->GetFixtureA();
+		}
+
+		// Handle begin feet collision
+		{
+			if (us == m_feetFixture)
+			{
+				m_feetTouching.insert(them);
+				return;
+			}
+			else if (us == m_feetFixture)
+			{
+				m_feetTouching.insert(them);
+				return;
+			}
+		}
+
+		// Handle begin body collision
+		if (them->GetBody()->GetUserData() && them->GetBody()->GetUserData()->GetTypeID() == GOT_BOUNCER)
+			std::cout << std::endl << "Began touch of bouncer.";
+	}
+
+	void CPlayer::OnEndContact(b2Contact* contact)
+	{
+
+		// Handle end feet collision 
+		{
+			if (contact->GetFixtureA() == m_feetFixture)
+			{
+				m_feetTouching.erase(contact->GetFixtureB());
+			}
+			else if (contact->GetFixtureB() == m_feetFixture)
+			{
+				m_feetTouching.erase(contact->GetFixtureA());
+			}
+		}
+	}
+
+	void CPlayer::HandleBeginContact(b2Fixture* us, b2Fixture* them)
+	{
+
+	}
+
+	void CPlayer::HandleEndContact(b2Fixture* us, b2Fixture* them)
+	{
+
 	}
 
 	void CPlayer::CreateBody(b2Vec2& posMtrs, float widthMtrs, float heightMtrs)
 	{
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.allowSleep = false;
-		bd.fixedRotation = true;
-		bd.gravityScale = 1.0f;
-		bd.position = posMtrs;
-		bd.userData = this;
+		m_characterWidth = widthMtrs;
+		m_characterHeight = heightMtrs;
+		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.allowSleep = false;
+			bd.fixedRotation = true;
+			bd.gravityScale = 1.0f;
+			bd.position = posMtrs;
+			bd.userData = this;
 
-		b2PolygonShape shape;
-		shape.SetAsBox(widthMtrs / 2.0f, heightMtrs / 2.0f);
+			b2PolygonShape shape;
+			shape.SetAsBox(widthMtrs / 2.0f, heightMtrs / 2.0f);
 
-		b2FixtureDef fd;
-		fd.density = DEFAULTDENSITY;
-		fd.shape = &shape;
+			b2FixtureDef fd;
+			fd.density = DEFAULTDENSITY;
+			fd.shape = &shape;
+			fd.friction = 0.0f;
 
+			m_body.reset(GetPhysMgr().GetWorld()->CreateBody(&bd));
+			m_body->CreateFixture(&fd);
+		}
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(GetCharacterWidth() / 2.5f, 0.001, b2Vec2(0, GetCharacterHeight() / 2.0f), 0.0f);
 
-		m_body.reset(GetPhysMgr().GetWorld()->CreateBody(&bd));
-		m_body->CreateFixture(&fd);
+			b2FixtureDef fd;
+			fd.density = DEFAULTDENSITY;
+			fd.shape = &shape;
+			fd.isSensor = true;
+
+			m_feetFixture = m_body->CreateFixture(&fd);
+		}
+
 	}
 
 	void CPlayer::CreateBody(const Tiled::TiledObject& data)
@@ -194,6 +293,17 @@ namespace VE
 		GetObjMgr().SetPlayer(player);
 		// Set the player as the target to follow for the camera
 		GetRenderMgr().GetCam()->SetTarget(player);
+
+		for (auto iter = to.properties.begin(); iter != to.properties.end(); ++iter)
+		{
+			if (Tiled::IsScriptName((*iter).first))
+			{
+				CLuaScript* script = GetScriptMgr().LoadScript((*iter).second);
+				if (script)
+					player->AttachScript(script);
+			}
+		}
+
 		// Remove the passed TileObject table from Lua's stack.
 		lua_pop(L, 1);
 		// STK:

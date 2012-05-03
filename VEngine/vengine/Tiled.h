@@ -52,5 +52,6 @@ namespace Tiled
 	TiledObject ToTiledObject(lua_State* L);
 
 	std::map<const std::string, std::string> GetProperties(lua_State*L);
+	bool IsScriptName(const std::string& str);
 };
 #endif

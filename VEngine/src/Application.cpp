@@ -1,5 +1,7 @@
 #include "vengine\Application.h"
 #include "vengine\Vengine.h"
+#include <vengine\GUI\VengineGUI.h>
+
 #include <memory>
 #include <physfs.h>
 #include <iostream>
@@ -79,18 +81,16 @@ namespace VE
 
 		void Update(void)
 		{
+			/*
+			 *	This function is the update loop.
+			 */
+
 			// Time since last frame
 			m_deltaTime = al_current_time() - m_lastUpdateTime;
+			m_lastUpdateTime = al_current_time();
 			++m_ingameTicks;
 			// Objects are being updated therefore a redraw is needed.
 			m_needRedraw = true;
-
-			/* 
-				Let RenderManager perform any pre update logic it needs to do, 
-				such as freeing objects from last draw. No actual drawing is done here.
-			*/
-			//GetRenderMgr().Logic();
-
 			// Let the level manager perform any operations it needs.
 			GetLvlMgr().Logic();
 			// Update animations.
@@ -99,22 +99,16 @@ namespace VE
 			GetObjMgr().UpdateGameObjects();
 			// Update physics world.
 			GetPhysMgr().UpdateWorld();
-
 		}
 
 		void OnCleanup(void)
 		{
-			//GetScriptMgr().Cleanup();
 			GetLvlMgr().Cleanup();
 			GetObjMgr().Cleanup();
 			GetInputMgr().Cleanup();
 			GetRenderMgr().Cleanup();
-			// Cleanup should do any storing of data.
-			// Exit is called here 'cause when destructors for the managers are called
-			// the ycan yield problems that aren't my fault. The API's I use don't work 
-			// well together on program end.
-			//exit(EXIT_SUCCESS);
 		}
+
 	public:
 
 		CApplicationImpl(void)
@@ -130,41 +124,36 @@ namespace VE
 			if (!m_isInit)
 				return EXIT_FAILURE;
 
-			GetScriptMgr().LoadScript("test.lua");
-			//CLevelMap m;
 			al_start_timer(m_timer.get());
 
-			if (GetGUIMgr().GetGUI())
-				GetGUIMgr().GetGUI()->ShowMainMenu();
+			GetUI().ShowMainMenu();
 
 			m_state = MAINMENU;
-
 
 			while(true)
 			{
 				ALLEGRO_EVENT ev;
-
+				// Rest/Wait until an event is received.
 				al_wait_for_event(m_evQ.get(), &ev);
 
+				// These if-statements process the received event
+
+				// If the event was a timer event, it's time to update the game world.
 				if (ev.type == ALLEGRO_EVENT_TIMER)
 					Update();
 				else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 					break;
 				else if (ev.type >= ALLEGRO_EVENT_JOYSTICK_AXIS && ev.type  <  ALLEGRO_EVENT_TIMER)
 				{
-					// TO DO: Implement Input Manager Push Function
+					// Let all input listeners know about the input that was just received.
 					GetInputMgr().PushInput(ev);
-
 				}; 
 
-				// If there are no events to process AND we don't need to redraw any updated game objected we draw to the screen
+				// If world was updated and therefore needs redrawing AND there are no more events to process we draw the world to the screen.
 				if (m_needRedraw && al_is_event_queue_empty(m_evQ.get()))
 				{
 					m_needRedraw = false;
-					//GUIManager::GetInstance().Update();
-					//const double ctime = al_get_time();
 					GetRenderMgr().Render();
-					//std::cout << "\nRender Time: " << al_current_time() - ctime;
 				}
 			}
 
@@ -175,7 +164,6 @@ namespace VE
 
 
 	private:
-		//std::unique_ptr<ALLEGRO_DISPLAY, Utility::AlDisplayDel> m_display;
 		std::unique_ptr<ALLEGRO_TIMER, Utility::AlTimerDel> m_timer;
 		std::unique_ptr<ALLEGRO_EVENT_QUEUE, Utility::AlQueueDel> m_evQ;
 		bool m_needRedraw;

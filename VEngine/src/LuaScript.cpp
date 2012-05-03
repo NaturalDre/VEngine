@@ -25,13 +25,16 @@ namespace VE
 		}
 		// STK: -- table
 		lua_getfield(L, -1, function);
-		// STK: -- function?
+		// STK: -- table function?
 		if (!lua_isfunction(L, -1))
 		{
-			lua_pop(L, 1);
+			lua_pop(L, 2);
+			// STK: --
 			return false;
 		}
-		// STK: -- function
+		// STK: -- table function
+		lua_remove(L, -2);
+		// STK: function
 		return true;
 	}
 	CLuaScript::CLuaScript(const std::string& filename)
@@ -42,7 +45,11 @@ namespace VE
 
 	CLuaScript::~CLuaScript(void)
 	{
-
+		lua_State* L = GetScriptMgr().GetState();
+		lua_pushnil(L);
+		// STK: nil
+		lua_setfield(L, LUA_REGISTRYINDEX, m_scriptID.c_str());
+		// STK:
 	}
 
 	void CLuaScript::CallUpdate(void)

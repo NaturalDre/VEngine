@@ -1,5 +1,5 @@
 function OnUpdate(a)
-	print("OnUpdate called.");
+	print(App:DeltaTime());
 end
 
 print(GAMEPAUSED)

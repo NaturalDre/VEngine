@@ -2,11 +2,10 @@
 #define VENGINELEVEL_H
 
 #include "vengine\Level\VengineMap.h"
-#include "vengine\Level\Level.h"
 
 namespace VE
 {
-	class CVengineLevelLoader;
+	class CLevelManager;
 }
 namespace VE
 {
@@ -14,7 +13,7 @@ namespace VE
 	// This is meant to be tailored to specifically for the type of game I'm making.
 	class CVengineLevel
 	{
-		friend CVengineLevelLoader;
+		friend CLevelManager;
 	protected:
 		void Logic(void);
 		void LoadData(void);

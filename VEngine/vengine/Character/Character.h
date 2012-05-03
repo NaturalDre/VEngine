@@ -2,10 +2,13 @@
 #define CHARACTER_H
 
 #include <vengine\GameObject.h>
-#include <vengine\Physics.h>
+#include <vengine\ContactListener.h>
+#include <set>
 
 namespace VE
 {
+
+
 	class ICharacter: public NE::IGameObject
 	{
 	protected:

@@ -72,4 +72,12 @@ namespace Tiled
 		// STK: table1
 		return std::move(props);
 	}
+
+	bool IsScriptName(const std::string& str)
+	{
+		const int ret = str.find("script_");
+		if (ret)
+			return false;
+		return true;
+	}
 }

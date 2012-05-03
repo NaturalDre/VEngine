@@ -6,7 +6,8 @@ using namespace NE;
 
 namespace NE
 {
-	IGameObject::IGameObject(const std::string& tag)
+	IGameObject::IGameObject(const std::string& tag, int typeID)
+		: m_typeID(typeID)
 	{
 		// TO DO: Add to object manager
 		VE::GetObjMgr().Add(this);

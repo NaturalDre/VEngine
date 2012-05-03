@@ -2,12 +2,13 @@
 #define GAMEOBJECT_H
 
 #include <string>
-#include <Box2D\Box2D.h>
 #include <list>
-
+#include <vengine\Physics.h>
+#include <vengine\Script\LuaScript.h>
 namespace VE
 {
 	class CObjectManager;
+	class CContactListener;
 	class CLuaScript;
 }
 
@@ -16,8 +17,9 @@ namespace NE
 	class NE::IGameObject
 	{
 		friend VE::CObjectManager;
+		friend VE::CContactListener;
 	protected:
-		NE::IGameObject(const std::string& tag = std::string());
+		NE::IGameObject(const std::string& tag = std::string(), int typeID = 0);
 
 
 		// Called at the beginning of a frame.
@@ -30,6 +32,8 @@ namespace NE
 		virtual void OnBeginContact(b2Contact* contact) { }
 		// Called when this object ends contact with another [physics enabled] object.
 		virtual void OnEndContact(b2Contact* contact) { }
+		virtual void OnPreSolve(b2Contact* contact, const b2Manifold* oldManifold) {}
+		virtual void OnPostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {}
 		/*
 		 *	When the player presses the interact button near a game object
 		 *	this function will be called. (If it is the closest interactable
@@ -37,14 +41,20 @@ namespace NE
 		 */
 		virtual void Interact(void) { }
 		//
-		void AttachScript(VE::CLuaScript* script);
+		void AttachScript(VE::CLuaScript* script) { m_scripts.push_back(std::unique_ptr<VE::CLuaScript>(script)); }
+
 
 	public:
 		// Position of this object. Should be overriden.
 		virtual b2Vec2 GetPos(void) const { return b2Vec2(0,0); } 
 		virtual ~IGameObject(void);
 
+		int GetTypeID(void) const { return m_typeID; }
+
 	private:
+		//
+		const std::list<std::unique_ptr<VE::CLuaScript>>& GetScripts(void) { return m_scripts; }
+
 		/*
 		 *	Tag used to searching for a game object by name.
 		 *	IMPORTANT: Try not to use the same name twice if you plan to 
@@ -57,7 +67,8 @@ namespace NE
 		 * OnUpdate function is called in the order they appear
 		 * in the list.
 		 */
-		std::list<std::unique_ptr<VE::CLuaScript>> m_scriptComponents;
+		std::list<std::unique_ptr<VE::CLuaScript>> m_scripts;
+		int m_typeID;
 	};
 
 }

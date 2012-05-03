@@ -1,7 +1,6 @@
 #include "vengine\Input.h"
 #include <algorithm>
-#include "vengine\GUI\GUI.h"
-
+#include <vengine\GUI\VengineGUI.h>
 namespace VE
 {
 	CInputManager::CInputManager(void)
@@ -21,7 +20,7 @@ namespace VE
 
 	void CInputManager::PushInput(ALLEGRO_EVENT& ev)
 	{
-		GetGUIMgr().PushInput(ev);
+		GetUI().PushInput(ev);
 		std::for_each(m_listeners.begin(), m_listeners.end(), [&](IInputListener* listener)
 		{
 			if (ev.type == ALLEGRO_EVENT_KEY_UP)

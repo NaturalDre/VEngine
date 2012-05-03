@@ -21,7 +21,11 @@
   </data>
  </layer>
  <objectgroup name="Main Gameplay" width="100" height="30">
-  <object type="Player" x="2038" y="833" width="64" height="128"/>
+  <object type="Player" x="2038" y="833" width="64" height="128">
+   <properties>
+    <property name="script_test" value="test.lua"/>
+   </properties>
+  </object>
   <object name="Harpoon1" type="Harpoon" x="1600" y="1024" width="384" height="64">
    <properties>
     <property name="direction" value="left"/>

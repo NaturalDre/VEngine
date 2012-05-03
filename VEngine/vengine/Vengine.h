@@ -15,7 +15,6 @@
 #include <vengine\Utility.h>
 #include <vengine\Animation\AnimationBase.h>
 #include <vengine\Animation\BasicAnimation.h>
-#include <vengine\GUI\Gui.h>
 #include <vengine\Level\Level.h>
 #include <vengine\Render\Render.h>
 #include <vengine\ObjectManager.h>

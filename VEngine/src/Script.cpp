@@ -90,7 +90,7 @@ namespace VE
 		{
 			const char* error = lua_tostring(m_L, -1);
 			lua_pop(m_L, -1);
-			throw(std::exception(error));
+			throw(std::exception((std::string(error) + "\n\n" + __FILE__ + "\n\n" + filename).c_str()));
 		}
 
 		// STK: func

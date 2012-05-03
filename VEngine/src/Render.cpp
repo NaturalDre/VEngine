@@ -1,8 +1,7 @@
 #include "vengine\Render\Render.h"
 #include "vengine\Utility.h"
-#include "vengine\GUI\GUI.h"
 #include <vengine\Physics.h>
-
+#include <vengine\GUI\VengineGUI.h>
 #include <algorithm>
 
 namespace VE
@@ -12,7 +11,7 @@ namespace VE
 		const float FPS(60.0f);
 	}
 
-	bool IsLessThan(const IRenderListener* lhs, const IRenderListener* rhs)
+	inline bool IsLessThan(const IRenderListener* lhs, const IRenderListener* rhs)
 	{
 		return lhs->GetOrderID() < rhs->GetOrderID();
 	}
@@ -70,9 +69,10 @@ namespace VE
 		{
 			listener->Draw();
 		});
+
 		GetPhysMgr().DrawDebugData();
 
-		GetGUIMgr().Draw();
+		GetUI().GetCanvas()->RenderCanvas();
 		// Update the screen.
 		al_flip_display();
 	}
@@ -86,5 +86,47 @@ namespace VE
 	{
 		static CRenderManager instance;
 		return instance;
+	}
+	// bitmapPos is passed in meters.
+	bool IsDrawable(ALLEGRO_BITMAP* bitmap, b2Vec2 bitmapPos, b2Vec2 bitmapCPos = b2Vec2(0,0))
+	{
+		auto& cam = GetRenderMgr().GetCam();
+
+		b2Vec2 camTopL = cam->GetTopLeftPix();
+		// Copy the vector then add it's with and height to get its bottom right
+		b2Vec2 camBotR(camTopL);
+		camBotR.x += cam->GetWidthPix();
+		camBotR.y += cam->GetHeightPix();
+
+		// Convert to pix
+		bitmapPos = Utility::mtrToPix(bitmapPos);
+		bitmapPos -= bitmapCPos;
+		float bitmapWidth(al_get_bitmap_width(bitmap));
+		float bitmapHeight(al_get_bitmap_height(bitmap));
+
+		if (													// If none of the below statements are true then the bitmap is within view of the camera.
+			(bitmapPos.x > (camBotR.x - 1))		||	// Is the left side of the bitmap to the right of the camera?
+			((bitmapPos.x + bitmapWidth - 1) < camTopL.x)	||	// Is the right side of the bitmap to the left side of the camera?
+			(bitmapPos.y > (camBotR.y - 1))		||	// Is the top of the bitmap below the camera?
+			(bitmapPos.y + bitmapHeight - 1) < camTopL.y)		// Is the bottom of the bitmap above the camera?
+			return false;
+
+		return true;
+	}
+
+	bool Draw(ALLEGRO_BITMAP* bitmap, b2Vec2 dpos, int flags)
+	{
+		if (!bitmap)
+			return false;
+		if (!IsDrawable(bitmap, dpos))// Is the position to be drawn at out of view of the camera?
+			return false;												// If so, don't waste CPU time drawing it.
+		
+		dpos = Utility::mtrToPix(dpos);		// Meters->Pixels
+		
+		b2Vec2 drawPos(Utility::GameToScreenPosPix(dpos));
+		auto test = Utility::GameToScreenPosPix(dpos);
+		al_draw_bitmap(bitmap, drawPos.x, drawPos.y, flags);
+
+		return true;
 	}
 };

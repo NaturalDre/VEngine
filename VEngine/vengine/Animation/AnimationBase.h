@@ -21,7 +21,7 @@ namespace VE
 		 *		E.G.: If an animation has 3 rows, 4 cols, and the
 		 *		current frame is row 2, col 3, you're on the 7th frame.
 		 */
-		inline size_t GetCurrentFrame(void);
+		inline size_t GetCurrentFrame(void) const { return m_currentFrame; }
 		// Do timing.
 		void Logic(void);
 		/* 

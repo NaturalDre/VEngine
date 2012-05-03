@@ -10,18 +10,27 @@
 #include <vector>
 #include <lua.hpp>
 #include <vengine\Application.h>
+#include <vengine\Render\RenderListener.h>
 
 struct ALLEGRO_BITMAP;
 
 using namespace NE;
+
 namespace VE
 {
 	class CBasicAnimation;
 	class IRenderListener;
-}
+};
 
 namespace VE
 {
+	enum  PLAYERCONTROLS {
+		PL_JUMP = ALLEGRO_KEY_W
+		, PL_LEFT = ALLEGRO_KEY_A
+		, PL_RIGHT = ALLEGRO_KEY_D
+	};
+
+
 	class CPlayer: public ICharacter
 	{
 	protected:
@@ -57,7 +66,7 @@ namespace VE
 			// Did the right key go down this frame?
 			bool RKeyDownThisFrame(void) { return (GetApp()->GetIngameTicks() == m_frameMoveRPressed); }
 
-			bool IsJumpKeyDown(void) { return m_jumpKeyDown; }
+			bool IsJumpKeyDown(void) { return m_keys[VE::PL_JUMP]; }
 			bool IsUseKeyDown(void) { return m_useKeyDown; }
 			bool IsLeftMouseDown(void) { return m_leftMouseDown; }
 
@@ -85,9 +94,11 @@ namespace VE
 		//////////////////////
 		////// Render ////////
 		//////////////////////
-		class Render
+		class Render: public VE::IRenderListener
 		{
 			friend CPlayer;
+		protected:
+			void Draw(void);
 		public:
 			/* 
 			* Pass player object to render. Does not own.
@@ -111,6 +122,13 @@ namespace VE
 	protected:
 		void CreateBody(b2Vec2& posMtrs, float widthMtrs, float heightMtrs);
 		void CreateBody(const Tiled::TiledObject& data);
+		void OnBeginContact(b2Contact* contact);
+		void OnEndContact(b2Contact* contact);
+		void HandleBeginContact(b2Fixture* us, b2Fixture* them);
+		void HandleEndContact(b2Fixture* us, b2Fixture* them);
+
+
+		
 		static CPlayer* Create(void);
 
 	public:	
@@ -118,6 +136,8 @@ namespace VE
 		~CPlayer(void);
 
 		b2Vec2 GetPos(void) const { return m_body->GetPosition(); }
+		bool IsGrounded(void) const;
+
 
 
 		static int L_Create(lua_State* L);
@@ -127,10 +147,11 @@ namespace VE
 
 		// Draws the player at render time
 		std::unique_ptr<IRenderListener> m_render;
-		// 
-		//std::unique_ptr<b2Body, Utility::b2BodyDtor> m_body;
-		// 
+		
 		CPlayer::Input m_input;
+
+		std::set<b2Fixture*> m_feetTouching;
+		b2Fixture* m_feetFixture;
 	};
 }
 #endif

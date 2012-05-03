@@ -8,6 +8,10 @@ MapList =
 	{
 		Name = "Level 1";
 		Location = "Maps/Level1/Level1a.lua";
+	},
+	{
+		Name = "Bam";
+		Location = "Maps/Level1/Bam.lua";
 	}
 }
 

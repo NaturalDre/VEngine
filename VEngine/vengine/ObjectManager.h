@@ -27,8 +27,6 @@ namespace VE
 		void UpdateAnimations(void);
 
 	public:
-		//void AddGameObject(NE::IGameObject* gameObj) { m_gameObjects.push_back(gameObj); }
-		//void RemoveGameObject(NE::IGameObject* gameObj) { m_gameObjects.remove(gameObj); }
 		/*
 		 * Add()
 		 *

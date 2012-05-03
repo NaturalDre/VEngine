@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\Animation">
       <UniqueIdentifier>{2ed93a1a-fb2b-4174-b797-43849c46792a}</UniqueIdentifier>
     </Filter>
@@ -31,14 +27,21 @@
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{85ae445d-61a6-4ae9-adbe-6d57467fd229}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\TLPP">
-      <UniqueIdentifier>{63143352-9711-4a90-b879-96548fe561fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\TLPP">
       <UniqueIdentifier>{7e03d460-4c2c-4513-855c-f23caf0af283}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Animation\GUI">
       <UniqueIdentifier>{b1b0d08b-ce94-44e2-8daf-cc0b9bcbd161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TLPP">
+      <UniqueIdentifier>{63143352-9711-4a90-b879-96548fe561fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gameplay">
+      <UniqueIdentifier>{4b1780c5-4a1e-4265-8472-efc106c533da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,9 +87,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\gwen\Renderers\Allegro\Allegro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI.cpp">
-      <Filter>Source Files\Animation\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\GUIMainMenu.cpp">
       <Filter>Source Files\Animation\GUI</Filter>
     </ClCompile>
@@ -96,17 +96,11 @@
     <ClCompile Include="src\VengineGUI.cpp">
       <Filter>Source Files\Vengine</Filter>
     </ClCompile>
-    <ClCompile Include="src\VengineLevelLoader.cpp">
-      <Filter>Source Files\Vengine</Filter>
-    </ClCompile>
     <ClCompile Include="src\AnimationBase.cpp">
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
     <ClCompile Include="src\BasicAnimation.cpp">
       <Filter>Source Files\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GUIHUD.cpp">
-      <Filter>Source Files\Vengine</Filter>
     </ClCompile>
     <ClCompile Include="src\VengineMap.cpp">
       <Filter>Source Files\Vengine</Filter>
@@ -135,17 +129,23 @@
     <ClCompile Include="src\DebugDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LevelLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Tiled.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BindToLua.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vengine\TLPP\tolua_Application.cpp">
       <Filter>Source Files\TLPP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IngameMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoadLevelDialog.cpp">
+      <Filter>Source Files\Animation\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VengineStatics.cpp">
+      <Filter>Source Files\Vengine</Filter>
+    </ClCompile>
+    <ClCompile Include="vengine\Gameplay\Bouncer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -197,13 +197,7 @@
     <ClInclude Include="vengine\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vengine\GUI\GUI.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="vengine\GUI\GUIMainMenu.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="vengine\GUI\GuiBase.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
     <ClInclude Include="vengine\GUI\VengineGUI.h">
@@ -212,14 +206,8 @@
     <ClInclude Include="vengine\Level\VengineLevel.h">
       <Filter>Header Files\Vengine</Filter>
     </ClInclude>
-    <ClInclude Include="vengine\Level\VengineLevelLoader.h">
-      <Filter>Header Files\Vengine</Filter>
-    </ClInclude>
     <ClInclude Include="vengine\Vengine.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vengine\GUI\GUIHUD.h">
-      <Filter>Header Files\Vengine</Filter>
     </ClInclude>
     <ClInclude Include="vengine\Level\VengineMap.h">
       <Filter>Header Files\Vengine</Filter>
@@ -254,11 +242,23 @@
     <ClInclude Include="vengine\Tiled.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vengine\BindToLua.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="vengine\TLPP\tolua_Application.h">
       <Filter>Header Files\TLPP</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\GUI\IngameMenu.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\GUI\LoadLevelDialog.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\VengineStatics.h">
+      <Filter>Header Files\Vengine</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\Gameplay\Bouncer.h">
+      <Filter>Header Files\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\GameTypes.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

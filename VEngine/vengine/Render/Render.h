@@ -76,5 +76,7 @@ namespace VE
 
 	inline float GetScreenW(void) { return al_get_display_width(al_get_current_display()); }
 	inline float GetScreenH(void) { return al_get_display_height(al_get_current_display()); }
+
+	bool Draw(ALLEGRO_BITMAP* bitmap, b2Vec2 dpos, int flags); 
 }
 #endif

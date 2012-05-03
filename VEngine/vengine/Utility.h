@@ -114,10 +114,6 @@ namespace VE
 		*/
 		float GetFloatVal(const std::string& key, lua_State* L);
 
-
-
-
-
 		// ALLEGRO_EVENT_QUEUE delete functor
 		struct AlQueueDel
 		{

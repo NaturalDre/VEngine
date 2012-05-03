@@ -16,17 +16,19 @@ namespace VE
 		GetObjMgr().Add(this);
 	}
 
-	IAnimationBase::~IAnimationBase(void)
-	{
-		GetObjMgr().Remove(this);
-	}
-
 	IAnimationBase::IAnimationBase(size_t rows, size_t cols, double fps)
 		: m_rows(rows)
 		, m_cols(cols)
 		, m_fps(fps)
+		, m_currentFrame(1)
 	{
-		m_timeout = fps;
+		m_timeout = 1.0f / m_fps;
+		GetObjMgr().Add(this);
+	}
+
+	IAnimationBase::~IAnimationBase(void)
+	{
+		GetObjMgr().Remove(this);
 	}
 
 	void IAnimationBase::NextFrame(void)
@@ -42,7 +44,7 @@ namespace VE
 		m_timeout -= GetApp()->DeltaTime();
 		if (m_timeout <= 0)
 		{
-			m_timeout = m_fps;
+			m_timeout = 1.0f / m_fps;
 			NextFrame();
 		}
 	}

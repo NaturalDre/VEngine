@@ -149,6 +149,7 @@ namespace VE
 			return true;
 		}
 	}
+
 	//Utility::TiledObject Utility::ToTiledObject(lua_State* L)
 	//{
 	//	// STK: table? --

@@ -27,6 +27,10 @@ namespace VE
 	{
 		std::for_each(m_gameObjects.begin(), m_gameObjects.end(), [&](NE::IGameObject* gameObj)
 		{
+			for (auto iter = gameObj->GetScripts().begin(); iter != gameObj->GetScripts().end(); ++iter)
+			{
+				(*iter)->CallUpdate();
+			}
 			gameObj->OnUpdate();
 		});
 	}
