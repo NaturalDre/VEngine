@@ -39,7 +39,7 @@ namespace VE
 	//////// INPUT /////////////
 	////////////////////////////
 
-	CPlayer::Input::Input(CPlayer* player)
+	CPlayerInput::CPlayerInput(CPlayer* player)
 		: m_player(player)
 		, m_moveRKeyDown(false)
 		, m_moveLKeyDown(false)
@@ -52,12 +52,12 @@ namespace VE
 		m_frameKeyDown.resize(ALLEGRO_KEY_MAX, 0);
 	}
 
-	CPlayer::Input::~Input(void)
+	CPlayerInput::~CPlayerInput(void)
 	{
 
 	}
 
-	void CPlayer::Input::OnUpdate(void)
+	void CPlayerInput::OnUpdate(void)
 	{
 		/*
 		/	Since keyboards don't always auto repeat when a key is held down
@@ -73,7 +73,7 @@ namespace VE
 		if (m_moveDownKeyDown)
 			OnKeyDown(ALLEGRO_KEY_S);
 	}
-	void CPlayer::Input::OnKeyDown(int keyCode)
+	void CPlayerInput::OnKeyDown(int keyCode)
 	{
 		m_keys[keyCode] = true;
 		//Plus one because this function happens outside and before the update function, thus it's 1 frame behind. 
@@ -81,39 +81,40 @@ namespace VE
 		m_frameKeyDown[keyCode] = GetApp()->GetIngameTicks() + 1;
 	}
 
-	void CPlayer::Input::OnKeyUp(int keyCode)
+	void CPlayerInput::OnKeyUp(int keyCode)
 	{
 		m_keys[keyCode] = false;
 	}
 
-	bool CPlayer::Input::IsKeyDown(int keyCode)
+	bool CPlayerInput::IsKeyDown(int keyCode)
 	{
 		assert(keyCode < ALLEGRO_KEY_MAX);
 		return m_keys[keyCode];
 	}
 
-	bool CPlayer::Input::KeyDownThisFrame(int keyCode)
+	bool CPlayerInput::KeyDownThisFrame(int keyCode)
 	{
 		assert(keyCode < ALLEGRO_KEY_MAX);
 		return (m_frameKeyDown[keyCode] == GetApp()->GetIngameTicks());
 	}
+
 	////////////////////////////
 	///////// RENDER ///////////
 	////////////////////////////
 
-	CPlayer::Render::Render(CPlayer* player)
+	CPlayerRender::CPlayerRender(CPlayer* player)
 		: m_player(player)
 		, m_animation("Images/test.png", 1, 6, 10)
 	{
 		m_animation.SetAlpha(16,32,48);
 	}
 
-	CPlayer::Render::~Render(void)
+	CPlayerRender::~CPlayerRender(void)
 	{
 
 	}
 
-	void CPlayer::Render::Draw(void)
+	void CPlayerRender::Draw(void)
 	{
 		// Test code below
 		VE::Draw(m_animation.GetFrame(), b2Vec2(1, 38), 0);
@@ -124,10 +125,11 @@ namespace VE
 	/////////////////////////////
 
 	CPlayer::CPlayer(void)
-		: m_input(this) // 'this' isn't used in Input's constructor so the warning by the compiler may be ignored.
+		: m_input(nullptr) // 'this' isn't used in Input's constructor so the warning by the compiler may be ignored.
 		, m_feetFixture(nullptr)
 	{
-		m_render.reset(new CPlayer::Render(this));
+		m_render.reset(new CPlayerRender(this));
+		m_input = new CPlayerInput(this);
 	}
 
 	CPlayer::~CPlayer(void)
@@ -149,18 +151,18 @@ namespace VE
 
 	void CPlayer::OnUpdate(void)
 	{
-		m_input.OnUpdate();
+		m_input->OnUpdate();
 
-		if (m_input.IsJumpKeyDown() && IsGrounded())
+		if (m_input->IsJumpKeyDown() && IsGrounded())
 			GetBody()->ApplyForceToCenter(b2Vec2(0, -300 * GetBody()->GetMass()));
 
 		{
 			float desiredVel = 0.0f;
-			if (m_input.IsBothLRKeysDown())
+			if (m_input->IsBothLRKeysDown())
 				desiredVel = 0;
-			else if(m_input.IsKeyDown(PL_RIGHT) || m_input.RKeyDownThisFrame())
+			else if(m_input->IsKeyDown(PL_RIGHT) || m_input->RKeyDownThisFrame())
 				desiredVel = GetMoveSpeed().x;
-			else if(m_input.IsKeyDown(PL_LEFT) || m_input.LKeyDownThisFrame())
+			else if(m_input->IsKeyDown(PL_LEFT) || m_input->LKeyDownThisFrame())
 				desiredVel = -GetMoveSpeed().x;
 
 			if (desiredVel - GetBody()->GetLinearVelocity().x != 0)
