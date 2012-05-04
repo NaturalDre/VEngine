@@ -5,6 +5,7 @@
 #include <vengine\Render\Render.h>
 #include <vengine\Script\Script.h>
 #include <vengine\GameTypes.h>
+#include <vengine\Animation\MultiAnimation.h>
 
 #include <iostream>
 namespace VE
@@ -63,11 +64,15 @@ namespace VE
 
 	void CPlayer::OnUpdate(void)
 	{
+		// Let CPlayerInput run it's operations
 		m_input->OnUpdate();
 
+		// If the jump key is down and the player is on the ground, let the player jump.
+		// TO DO:	Make sure this takes into account whether or not the jump key was pressed
+		//			this frame.
 		if (m_input->IsJumpKeyDown() && IsGrounded())
 			GetBody()->ApplyForceToCenter(b2Vec2(0, -300 * GetBody()->GetMass()));
-
+		// Calculate how much force is neccesary to move by GetMoveSpeed()'s returned distance(meters).
 		{
 			float desiredVel = 0.0f;
 			if (m_input->IsBothLRKeysDown())
@@ -292,9 +297,10 @@ namespace VE
 	// CPlayerRender Definitions
 	CPlayerRender::CPlayerRender(CPlayer* player)
 		: m_player(player)
-		, m_animation("Images/test.png", 1, 6, 10)
 	{
-		m_animation.SetAlpha(16,32,48);
+		m_animation.SetSpriteSheet("Images/test.png", 4, 4, 1);
+		m_animation.AddFrameSequence(FrameSequence(1, 30), "norm");
+		m_animation.SetCurrentAnim("norm");
 	}
 
 	CPlayerRender::~CPlayerRender(void)

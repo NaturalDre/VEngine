@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <vengine\Character\Character.h>
-#include <vengine\Animation\BasicAnimation.h>
+#include <vengine\Animation\MultiAnimation.h>
 #include <vengine\Physics.h>
 #include <vengine\Utility.h>
 #include <vengine\InputListener.h>
@@ -34,7 +34,7 @@ namespace VE
 	class CPlayerInput;
 	class CPlayerRender;
 
-
+	// CPlayer
 	class CPlayer: public ICharacter
 	{
 	protected:
@@ -101,7 +101,6 @@ namespace VE
 		std::set<b2Fixture*> m_feetTouching;
 		b2Fixture* m_feetFixture;
 	};
-
 
 	// CPlayerInput
 	class CPlayerInput: public IInputListener
@@ -178,7 +177,7 @@ namespace VE
 
 	private:
 		CPlayer *const m_player;
-		CBasicAnimation m_animation;
+		CMultiAnimation m_animation;
 		std::shared_ptr<ALLEGRO_BITMAP> m_playerSprite;
 	};
 }

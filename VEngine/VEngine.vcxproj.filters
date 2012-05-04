@@ -147,6 +147,9 @@
     <ClCompile Include="vengine\Gameplay\Bouncer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MultiAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vengine\Render\Render.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="vengine\GameTypes.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vengine\Animation\MultiAnimation.h">
+      <Filter>Header Files\Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -94,6 +94,7 @@
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\LoadLevelDialog.cpp" />
     <ClCompile Include="src\LuaScript.cpp" />
+    <ClCompile Include="src\MultiAnimation.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClInclude Include="vengine\Animation\AnimationBase.h" />
     <ClInclude Include="vengine\Animation\BasicAnimation.h" />
+    <ClInclude Include="vengine\Animation\MultiAnimation.h" />
     <ClInclude Include="vengine\Application.h" />
     <ClInclude Include="vengine\Camera.h" />
     <ClInclude Include="vengine\Character\Character.h" />

@@ -8,9 +8,13 @@ namespace VE
 
 	class IAnimationBase
 	{
-	protected:
-		virtual void NextFrame(void);
 
+	private:
+		void NextFrame(void);
+
+	protected:
+		// Called each time currentFrame changes. [Inside NextFrame() and SetCurrentFrame()]
+		virtual void FrameChanged(void) { }
 	public:
 		virtual ~IAnimationBase(void);
 		/*
@@ -50,6 +54,14 @@ namespace VE
 		inline bool IsAnimHeld(void) const { return m_holdAnimation; }
 		// Should the animation be held?
 		inline void SetHoldAnimation(bool hold) { m_holdAnimation = hold; }
+		// The starting frame of the animation. When the end is reached it will start back at this frame.
+		inline void SetBeginFrame(size_t frame) { if (frame > 0) { m_beginFrame = frame; FrameChanged(); }}
+		// The last frame of the animation. When this frame is reached the animation goes back to the start frame.
+		inline void SetEndFrame(size_t frame) { if (frame > 0) m_endFrame = frame; }
+		// The first frame of the animation
+		size_t GetBeginFrame(void) const { return m_beginFrame; }
+		// The last frame of the animation
+		size_t GetEndFrame(void) const { return m_endFrame; }
 		/* 
 		 * Reset()
 		 * 
@@ -85,13 +97,32 @@ namespace VE
 		 *		std::exception if row or col is zero.
 		 */
 		IAnimationBase(size_t rows, size_t cols, double fps);
-
+		
+		// Copy Constructor
+		IAnimationBase(const IAnimationBase& rhs);
+		// Assignment operator
+		IAnimationBase& operator=(const IAnimationBase& rhs);
+		/*	If true, when NextFrame() is called it will immedietly return 
+		 *	without going to the next frame.
+		 */
 		bool m_holdAnimation;
+		/*
+		 * Each game update, the deltatime is subtracted from this. 
+		 * When it's 0 or less it's time to call NextFrame().
+		 */
 		double m_timeout;
+		// How many frames per second the animation should run at.
 		double m_fps;
+		// The current frame number we're on.
 		size_t m_currentFrame;
+		// How many rows the animation sheet has.
 		size_t m_rows;
+		// How many columns the animation sheet has.
 		size_t m_cols;
+		// The beginning frame of the animation.
+		size_t m_beginFrame;
+		// The end frame of the animation.
+		size_t m_endFrame;
 	};
 }
 #endif
