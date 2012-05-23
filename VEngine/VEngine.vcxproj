@@ -10,6 +10,44 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="BoxView.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectModel.cpp" />
+    <ClCompile Include="ObjectView.cpp" />
+    <ClCompile Include="Render.cpp" />
+    <ClCompile Include="TMR\MapFile.cpp" />
+    <ClCompile Include="TMR\ObjectLayer.cpp" />
+    <ClCompile Include="TMR\TiledLua.cpp" />
+    <ClCompile Include="TMR\TiledObject.cpp" />
+    <ClCompile Include="TMR\Tilelayer.cpp" />
+    <ClCompile Include="TMR\Tileset.cpp" />
+    <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="BoxView.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ObjectModel.h" />
+    <ClInclude Include="ObjectView.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="Render.h" />
+    <ClInclude Include="TMR\Layer.h" />
+    <ClInclude Include="TMR\LayerTypes.h" />
+    <ClInclude Include="TMR\MapFile.h" />
+    <ClInclude Include="TMR\ObjectLayer.h" />
+    <ClInclude Include="TMR\TiledLua.h" />
+    <ClInclude Include="TMR\TiledObject.h" />
+    <ClInclude Include="TMR\Tilelayer.h" />
+    <ClInclude Include="TMR\Tileset.h" />
+    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Vengine.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C583B7BA-6214-4F71-B500-D7BD2C5EB4A2}</ProjectGuid>
     <RootNamespace>VEngine</RootNamespace>
@@ -43,16 +81,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Furiosity\Documents\Visual Studio 2010\Projects\VEngine\VEngine;C:\allegro\include;C:\Box2D_v2.2.1;C:\gwen\include;C:\tolua++-1.0.93\include;C:\Lua\Lua-5.1.4Built\include;C:\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\gwen\include;C:\tolua++-1.0.93\include;C:\Lua\Lua-5.1.4Built\include;C:\boost_1_48_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CompileAs>CompileAsCpp</CompileAs>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\tolua++-1.0.93\lib\Debug;C:\gwen\lib\windows;C:\allegro\lib;C:\Box2D_v2.2.1\Build\Box2D\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;C:\Lua\Lua-5.1.4Built;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;gwend_static.lib;lua51.lib;opengl32.lib;glu32.lib;tolua++.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;gwend_static.lib;lua51.lib;tolua++.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,83 +114,6 @@
       <AdditionalDependencies>allegro-5.0.4-monolith-md.lib;Box2D.lib;physfs.lib;gwen_static.lib;lua51.lib;tolua++.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\gwen\Renderers\Allegro\Allegro.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\AnimationBase.cpp" />
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\BasicAnimation.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Character.cpp" />
-    <ClCompile Include="src\ContactListener.cpp" />
-    <ClCompile Include="src\DebugDraw.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
-    <ClCompile Include="src\GUIMainMenu.cpp" />
-    <ClCompile Include="src\Image.cpp" />
-    <ClCompile Include="src\IngameMenu.cpp" />
-    <ClCompile Include="src\Input.cpp" />
-    <ClCompile Include="src\InputListener.cpp" />
-    <ClCompile Include="src\Level.cpp" />
-    <ClCompile Include="src\LoadLevelDialog.cpp" />
-    <ClCompile Include="src\LuaScript.cpp" />
-    <ClCompile Include="src\MultiAnimation.cpp" />
-    <ClCompile Include="src\ObjectManager.cpp" />
-    <ClCompile Include="src\Physics.cpp" />
-    <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\Render.cpp" />
-    <ClCompile Include="src\RenderListener.cpp" />
-    <ClCompile Include="src\Script.cpp" />
-    <ClCompile Include="src\ScriptObject.cpp" />
-    <ClCompile Include="src\Tiled.cpp" />
-    <ClCompile Include="src\Tilelayer.cpp" />
-    <ClCompile Include="src\Utility.cpp" />
-    <ClCompile Include="src\VengineStatics.cpp" />
-    <ClCompile Include="src\VengineGUI.cpp" />
-    <ClCompile Include="src\VengineLevel.cpp" />
-    <ClCompile Include="src\VengineMap.cpp" />
-    <ClCompile Include="vengine\Gameplay\Bouncer.cpp" />
-    <ClCompile Include="vengine\TLPP\tolua_Application.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="vengine\Animation\AnimationBase.h" />
-    <ClInclude Include="vengine\Animation\BasicAnimation.h" />
-    <ClInclude Include="vengine\Animation\MultiAnimation.h" />
-    <ClInclude Include="vengine\Application.h" />
-    <ClInclude Include="vengine\Camera.h" />
-    <ClInclude Include="vengine\Character\Character.h" />
-    <ClInclude Include="vengine\Character\Player.h" />
-    <ClInclude Include="vengine\ContactListener.h" />
-    <ClInclude Include="vengine\DebugDraw.h" />
-    <ClInclude Include="vengine\GameObject.h" />
-    <ClInclude Include="vengine\Gameplay\Bouncer.h" />
-    <ClInclude Include="vengine\GameTypes.h" />
-    <ClInclude Include="vengine\GUI\GUIMainMenu.h" />
-    <ClInclude Include="vengine\GUI\IngameMenu.h" />
-    <ClInclude Include="vengine\GUI\LoadLevelDialog.h" />
-    <ClInclude Include="vengine\GUI\VengineGUI.h" />
-    <ClInclude Include="vengine\Image.h" />
-    <ClInclude Include="vengine\Input.h" />
-    <ClInclude Include="vengine\InputListener.h" />
-    <ClInclude Include="vengine\Level\LayerDataTypes.h" />
-    <ClInclude Include="vengine\Level\Level.h" />
-    <ClInclude Include="vengine\Level\LevelLoader.h" />
-    <ClInclude Include="vengine\Level\Tilelayer.h" />
-    <ClInclude Include="vengine\Level\VengineLevel.h" />
-    <ClInclude Include="vengine\Level\MapLayer.h" />
-    <ClInclude Include="vengine\Level\VengineMap.h" />
-    <ClInclude Include="vengine\ObjectManager.h" />
-    <ClInclude Include="vengine\Physics.h" />
-    <ClInclude Include="vengine\Render\Render.h" />
-    <ClInclude Include="vengine\Render\RenderListener.h" />
-    <ClInclude Include="vengine\Script\LuaScript.h" />
-    <ClInclude Include="vengine\Script\Script.h" />
-    <ClInclude Include="vengine\Script\ScriptObject.h" />
-    <ClInclude Include="vengine\Tiled.h" />
-    <ClInclude Include="vengine\TLPP\tolua_Application.h" />
-    <ClInclude Include="vengine\Utility.h" />
-    <ClInclude Include="vengine\Vengine.h" />
-    <ClInclude Include="vengine\VengineStatics.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

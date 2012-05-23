@@ -1,29 +1,31 @@
-#include "vengine\Application.h"
-#include <vengine\Vengine.h>
-#include "vengine\GUI\VengineGUI.h"
-#include "vengine\Level\VengineMap.h"
-#include <vengine\Script\Script.h>
-#include <vengine\VengineStatics.h>
+#include "Application.h"
 
-#include <iostream>
-
-int main() 
+using namespace VE;
+int main(int argc, const char* argv[])
 {
-	VE::CApplication* app = VE::CreateApp();
-	// Initialize
-	if (int ret = app->Init())
-		return ret;
+	CApplication* game = CApplication::Create();
+	if (!game)
+	{
+		vWarning("Error creating the application.");
+		return EXIT_FAILURE;
+	}
 
-	// Bind classes
-	VE::GetScriptMgr().BindToLua(BindCPPToLua);
-	VE::GetScriptMgr().SetProvideGlobals(ProvideGlobals);
-	VE::GetLvlMgr().SetLevelFactories(ProvideLevelFactories);
+	if(game->Init())
+	{
+		vWarning("Error initializing the application.");
+		return EXIT_FAILURE;
+	}
 
-	// Run the app
-	if (int ret = app->Run())
-		return ret;
-	// Free memory
-	delete app;
-	app = nullptr;
-	return EXIT_SUCCESS;
+
+	for (size_t i = 0; i < argc; ++i)
+	{
+		//std::cout << argv[i];
+		if (argv[i] == std::string("-loadmap") && (i + 1) < argc)
+		{
+			game->LoadMap(argv[i+1]);
+		}
+	}
+
+	int ret = game->Run(argc, argv);
+	return ret;
 }

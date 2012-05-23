@@ -1,0 +1,89 @@
+#ifndef CAMERA_H
+#define CAMERA_H
+
+#include "GameObject.h"
+#include "Physics.h"
+
+namespace VE
+{
+	class IGameObject;
+	class CCamera
+	{
+		// IGameObject needs access to UnWatch()
+		friend IGameObject;
+	protected:
+		/* 
+		* UnWatch()
+		*
+		* Tell the camera not to follow an object if it's
+		* pointer is the one passed.
+		*
+		* Params:
+		*	IGameObject* - The gameobject to stop watching.
+		*
+		* Notes:
+		*	I need this function because I need to ensure that whenever
+		*	a game object is destroyed that, if the camera is following it,
+		*	the camera doesn't try to use an invalid pointer. This function
+		*	is meant to only be called by IGameObject's destructor.
+		*/
+		void UnWatch(IGameObject* gameObj);
+
+	public:
+		// Pass an object to follow. Null pointer means camera focuses on (0,0) in the world.
+		CCamera(IGameObject* gameObj = nullptr);
+		~CCamera(void);
+
+		// 2D Vector of the camera's center/focus position in pixels.
+		inline b2Vec2 PosPix(void) const { if (m_gameObj) return MtrToPix(m_gameObj->Pos()); return b2Vec2(0,0); }
+		// 2D vector of the camera' center/focus position in meters.
+		inline b2Vec2 PosMtr(void) const { if (m_gameObj) return m_gameObj->Pos(); return b2Vec2(0,0); }
+		/*
+		* TopLeftPosPix()
+		*
+		* Gets the gameworld position of the topleft of the camera view.
+		*
+		* Notes:
+		*	The top left of the camera corresponds to the to the top left
+		*	of the computer screen, which should be (0,0). Everything below
+		*	(0,0) is not viewable. Everything past (0,0) + b2Vec2(camWidth,camHeight)
+		*	is also not viewable.
+		*/
+		b2Vec2 TopLeftPosPix(void) const 
+		{ 
+			b2Vec2 tl = MtrToPix(PosMtr());
+			tl.x -= m_width / 2.0f;
+			tl.y -= m_height / 2.0f;
+			return tl;
+		} 
+		/*
+		* Watch()
+		*
+		* Set what game object the camera should follow.
+		*
+		* Params:
+		*	IGameObject* -	The object that should be followed.
+		*		A null pointer means the camera follows nothing
+		*		and focuses on position (0,0) in the game world.
+		*/
+		inline void Watch(IGameObject* gameObj) { m_gameObj = gameObj; }
+		// Set the width of the camera in pixels
+		void SetWidth(size_t width) { if (width) m_width = width; }
+		// Set the height of the camera in pixels
+		void SetHeight(size_t height) { if (height) m_height = height; }
+		// Width of the camera in pixels
+		inline size_t Width(void) const { return m_width; }
+		// Height of the camera in pixels.
+		inline size_t Height(void) const { return m_height; }
+
+	private:
+		// The object the camera is following. Null means none and focus on (0,0).
+		IGameObject* m_gameObj;
+		// The width of the camera. Pix.
+		size_t m_width;
+		// The height of the camera. Pix.
+		size_t m_height;
+
+	};
+}
+#endif
