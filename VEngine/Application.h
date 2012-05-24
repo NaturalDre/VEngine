@@ -15,7 +15,9 @@ class CApplication
 protected:
 	CApplication(void);
 
+
 public:
+	virtual ~CApplication(void);
 	static CApplication* Create(void);
 
 	/*
@@ -59,20 +61,20 @@ public:
 	 * Returns:
 	 *	bool - True if it loaded without error. False otherwise.
 	 */
-	bool LoadMap(const std::string& fileName) { return m_mapFile.ReadMapFile(fileName); }
+	bool LoadMap(const std::string& fileName);
 	/*
 	 * IsMapLoaded()
 	 *
 	 * Returns if a map is currently loaded
 	 */
-	bool IsMapLoaded(void) const;
+	bool IsMapLoaded(void) const { m_mapFile.IsValid(); }
 	// Pointer to the player
 	CPlayer* GetPlayer(void) const { return m_player; }
 	// Set the player
 	void SetPlayer(CPlayer* player) { m_player = player; }
 protected:
 	Tiled::CMapFile m_mapFile;
-	bool m_mapLoaded;
+	//bool m_mapLoaded;
 	CPlayer* m_player;
 };
 

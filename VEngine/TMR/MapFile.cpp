@@ -14,17 +14,18 @@ CMapFile::CMapFile(void)
 	m_tileHeight = 0;
 	m_tileWidth = 0;
 
+	m_physicsLayer = nullptr;
 	m_valid = false;
 }
 
 void CMapFile::LoadMapData(lua_State* L)
 {
-	m_version = Version(L);
-	m_orientation = Orientation(L);
-	m_width = MapWidth(L);
-	m_height = MapHeight(L);
-	m_tileWidth = TileWidth(L);
-	m_tileHeight = TileHeight(L);
+	m_version = GetVersion(L);
+	m_orientation = GetOrientation(L);
+	m_width = GetMapWidth(L);
+	m_height = GetMapHeight(L);
+	m_tileWidth = GetTileWidth(L);
+	m_tileHeight = GetTileHeight(L);
 }
 
 void CMapFile::LoadLayers(lua_State* L)
@@ -36,9 +37,9 @@ void CMapFile::LoadLayers(lua_State* L)
 		m_tilesets.push_back(ts);
 	}
 
-	for (size_t i = 1, max = LayerCount(L); i <= max; ++i)
+	for (size_t i = 1, max = GetLayerCount(L); i <= max; ++i)
 	{
-		const std::string type = LayerType(L, i);
+		const std::string type = GetLayerType(L, i);
 
 		if(type == "tilelayer")
 		{
@@ -50,7 +51,11 @@ void CMapFile::LoadLayers(lua_State* L)
 		{
 			CObjectLayer* layer = new CObjectLayer;
 			layer->ReadMapFile(this, L, i);
-			m_objectLayers.push_back(layer);
+
+			if (layer->Property("type") == "physics")
+				m_physicsLayer = layer;
+			else
+				m_objectLayers.push_back(layer);
 		}
 	}
 }

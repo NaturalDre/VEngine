@@ -13,8 +13,8 @@ CTileLayer::CTileLayer(void)
 
 bool CTileLayer::ReadMap(lua_State* L, const size_t layerIndex, CMapFile* mapFile)
 {
-	SetWidth(mapFile->GetWidth());
-	SetHeight(mapFile->GetHeight());
+	SetWidth(mapFile->Width());
+	SetHeight(mapFile->Height());
 
 	if(PushLayer(L, layerIndex))
 	{
@@ -26,7 +26,7 @@ bool CTileLayer::ReadMap(lua_State* L, const size_t layerIndex, CMapFile* mapFil
 	}
 
 	//m_data.resize(mapFile->GetWidth() * mapFile->GetHeight(), 0);
-	m_data.resize(mapFile->GetHeight(), std::vector<size_t>(mapFile->GetWidth(), 0));
+	m_data.resize(mapFile->Height(), std::vector<size_t>(mapFile->Width(), 0));
 	//for (size_t i = 0, element = 1; i < (GetWidth() * GetHeight()); ++i)
 	//	m_data[i] = DataValue(L, layerIndex, element++);
 

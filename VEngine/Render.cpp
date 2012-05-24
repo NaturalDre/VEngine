@@ -25,7 +25,7 @@ namespace VE
 		// The map file; Contains all info on how to the map is structured
 		const Tiled::CMapFile& mapFile = App()->GetMap();
 		// List of all the TileLayers in the map file.
-		auto layers = App()->GetMap().GetTileLayers();
+		auto layers = App()->GetMap().TileLayers();
 		// We go through all the layers and draw them in order(bottom layer is first in the list)
 		for (auto iter = layers.begin(); iter != layers.end(); ++iter)
 		{
@@ -38,6 +38,8 @@ namespace VE
 		{
 			view->Draw();
 		}
+
+		World()->DrawDebugData();
 	}
 
 	CRender* Renderer(void)
@@ -62,13 +64,13 @@ void RenderLayer(const Tiled::CMapFile& mf, Tiled::CTileLayer* layer)
 	const float tly = VE::Renderer()->Cam()->TopLeftPosPix().y;	
 
 
-	const int startCol(tlx / mf.GetTileWidth());
-	const int startRow(tly / mf.GetTileHeight());
+	const int startCol(tlx / mf.TileWidth());
+	const int startRow(tly / mf.TileHeight());
 
 
 
-	const int endCol = (VE::GetDisplayWidth() / mf.GetTileWidth()) + 2; // +2 is buffer otherwise last col won't draw
-	const int endRow = (VE::GetDisplayHeight() / mf.GetTileHeight()) + 2; // +2 is buffer otherwise last row won't draw
+	const int endCol = (VE::GetDisplayWidth() / mf.TileWidth()) + 2; // +2 is buffer otherwise last col won't draw
+	const int endRow = (VE::GetDisplayHeight() / mf.TileHeight()) + 2; // +2 is buffer otherwise last row won't draw
 
 	for (int row = startRow; row < endRow; ++row)
 	{
@@ -85,15 +87,15 @@ void RenderLayer(const Tiled::CMapFile& mf, Tiled::CTileLayer* layer)
 					tile = nullptr;
 				}
 				prevID = id;
-				tile = Tiled::CTileset::LoadTile(mf.GetTilesets(), id);
+				tile = Tiled::CTileset::LoadTile(mf.Tilesets(), id);
 			}
 			//if (tile)
 			//	al_draw_bitmap(tile, (col -1) * mf.GetTileWidth(), (row - 1) * mf.GetTileHeight(), 0);
 
 			prevID = id;
 
-			float dx = col * mf.GetTileWidth();
-			float dy = row * mf.GetTileHeight();
+			float dx = col * mf.TileWidth();
+			float dy = row * mf.TileHeight();
 
 			dx -= tlx;
 			dy -= tly;

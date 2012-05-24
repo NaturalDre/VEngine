@@ -27,5 +27,7 @@ int main(int argc, const char* argv[])
 	}
 
 	int ret = game->Run(argc, argv);
+	delete game;
+	game = nullptr;
 	return ret;
 }

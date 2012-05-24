@@ -14,10 +14,14 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BoxView.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ContactListener.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectModel.cpp" />
     <ClCompile Include="ObjectView.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="TMR\MapFile.cpp" />
     <ClCompile Include="TMR\ObjectLayer.cpp" />
@@ -31,8 +35,11 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="BoxView.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectList.h" />
     <ClInclude Include="ObjectModel.h" />
     <ClInclude Include="ObjectView.h" />
     <ClInclude Include="Physics.h" />

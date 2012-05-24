@@ -5,7 +5,7 @@
 
 namespace Tiled
 {
-	std::string Version(lua_State* L)
+	std::string GetVersion(lua_State* L)
 	{
 		assert(L != nullptr);
 		// STK:
@@ -37,7 +37,7 @@ namespace Tiled
 		return val;
 	}
 
-	std::string Orientation(lua_State* L)
+	std::string GetOrientation(lua_State* L)
 	{
 		assert(L != nullptr);
 		// STK:
@@ -69,7 +69,7 @@ namespace Tiled
 		return val;
 	}
 
-	size_t MapWidth(lua_State* L)
+	size_t GetMapWidth(lua_State* L)
 	{
 		assert(L != nullptr);
 		// STK:
@@ -101,7 +101,7 @@ namespace Tiled
 		return val;
 	}
 
-	size_t MapHeight(lua_State* L)
+	size_t GetMapHeight(lua_State* L)
 	{
 		assert(L != nullptr);
 		// STK:
@@ -132,7 +132,7 @@ namespace Tiled
 		return val;
 	}
 
-	size_t TileWidth(lua_State* L)
+	size_t GetTileWidth(lua_State* L)
 	{
 		assert(L != nullptr);
 		// STK:
@@ -163,7 +163,7 @@ namespace Tiled
 		return val;
 	}
 
-	size_t TileHeight(lua_State* L)
+	size_t GetTileHeight(lua_State* L)
 	{
 		assert(L != nullptr);
 		// STK:
@@ -194,7 +194,7 @@ namespace Tiled
 		return val;
 	}
 
-	size_t LayerCount(lua_State* L)
+	size_t GetLayerCount(lua_State* L)
 	{
 		// STK: 
 		lua_getglobal(L, "GetNumberOfLayers");
@@ -226,7 +226,7 @@ namespace Tiled
 		return amount;
 	}
 
-	std::string LayerType(lua_State* L, size_t element)
+	std::string GetLayerType(lua_State* L, size_t element)
 	{
 		assert(L != nullptr);
 		// STK:

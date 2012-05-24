@@ -7,20 +7,20 @@
 
 namespace Tiled
 {
-	std::string Version(lua_State* L);
-	std::string Orientation(lua_State* L);
+	std::string GetVersion(lua_State* L);
+	std::string GetOrientation(lua_State* L);
 	// map.width
-	size_t MapWidth(lua_State* L);
+	size_t GetMapWidth(lua_State* L);
 	// map.height
-	size_t MapHeight(lua_State* L);
+	size_t GetMapHeight(lua_State* L);
 	// map.tilewidth
-	size_t TileWidth(lua_State* L);
+	size_t GetTileWidth(lua_State* L);
 	// map.tileheight
-	size_t TileHeight(lua_State* L);
+	size_t GetTileHeight(lua_State* L);
 	// #map.layers
-	size_t LayerCount(lua_State* L);
+	size_t GetLayerCount(lua_State* L);
 	// map.layers[element].type
-	std::string LayerType(lua_State* L, size_t element);
+	std::string GetLayerType(lua_State* L, size_t element);
 
 	// return map.layers[layer].objects[index] NOTE: Value at top of stack must be popped if
 	// call returns true.

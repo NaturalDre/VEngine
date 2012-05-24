@@ -10,15 +10,25 @@ struct lua_State;
 namespace Tiled
 {
 	class CMapFile;
+
 	class CObjectLayer: public ILayer
 	{
+		typedef std::map<const std::string, const std::string> LayerProperties;	
 	public:
 		CObjectLayer(void);
-		int Type(void) const { return e_ObjectLayer; }
+
 		void ReadMapFile(CMapFile* mapFile, lua_State* L, size_t layer);
 
+		int Type(void) const { return e_ObjectLayer; }
+
+		LayerProperties Properties(void) const { return m_properties; }
+		const std::list<TiledObject>& Objects(void) { return m_objects; }
+
+
+		std::string Property(const std::string& prop);
 	private:
-		std::map<const std::string, const std::string> m_properties;
+	
+		LayerProperties m_properties;
 		std::list<TiledObject> m_objects;
 	};
 };
