@@ -5,7 +5,6 @@ using namespace Tiled;
 
 std::string GetStringVal(const std::string& key, lua_State* L);
 float GetFloatVal(const std::string& key, lua_State* L);
-//std::map<const std::string, std::string> GetProperties(lua_State*L);
 
 TiledObject::TiledObject(TiledObject&& rhs)
 	: m_name(rhs.m_name)
@@ -110,40 +109,3 @@ float GetFloatVal(const std::string& key, lua_State* L)
 	lua_pop(L, 1);
 	return val;
 }
-
-//std::map<const std::string, std::string> GetProperties(lua_State*L)
-//{
-//	// STK: table1 --
-//	lua_pushstring(L, "properties");
-//	// STK: table1 -- string
-//	lua_rawget(L, 1);
-//	// STK: table1 -- table2?
-//	if (!lua_istable(L, -1))
-//	{
-//		lua_pop(L, 1);
-//		// STL: table1 --
-//		throw(std::exception("Table has not 'properties' key."));
-//	}
-//	// STK: table1 -- table2
-//	lua_insert(L, 1);
-//	// STK: table2 table1 --
-//	lua_pushnil(L);
-//	// STK: table2 table1 -- nil
-//	std::map<const std::string, std::string> props;
-//	while(lua_next(L, 1))
-//	{
-//		// STK: table2 table1 -- string? string?
-//		if (!lua_isstring(L, -2))
-//			throw(std::exception("A key in properties is a non string value."));
-//		else if(!lua_isstring(L, -1))
-//			throw(std::exception("A key in properties returned a non string value."));
-//		// STK: table2 table1 -- string string
-//		props[lua_tostring(L, -2)] = lua_tostring(L, -1);
-//		lua_pop(L, 1);
-//
-//	}
-//	// STK: table2 table1 --
-//	lua_remove(L, 1);
-//	// STK: table1
-//	return std::move(props);
-//}

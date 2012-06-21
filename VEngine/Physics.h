@@ -2,16 +2,8 @@
 #define PHYSICS_H
 
 #include <Box2D\Box2D.h>
-#include "ContactListener.h"
 
-#include <list>
-#include <vector>
-
-// Pixels per meter
-#define SCALE 32.0f
-
-
-class DebugDraw;
+const float SCALE(32.0f);
 
 namespace Tiled
 {
@@ -20,33 +12,6 @@ namespace Tiled
 
 namespace VE
 {
-	class CApplication;
-	class CApplicationImpl;
-	class CPhysics
-	{
-		friend CApplication;
-		friend CApplicationImpl;
-	protected:
-		CPhysics(void);
-		~CPhysics(void);
-		// If the map file has a physics layer; use the data to create static objects.
-		void ProcessPhysicsLayer(void);
-
-		static void Free(void);
-	public:
-		// Pointer to the physics world.
-		b2World* World(void) const { return m_world; }
-		// Simulate all objects in the physics world.
-		void Step(void);
-	private:
-		b2World* m_world;
-		CContactListener* m_contactListener;
-		DebugDraw* m_debugDraw;
-		// Bodies created from ProcessPhysicsLayer()
-		std::list<b2Body*> m_mapBodies;
-	};
-
-	CPhysics* Physics(void);
 	b2World* World(void);
 
 	/* 
@@ -103,12 +68,5 @@ namespace VE
 	//	to do. So we need a helper function to do that for us and return it in meters.
 	//*	
 	b2Vec2 GetWorldCenterMtrs(const Tiled::TiledObject& obj);
-	// Angle of a line
-
-
-	//// Seperate Polygon into multiple smaller shapes
-	//std::vector<b2Vec2> Seperate(b2Vec2 verts[], size_t count);
 }
-
-
 #endif

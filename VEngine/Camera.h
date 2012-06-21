@@ -1,16 +1,15 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "GameObject.h"
 #include "Physics.h"
 
 namespace VE
 {
-	class IGameObject;
+	class CPlayer;
 	class CCamera
 	{
 		// IGameObject needs access to UnWatch()
-		friend IGameObject;
+		friend CPlayer;
 	protected:
 		/* 
 		* UnWatch()
@@ -27,17 +26,17 @@ namespace VE
 		*	the camera doesn't try to use an invalid pointer. This function
 		*	is meant to only be called by IGameObject's destructor.
 		*/
-		void UnWatch(IGameObject* gameObj);
+		void UnWatch(CPlayer* player);
 
 	public:
 		// Pass an object to follow. Null pointer means camera focuses on (0,0) in the world.
-		CCamera(IGameObject* gameObj = nullptr);
+		CCamera(CPlayer* player = nullptr, size_t width = 800, size_t height = 600);
 		~CCamera(void);
 
 		// 2D Vector of the camera's center/focus position in pixels.
-		inline b2Vec2 PosPix(void) const { if (m_gameObj) return MtrToPix(m_gameObj->Pos()); return b2Vec2(0,0); }
+		inline b2Vec2 PosPix(void) const;
 		// 2D vector of the camera' center/focus position in meters.
-		inline b2Vec2 PosMtr(void) const { if (m_gameObj) return m_gameObj->Pos(); return b2Vec2(0,0); }
+		inline b2Vec2 PosMtr(void) const;
 		/*
 		* TopLeftPosPix()
 		*
@@ -66,7 +65,7 @@ namespace VE
 		*		A null pointer means the camera follows nothing
 		*		and focuses on position (0,0) in the game world.
 		*/
-		inline void Watch(IGameObject* gameObj) { m_gameObj = gameObj; }
+		inline void Watch(CPlayer* player) { m_player = player; }
 		// Set the width of the camera in pixels
 		void SetWidth(size_t width) { if (width) m_width = width; }
 		// Set the height of the camera in pixels
@@ -78,7 +77,7 @@ namespace VE
 
 	private:
 		// The object the camera is following. Null means none and focus on (0,0).
-		IGameObject* m_gameObj;
+		CPlayer* m_player;
 		// The width of the camera. Pix.
 		size_t m_width;
 		// The height of the camera. Pix.

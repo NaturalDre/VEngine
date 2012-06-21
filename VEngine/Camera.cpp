@@ -1,11 +1,12 @@
 #include "Camera.h"
+#include "Player.h"
 
 namespace VE
 {
-	CCamera::CCamera(IGameObject* gameObj)
-		: m_gameObj(nullptr)
-		, m_width(1024)
-		, m_height(768)
+	CCamera::CCamera(CPlayer* player, size_t width, size_t height)
+		: m_player(player)
+		, m_width(width)
+		, m_height(height)
 	{
 
 
@@ -13,6 +14,20 @@ namespace VE
 
 	CCamera::~CCamera(void)
 	{
-		m_gameObj = nullptr;
+		m_player = nullptr;
+	}
+
+	b2Vec2 CCamera::PosPix(void) const 
+	{ 
+		if (m_player) 
+			return MtrToPix(m_player->Position()); 
+		return b2Vec2(0,0); 
+	}
+
+	b2Vec2 CCamera::PosMtr(void) const 
+	{ 
+		if (m_player) 
+			return m_player->Position(); 
+		return b2Vec2(0,0); 
 	}
 }

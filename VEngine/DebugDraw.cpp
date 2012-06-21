@@ -1,11 +1,6 @@
 #include "DebugDraw.h"
-//#include <vengine\DebugDraw.h>
-//#include <vengine\Physics.h>
-//#include <vengine\DebugDraw.h>
 #include <allegro5\allegro5.h>
 #include <allegro5\allegro_primitives.h>
-//#include <vengine\Utility.h>
-
 #include "Physics.h"
 
 using namespace VE;

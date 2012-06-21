@@ -30,10 +30,5 @@ struct ColRow
 	size_t col, row; 
 };
 
-
-
-
-
-
 ColRow GetColRow(size_t cols, size_t id);
 #endif
