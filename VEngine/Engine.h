@@ -38,6 +38,7 @@ namespace VE
 		ISystemController* m_controller;
 		bool m_done;
 		bool m_needRedraw;
+		bool m_isInit;
 	};
 }
 #endif

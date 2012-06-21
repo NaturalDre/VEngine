@@ -38,6 +38,8 @@ namespace VE
 				m_player->MoveLeft();
 				m_movedLThisFrame = true;
 			}
+			else if(ev.keyboard.keycode == ALLEGRO_KEY_L)
+				m_player->AdvanceLevel();
 		}
 		//if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_D)
 		//	m_player->MoveRight();
@@ -47,5 +49,7 @@ namespace VE
 	{
 		m_movedLThisFrame = false;
 		m_movedRThisFrame = false;
+
+		m_player->Update(deltaTime);
 	}
 }

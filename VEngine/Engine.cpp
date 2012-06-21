@@ -12,6 +12,7 @@ namespace VE
 		, m_display(nullptr)
 		, m_done(false)
 		, m_controller(nullptr)
+		, m_isInit(false)
 	{
 
 	}
@@ -33,6 +34,7 @@ namespace VE
 
 	int CEngine::Init(void)
 	{
+
 		al_init();
 		al_install_keyboard();
 
@@ -44,13 +46,15 @@ namespace VE
 		al_register_event_source(m_evQ, al_get_display_event_source(m_display));
 		al_register_event_source(m_evQ, al_get_keyboard_event_source());
 
+		
+		m_isInit = true;
 		return 0;
 	}
 
 	int CEngine::Run(void)
 	{
-		if(Init())
-			return 0;
+		if (!m_isInit)
+			return -1;
 
 		al_start_timer(m_timer);
 		while(!m_done)
