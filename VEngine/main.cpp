@@ -1,9 +1,10 @@
-#include "Application.h"
-
+#include "Vengine.h"
+#include <boost\lexical_cast.hpp>
 using namespace VE;
 int main(int argc, const char* argv[])
 {
 	CApplication* game = CApplication::Create();
+
 	if (!game)
 	{
 		vWarning("Error creating the application.");

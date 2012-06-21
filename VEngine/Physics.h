@@ -5,6 +5,8 @@
 #include "ContactListener.h"
 
 #include <list>
+#include <vector>
+
 // Pixels per meter
 #define SCALE 32.0f
 
@@ -101,7 +103,11 @@ namespace VE
 	//	to do. So we need a helper function to do that for us and return it in meters.
 	//*	
 	b2Vec2 GetWorldCenterMtrs(const Tiled::TiledObject& obj);
+	// Angle of a line
 
+
+	//// Seperate Polygon into multiple smaller shapes
+	//std::vector<b2Vec2> Seperate(b2Vec2 verts[], size_t count);
 }
 
 

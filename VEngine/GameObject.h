@@ -15,10 +15,13 @@ namespace VE
 	public:
 		// Position of this object in the game world. Meters.
 		virtual b2Vec2 Pos(void) const = 0; 
-		//b2Vec2 PosPix(void) const { return mtrToPix(Pos()
+		// Tag
+		const std::string& Tag(void) const { return m_tag; }
+		//
+		void SetTag(const std::string& tag) { m_tag = tag; }
 
 	protected:
-		
+		std::string m_tag;
 	};
 
 }

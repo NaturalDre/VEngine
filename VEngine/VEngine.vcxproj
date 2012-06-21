@@ -11,18 +11,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Polygon.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Triangle.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BoxView.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ContactListener.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameObjectList.cpp" />
+    <ClCompile Include="LuaError.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectModel.cpp" />
     <ClCompile Include="ObjectView.cpp" />
     <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="Poly.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="ScriptedObjectModel.cpp" />
     <ClCompile Include="TMR\MapFile.cpp" />
     <ClCompile Include="TMR\ObjectLayer.cpp" />
     <ClCompile Include="TMR\TiledLua.cpp" />
@@ -39,11 +46,15 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameObjectList.h" />
+    <ClInclude Include="LuaError.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="ObjectModel.h" />
     <ClInclude Include="ObjectView.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="Poly.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="Script.h" />
+    <ClInclude Include="ScriptedObjectModel.h" />
     <ClInclude Include="TMR\Layer.h" />
     <ClInclude Include="TMR\LayerTypes.h" />
     <ClInclude Include="TMR\MapFile.h" />

@@ -1,16 +1,15 @@
 #include "ObjectModel.h"
-#include "Application.h"
+#include "ObjectManager.h"
 
 namespace VE
 {
-
 	IObjectModel::IObjectModel(void)
 	{
-		Internal::Register(this);
+		ObjectMgr()->Register(this);
 	}
 
 	IObjectModel::~IObjectModel(void)
 	{
-		Internal::Deregister(this);
+		ObjectMgr()->Deregister(this);
 	}
 }

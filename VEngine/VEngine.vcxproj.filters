@@ -17,6 +17,21 @@
     <Filter Include="Source Files\TMR">
       <UniqueIdentifier>{2cdc5df0-5dc6-4fc2-ab9c-55cfffa5efe1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Test">
+      <UniqueIdentifier>{4e9e42f7-866d-46ad-b4dc-809d7c27c7b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Test">
+      <UniqueIdentifier>{399545fd-0e7b-40b9-b1b0-6581e6b30779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PhysicsEditor">
+      <UniqueIdentifier>{030953c0-ee4a-4d91-aad3-e528ca8894e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PhysicsEditor">
+      <UniqueIdentifier>{59dee0d9-362d-4bd0-b2ae-5ed68acac930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Box2DUtil">
+      <UniqueIdentifier>{05ae2577-a5f3-430a-a553-70cf2d443e74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -70,10 +85,31 @@
     <ClCompile Include="ContactListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjectList.cpp">
+    <ClCompile Include="DebugDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugDraw.cpp">
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Poly.cpp">
+      <Filter>Source Files\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Polygon.cpp">
+      <Filter>Source Files\Box2DUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Triangle.cpp">
+      <Filter>Source Files\Box2DUtil</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptedObjectModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -138,10 +174,22 @@
     <ClInclude Include="ContactListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectList.h">
+    <ClInclude Include="DebugDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugDraw.h">
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Poly.h">
+      <Filter>Header Files\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptedObjectModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaError.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

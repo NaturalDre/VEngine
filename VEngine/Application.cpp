@@ -1,22 +1,24 @@
 #include "Application.h"
-#include <allegro5\allegro5.h>
-#include <allegro5\allegro_primitives.h>
-#include <allegro5\allegro_image.h>
-#include <allegro5\allegro_font.h>
-#include <allegro5\allegro_ttf.h>
-#include <allegro5\allegro_physfs.h>
-#include <allegro5\timer.h>
-#include "Render.h"
-#include "ObjectModel.h"
-#include "Utility.h"
-#include "BoxView.h"
-#include "Physics.h"
+#include "Vengine.h"
+#include <tolua++.h>
+#include "Poly.h"
+//#include <allegro5\allegro5.h>
+//#include <allegro5\allegro_primitives.h>
+//#include <allegro5\allegro_image.h>
+//#include <allegro5\allegro_font.h>
+//#include <allegro5\allegro_ttf.h>
+//#include <allegro5\allegro_physfs.h>
+//#include <allegro5\timer.h>
+//#include "Render.h"
+//#include "ObjectModel.h"
+//#include "Utility.h"
+//#include "BoxView.h"
+//#include "Physics.h"
 
 
 namespace VE {
 
 	const float FPS(60.0f);
-
 	class CApplicationImpl;
 	CApplicationImpl* APP = nullptr;
 
@@ -46,16 +48,23 @@ namespace VE {
 		ALLEGRO_DISPLAY* m_display;
 		CPhysics* m_physics;
 		std::set<IObjectModel*> m_models;
+		CObjectManager* m_objMgr;
+
 	};
 
 	CApplicationImpl::CApplicationImpl(void)
 	{
 		APP = this;
 		m_physics = nullptr;
+		m_objMgr = nullptr;
+		m_luaState = nullptr;
 	}
 
 	CApplicationImpl::~CApplicationImpl(void)
 	{
+		delete m_objMgr;
+		m_objMgr = nullptr;
+
 		delete m_physics;
 		m_physics = nullptr;
 
@@ -67,6 +76,9 @@ namespace VE {
 
 		al_destroy_display(m_display);
 		m_display = nullptr;
+
+		lua_close(m_luaState);
+		m_luaState = nullptr;
 	}
 
 	int CApplicationImpl::Init(void)
@@ -98,11 +110,20 @@ namespace VE {
 			return e_TTF;
 		}
 
+		// Create an luastate to hold all script data.
+		m_luaState = lua_open();
+		assert(m_luaState != nullptr);
+		tolua_open(m_luaState);
+		// TO DO: Bind C++ classes/data to lua classes/data using tolua++
+
+
+
 		PHYSFS_init(nullptr);
 		PHYSFS_addToSearchPath("Images.zip", 1);
 		al_set_physfs_file_interface();
 
 		m_timer = al_create_timer(1.0f / FPS);
+		al_set_new_display_flags(ALLEGRO_OPENGL);
 		m_display = al_create_display(1024, 768);
 		m_evQ = al_create_event_queue();
 
@@ -112,13 +133,13 @@ namespace VE {
 		al_register_event_source(m_evQ, al_get_display_event_source(m_display));
 
 		m_physics = new CPhysics;
+		m_objMgr = new CObjectManager;
 		return e_NoError;
 	}
 
 	void CApplicationImpl::Update(void)
 	{
-		BOOST_FOREACH(IObjectModel* model, m_models)
-			model->Update();
+		m_objMgr->UpdateGameObjects();
 	}
 
 	int CApplicationImpl::Run(int argc, const char* argv[])
@@ -126,9 +147,8 @@ namespace VE {
 		if (!m_initialized)
 			return EXIT_FAILURE;
 
-
 		//BoxView bv;
-
+		//CPoly poly;
 		al_start_timer(m_timer);
 		while(true)
 		{
@@ -175,13 +195,12 @@ namespace VE {
 
 	CApplication::CApplication(void)
 	{
-		//m_mapLoaded = false;
-		m_player = nullptr;
+		m_luaState = nullptr;
 	}
 
 	CApplication::~CApplication(void)
 	{
-		m_player = nullptr;
+
 	}
 
 	CApplication* CApplication::Create(void)
@@ -210,15 +229,5 @@ namespace VE {
 	size_t GetDisplayHeight(void)
 	{
 		return al_get_display_height(al_get_current_display());
-	}
-
-	void Internal::Register(IObjectModel* model)
-	{
-		APP->AddModel(model);
-	}
-
-	void Internal::Deregister(IObjectModel* model)
-	{
-		APP->RemoveModel(model);
 	}
 }

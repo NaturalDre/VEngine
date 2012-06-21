@@ -98,5 +98,10 @@ namespace VE
 		b2Vec2 pos(obj.X(), obj.Y());
 		return TiledToBoxCoords(pos, obj.Width(), obj.Height());
 	}
+
+	//std::vector<b2Vec2> Seperate(b2Vec2 verts[], size_t count)
+	//{
+
+	//}
 }	
 

@@ -2,16 +2,18 @@
 #define OBJECTMODEL_H
 
 #include <allegro5\allegro5.h>
+#include <memory>
+#include "Script.h"
 
-namespace VE {
-	class CApplicationImpl;
-	
+namespace VE 
+{
+	class CObjectManager;
 	class IObjectModel
 	{
-		friend CApplicationImpl;
+		friend CObjectManager;
 	protected:
 		IObjectModel(void);
-		~IObjectModel(void);
+		virtual ~IObjectModel(void) = 0;
 
 		virtual void Update(void) { }
 		//virtual void InputEvent(ALLEGRO_EVENT* ev) { }
