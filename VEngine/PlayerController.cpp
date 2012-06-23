@@ -6,26 +6,28 @@
 
 namespace VE
 {
-	CPlayerController::CPlayerController(CPlayer* player, CPlayerView* playerView)
+	CPlayerController::CPlayerController(CPlayer* player)
 		: m_player(player)
-		, m_playerView(playerView)
 		, m_movedLThisFrame(false)
 		, m_movedRThisFrame(false)
 	{
-		assert(m_player != nullptr);
-		assert(m_playerView != nullptr);
+		//assert(m_player != nullptr);
+		//assert(m_playerView != nullptr);
 
-		m_playerView->SetPlayer(player);
+		//m_playerView->SetPlayer(player);
 	}
 
 	CPlayerController::~CPlayerController(void)
 	{
-		delete m_player;
+		//delete m_player;
 		m_player = nullptr;
 	}
 
 	void CPlayerController::HandleEvent(const ALLEGRO_EVENT& ev)
 	{
+		if (!m_player)
+			return;
+
 		if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_CHAR)
 		{
 			if (ev.keyboard.keycode == ALLEGRO_KEY_D && !m_movedRThisFrame)
@@ -50,6 +52,15 @@ namespace VE
 		m_movedLThisFrame = false;
 		m_movedRThisFrame = false;
 
+		if (!m_player)
+			return;
 		m_player->Update(deltaTime);
+	}
+
+	void CPlayerController::SetPlayer(CPlayer* player)
+	{
+		//if (m_player)
+		//	m_player->SubscribeFromAll(this);
+		m_player = player;
 	}
 }

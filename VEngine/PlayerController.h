@@ -18,17 +18,18 @@ namespace VE
 		* CPlayerController()
 		*
 		* Params:
-		*	player - The player model that this controller will control. This
-		*			 controller will now own the pointer and delete it during destruction.
+		*	player - The player model that this controller will control.
 		*/
-		CPlayerController(CPlayer* player, CPlayerView* playerView);
+		CPlayerController(CPlayer* player = nullptr);
 		~CPlayerController(void);
+
 		void HandleEvent(const ALLEGRO_EVENT& ev);
 		void Update(double deltaTime);
 
+		void SetPlayer(CPlayer* player);
+
 	private:
 		CPlayer* m_player;
-		CPlayerView* m_playerView;
 
 		bool m_movedLThisFrame;
 		bool m_movedRThisFrame;

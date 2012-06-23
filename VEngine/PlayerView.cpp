@@ -15,7 +15,9 @@ namespace VE
 
 	CPlayerView::~CPlayerView(void)
 	{
-
+		if (m_player)
+			m_player->SubscribeFromAll(this);
+		m_player = nullptr;
 	}
 
 	void CPlayerView::Draw(void)
@@ -46,9 +48,7 @@ namespace VE
 
 		m_player = player;
 
-		if (!m_player)
-			return;
-
-		m_player->SubscribeTo("LevelUp", this);
+		if (m_player)
+			m_player->SubscribeTo("LevelUp", this);
 	}
 }

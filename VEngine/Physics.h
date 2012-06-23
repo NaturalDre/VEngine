@@ -5,6 +5,9 @@
 
 const float SCALE(32.0f);
 
+
+class DebugDraw;
+
 namespace Tiled
 {
 	class TiledObject;
@@ -12,7 +15,27 @@ namespace Tiled
 
 namespace VE
 {
-	b2World* World(void);
+	class CContactListener;
+
+	class CPhysics
+	{
+	public:
+		CPhysics(void);
+		~CPhysics(void);
+
+		inline void Simulate(void) const { m_world->Step(m_timeStep, m_velocityIters, m_positionIters); }
+		inline b2World* World(void) const { return m_world; }
+		inline CContactListener* ContactListener(void) const { return m_contactListener; }
+
+	private:
+		float m_timeStep;
+		size_t m_velocityIters, m_positionIters;
+
+		b2World* m_world;
+		DebugDraw* m_debugDrawer;
+		CContactListener* m_contactListener;
+	};
+
 
 	/* 
 	* GameToScreenPosPix()

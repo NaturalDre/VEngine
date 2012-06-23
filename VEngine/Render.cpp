@@ -13,7 +13,8 @@ namespace VE
 
 	CRender::~CRender(void)
 	{
-
+		delete m_mapFile;
+		m_mapFile = nullptr;
 	}
 
 	void CRender::AddView(IView* view)

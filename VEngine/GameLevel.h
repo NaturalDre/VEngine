@@ -7,12 +7,16 @@
 
 namespace VE
 {
-	class IEntityController;
+	//class IEntityController;
+	class IEntity;
 	class IView;
 
-	class CPlayer;
-	class CPlayerController;
+
 	class CRender;
+	class CPhysics;
+	class CPlayer;
+	class CPlayerView;
+	class CPlayerController;
 	class CGameLevel//: public IObject
 	{
 	protected:
@@ -21,8 +25,8 @@ namespace VE
 		CGameLevel(CRender* renderer);
 		~CGameLevel(void);
 
-		void SetLevelName(const std::string& levelName);
-		std::string LevelName(void) const { return m_levelName; }
+		inline void SetLevelName(const std::string& levelName) { m_levelName = levelName; }
+		inline std::string LevelName(void) const { return m_levelName; }
 
 		// Call Update on all Updatable Controllers
 		void UpdateAll(double deltaTime);
@@ -30,14 +34,21 @@ namespace VE
 		inline CPlayerController* Player(void) const { return m_playerController; }
 		void SetPlayerController(CPlayerController* controller);
 
+		inline CRender* Renderer(void) const { return m_renderer; }
+		inline CPhysics* Physics(void) const { return m_physics; }
+
 	private:
-		typedef std::unordered_set<IEntityController*> UpdateControllers;
+		typedef std::unordered_set<IEntity*> EntitySet;
 
 		std::string m_levelName;
-		UpdateControllers m_controllers;
+		EntitySet m_controllers;
+
+		CPlayer* m_player;
+		CPlayerView* m_playerView;
 		CPlayerController* m_playerController;
 
 		CRender* m_renderer;
+		CPhysics* m_physics;
 	};
 }
 #endif

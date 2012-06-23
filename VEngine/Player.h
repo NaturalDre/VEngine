@@ -2,11 +2,12 @@
 #define PLAYER_H
 
 #include "Physics.h"
+#include "Entity.h"
 #include "Observable.h"
 
 namespace VE
 {
-	class CPlayer
+	class CPlayer: public IEntity
 	{
 	protected:
 
@@ -25,6 +26,7 @@ namespace VE
 		void SubscribeTo(const std::string& topic, IObserver* observer) { m_publisher.Register(topic, observer); }
 		void SubscribeFrom(const std::string& topic, IObserver* observer) { m_publisher.Deregister(topic, observer); }
 		void SubscribeFromAll(IObserver* observer) { m_publisher.Deregister(observer); }
+
 	private:
 		// m_pos is for testing. Will be removed.
 		b2Vec2 m_pos;

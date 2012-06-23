@@ -17,9 +17,11 @@ namespace VE
 
 	CGameLevelController::~CGameLevelController(void)
 	{
-
 		delete m_gameLevel;
 		m_gameLevel = nullptr;
+
+		delete m_renderer;
+		m_renderer = nullptr;
 	}
 
 	void CGameLevelController::Notify(IEvent* ev)
