@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "PlayerView.h"
 #include "GameLevel.h"
+#include "TMR\MapFile.h"
+#include "Render.h"
 
 namespace VE
 {
@@ -12,7 +14,9 @@ namespace VE
 		, m_physics(nullptr)
 		, m_player(nullptr)
 		, m_playerView(nullptr)
+		, m_mapFile(nullptr)
 	{
+		m_mapFile = new Tiled::CMapFile;
 		m_physics = new CPhysics;
 		m_player = new CPlayer;
 		m_playerView = new CPlayerView(Renderer());
@@ -20,6 +24,13 @@ namespace VE
 
 		m_playerView->SetPlayer(m_player);
 		m_playerController->SetPlayer(m_player);
+
+		std::string err;
+		// Test: will likely call ReadMapFile from somewhere else.
+		m_mapFile->ReadMapFile("Simple.lua", err);
+
+		m_renderer->SetMapFile(m_mapFile);
+		m_renderer->SetCam(new CCamera);
 	}
 
 	CGameLevel::~CGameLevel(void)
@@ -36,6 +47,9 @@ namespace VE
 		delete m_physics;
 		m_physics = nullptr;
 
+		delete m_mapFile;
+		m_mapFile = nullptr;
+
 		// We don't own it.
 		m_renderer = nullptr;
 	}
@@ -49,7 +63,5 @@ namespace VE
 
 		for (auto iter = m_controllers.begin(); iter != m_controllers.end(); ++iter)
 			(*iter)->Update(deltaTime);
-
-
 	}
 }

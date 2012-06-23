@@ -34,9 +34,9 @@ namespace VE
 		~CCamera(void);
 
 		// 2D Vector of the camera's center/focus position in pixels.
-		inline b2Vec2 PosPix(void) const;
+		b2Vec2 PosPix(void) const;
 		// 2D vector of the camera' center/focus position in meters.
-		inline b2Vec2 PosMtr(void) const;
+		b2Vec2 PosMtr(void) const;
 		/*
 		* TopLeftPosPix()
 		*

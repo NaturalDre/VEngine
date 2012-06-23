@@ -5,6 +5,11 @@
 #include <unordered_set>
 #include <set>
 
+namespace Tiled
+{
+	class CMapFile;
+}
+
 namespace VE
 {
 	//class IEntityController;
@@ -49,6 +54,7 @@ namespace VE
 
 		CRender* m_renderer;
 		CPhysics* m_physics;
+		Tiled::CMapFile* m_mapFile;
 	};
 }
 #endif

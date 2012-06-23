@@ -1,6 +1,10 @@
 #include "Engine.h"
 #include <allegro5\allegro5.h>
+#include <allegro5\allegro_physfs.h>
+#include <allegro5\allegro_image.h>
 #include <algorithm>
+
+#include <physfs.h>
 #include "SystemController.h"
 #include "View.h"
 
@@ -34,9 +38,9 @@ namespace VE
 
 	int CEngine::Init(void)
 	{
-
 		al_init();
 		al_install_keyboard();
+		al_init_image_addon();
 
 		m_evQ = al_create_event_queue();
 		m_timer = al_create_timer(1.0f / 60.0f);
@@ -46,7 +50,9 @@ namespace VE
 		al_register_event_source(m_evQ, al_get_display_event_source(m_display));
 		al_register_event_source(m_evQ, al_get_keyboard_event_source());
 
-		
+		PHYSFS_init(nullptr);
+		al_set_physfs_file_interface();
+
 		m_isInit = true;
 		return 0;
 	}

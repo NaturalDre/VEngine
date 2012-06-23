@@ -1,7 +1,7 @@
 #ifndef CONTACTLISTENER_H
 #define CONTACTLISTENER_H
 
-#include <Box2D\Dynamics\b2WorldCallbacks.h>
+#include "ContactCallback.h"
 
 namespace VE
 {

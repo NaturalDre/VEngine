@@ -132,5 +132,3 @@ namespace VE
 		// STK: table
 	}
 }
-
-
