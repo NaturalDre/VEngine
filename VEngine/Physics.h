@@ -16,11 +16,11 @@ namespace Tiled
 namespace VE
 {
 	class CContactListener;
-
+	class CCamera;
 	class CPhysics
 	{
 	public:
-		CPhysics(void);
+		CPhysics(CCamera* cam);
 		~CPhysics(void);
 
 		inline void Simulate(void) const { m_world->Step(m_timeStep, m_velocityIters, m_positionIters); }
@@ -53,7 +53,7 @@ namespace VE
 	*		is larger than the camera's width/height(if those are also equal to the 
 	*		game screen's width/height) then it is not visible on the screen.
 	*/
-	b2Vec2 GameToScreenPosPix(const b2Vec2& posPix);
+	b2Vec2 GameToScreenPosPix(CCamera* cam, const b2Vec2& posPix);
 	/*
 	* mtrToPix()
 	*

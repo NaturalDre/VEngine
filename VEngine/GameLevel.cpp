@@ -8,17 +8,27 @@
 
 namespace VE
 {
-	CGameLevel::CGameLevel(CRender* renderer)
+	CGameLevel* GAMELEVEL(nullptr);
+
+	CGameLevel::CGameLevel(void)
 		: m_playerController(nullptr)
-		, m_renderer(renderer)
+		, m_renderer(nullptr)
 		, m_physics(nullptr)
 		, m_player(nullptr)
 		, m_playerView(nullptr)
+		, m_camera(nullptr)
 		, m_mapFile(nullptr)
 	{
+		assert(GAMELEVEL == nullptr);
+		GAMELEVEL = this;
+	
+		m_renderer = new CRender;
+		m_camera = new CCamera;
+
 		m_mapFile = new Tiled::CMapFile;
-		m_physics = new CPhysics;
-		m_player = new CPlayer;
+		m_physics = new CPhysics(m_camera);
+
+		m_player = new CPlayer(this);
 		m_playerView = new CPlayerView(Renderer());
 		m_playerController = new CPlayerController(m_player);
 
@@ -27,10 +37,12 @@ namespace VE
 
 		std::string err;
 		// Test: will likely call ReadMapFile from somewhere else.
-		m_mapFile->ReadMapFile("Simple.lua", err);
+		m_mapFile->ReadMapFile("Maps/Adventure/Adventure.lua", err);
 
 		m_renderer->SetMapFile(m_mapFile);
-		m_renderer->SetCam(new CCamera);
+		m_renderer->SetCam(m_camera);
+		m_renderer->SetPhysics(m_physics);
+		m_renderer->Cam()->Watch(m_player);
 	}
 
 	CGameLevel::~CGameLevel(void)
@@ -50,8 +62,10 @@ namespace VE
 		delete m_mapFile;
 		m_mapFile = nullptr;
 
-		// We don't own it.
+		delete m_renderer;
 		m_renderer = nullptr;
+
+		GAMELEVEL = nullptr;
 	}
 
 	void CGameLevel::UpdateAll(double deltaTime)
@@ -64,4 +78,9 @@ namespace VE
 		for (auto iter = m_controllers.begin(); iter != m_controllers.end(); ++iter)
 			(*iter)->Update(deltaTime);
 	}
+
+	CGameLevel* GameLevel(void)
+	{
+		return GAMELEVEL;
+	};
 }

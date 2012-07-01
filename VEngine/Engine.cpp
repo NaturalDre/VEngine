@@ -2,8 +2,8 @@
 #include <allegro5\allegro5.h>
 #include <allegro5\allegro_physfs.h>
 #include <allegro5\allegro_image.h>
+#include <allegro5\allegro_primitives.h>
 #include <algorithm>
-
 #include <physfs.h>
 #include "SystemController.h"
 #include "View.h"
@@ -41,6 +41,7 @@ namespace VE
 		al_init();
 		al_install_keyboard();
 		al_init_image_addon();
+		al_init_primitives_addon();
 
 		m_evQ = al_create_event_queue();
 		m_timer = al_create_timer(1.0f / 60.0f);

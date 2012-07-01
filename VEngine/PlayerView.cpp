@@ -1,16 +1,16 @@
 #include "PlayerView.h"
 #include "Player.h"
 #include <iostream>
-#include "LevelUpEvent.h"
+#include <allegro5\allegro5.h>
 
 namespace VE
 {
 	CPlayerView::CPlayerView(CRender* render)
 		: IView(render)
 		, m_player(nullptr)
-		, m_leveled(false)
 	{
-
+		m_bitmap = CBitmap("box.png");
+		//CBitmap t = m_bitmap;
 	}
 
 	CPlayerView::~CPlayerView(void)
@@ -24,21 +24,13 @@ namespace VE
 	{
 		if (!m_player)
 			return;
-
-		std::cout << std::endl << "Drawing player at position (" << m_player->Position().x << ',' << m_player->Position().y << ')';
-		if (m_leveled)
-			std::cout << " with the level[" << m_level << " up animation.";
-		m_leveled = false;
+		VE::DrawBitmap(m_bitmap, m_player->Position(), b2Vec2(0,0));
+		
 	}
 
 	void CPlayerView::Notify(IEvent* ev)
 	{
-		if (ev->Type() == ALLEGRO_GET_EVENT_TYPE('L', 'V', 'L', 'U'))
-		{
-			m_leveled = true;
-			LevelUpEvent* lvlEv = static_cast<LevelUpEvent*>(ev);
-			m_level = lvlEv->Level();
-		}
+		
 	}
 
 	void CPlayerView::SetPlayer(CPlayer* player)

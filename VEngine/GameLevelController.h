@@ -27,7 +27,6 @@ namespace VE
 		CGameLevel* GameLevel(void) const { return m_gameLevel; }
 	private:
 		CGameLevel* m_gameLevel;
-		CRender* m_renderer;
 	};
 }
 #endif

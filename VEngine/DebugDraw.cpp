@@ -10,14 +10,13 @@ void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2C
 	ALLEGRO_VERTEX* verts = new ALLEGRO_VERTEX[vertexCount];
 	for (int i = 0; i < vertexCount; ++i)
 	{
-		b2Vec2 posPix = GameToScreenPosPix(MtrToPix(vertices[i]));
+		b2Vec2 posPix = GameToScreenPosPix(m_cam, MtrToPix(vertices[i]));
 		verts[i].x = posPix.x;
 		verts[i].y = posPix.y;
 		verts[i].z = 0;
 		verts[i].color = al_map_rgb_f(color.r, color.g, color.b);
 	}
 	al_draw_prim(verts, NULL, NULL, 0, vertexCount, ALLEGRO_PRIM_LINE_LOOP);
-
 }
 
 void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -43,7 +42,7 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 	ALLEGRO_VERTEX* verts = new ALLEGRO_VERTEX[vertexCount];
 	for (int i = 0; i < vertexCount; ++i)
 	{
-		b2Vec2 posPix = GameToScreenPosPix(MtrToPix(vertices[i]));
+		b2Vec2 posPix = GameToScreenPosPix(m_cam, MtrToPix(vertices[i]));
 		verts[i].x = posPix.x;
 		verts[i].y = posPix.y;
 		verts[i].z = 0;
@@ -55,7 +54,7 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 
 	for (int i = 0; i < vertexCount; ++i)
 	{
-		b2Vec2 posPix = GameToScreenPosPix(MtrToPix(vertices[i]));
+		b2Vec2 posPix = GameToScreenPosPix(m_cam, MtrToPix(vertices[i]));
 		verts[i].x = posPix.x;
 		verts[i].y = posPix.y;
 		verts[i].z = 0;
@@ -75,7 +74,7 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
 	//al_store_state(&state, ALLEGRO_STATE_BLENDER);
 	//al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ALPHA);
 
-	b2Vec2 centerPix = GameToScreenPosPix(MtrToPix(center));
+	b2Vec2 centerPix = GameToScreenPosPix(m_cam, MtrToPix(center));
 	ALLEGRO_COLOR col = al_map_rgba_f(color.r, color.g, color.b, 0.5f);
 
 	al_draw_circle(centerPix.x, centerPix.y, MtrToPix(radius), col, 1);
@@ -90,7 +89,7 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 	//al_store_state(&state, ALLEGRO_STATE_BLENDER);
 	//al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ALPHA);
 
-	b2Vec2 centerPix = GameToScreenPosPix(MtrToPix(center));
+	b2Vec2 centerPix = GameToScreenPosPix(m_cam, MtrToPix(center));
 	ALLEGRO_COLOR col = al_map_rgba_f(color.r, color.g, color.b, 0.5f);
 
 	al_draw_filled_circle(centerPix.x, centerPix.y, MtrToPix(radius), col);
@@ -117,15 +116,15 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 	b2Vec2 p1 = xf.p, p2;
 	const float32 k_axisScale = 0.4f;
 
-	p1Pix = GameToScreenPosPix(MtrToPix(p1));
+	p1Pix = GameToScreenPosPix(m_cam, MtrToPix(p1));
 
 	p2 = p1 + k_axisScale * xf.q.GetXAxis();
-	p2Pix = GameToScreenPosPix(MtrToPix(p2));
+	p2Pix = GameToScreenPosPix(m_cam, MtrToPix(p2));
 
 	al_draw_line(p1Pix.x, p1Pix.y, p2Pix.x, p2Pix.y, al_map_rgb_f(1.0f, 0.0f, 0.0f), 1);
 
 	p2 = p1 + k_axisScale * xf.q.GetYAxis();
-	p2Pix = GameToScreenPosPix(MtrToPix(p2));
+	p2Pix = GameToScreenPosPix(m_cam, MtrToPix(p2));
 
 	al_draw_line(p1Pix.x, p1Pix.y, p2Pix.x, p2Pix.y, al_map_rgb_f(0.0f, 1.0f, 0.0f), 1);
 
@@ -133,7 +132,7 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 
 void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-	b2Vec2 point = GameToScreenPosPix(MtrToPix(p));
+	b2Vec2 point = GameToScreenPosPix(m_cam, MtrToPix(p));
 	al_draw_rectangle(point.x, point.y, point.x, point.y, al_map_rgb_f(color.r, color.g, color.b), 4);
 }
 
@@ -173,8 +172,8 @@ void DebugDraw::DrawString(int x, int y, const char *string, ...)
 
 void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& c)
 {
-	b2Vec2 lB = GameToScreenPosPix(MtrToPix(aabb->lowerBound));
-	b2Vec2 uB = GameToScreenPosPix(MtrToPix(aabb->upperBound));
+	b2Vec2 lB = GameToScreenPosPix(m_cam, MtrToPix(aabb->lowerBound));
+	b2Vec2 uB = GameToScreenPosPix(m_cam, MtrToPix(aabb->upperBound));
 
 	al_draw_rectangle(lB.x, lB.y, uB.x, uB.y, al_map_rgb_f(c.r, c.g, c.b), 1);
 }

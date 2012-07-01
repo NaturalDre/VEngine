@@ -9,19 +9,14 @@ namespace VE
 {
 	CGameLevelController::CGameLevelController(void)
 		: m_gameLevel(nullptr)
-		, m_renderer(nullptr)
 	{
-		m_renderer = new CRender;
-		m_gameLevel = new CGameLevel(m_renderer);
+		m_gameLevel = new CGameLevel;
 	}		
 
 	CGameLevelController::~CGameLevelController(void)
 	{
 		delete m_gameLevel;
 		m_gameLevel = nullptr;
-
-		delete m_renderer;
-		m_renderer = nullptr;
 	}
 
 	void CGameLevelController::Notify(IEvent* ev)
@@ -47,7 +42,7 @@ namespace VE
 
 	void CGameLevelController::Render(void)
 	{
-		m_renderer->Render();
+		m_gameLevel->Renderer()->Render();
 	}
 
 }

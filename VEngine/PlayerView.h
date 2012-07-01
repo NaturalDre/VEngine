@@ -3,6 +3,8 @@
 
 #include "View.h"
 #include "Observer.h"
+#include "Bitmap.h"
+
 namespace VE
 {
 	class CPlayer;
@@ -20,11 +22,8 @@ namespace VE
 		void SetPlayer(CPlayer* player);
 
 	private:
-		// For testing
-		bool m_leveled;
-		// For testing
-		int m_level;
 		CPlayer* m_player;
+		CBitmap m_bitmap;
 	};
 }
 #endif

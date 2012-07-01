@@ -16,7 +16,7 @@ namespace VE
 	class IEntity;
 	class IView;
 
-
+	class CCamera;
 	class CRender;
 	class CPhysics;
 	class CPlayer;
@@ -27,7 +27,7 @@ namespace VE
 	protected:
 
 	public:
-		CGameLevel(CRender* renderer);
+		CGameLevel(void);
 		~CGameLevel(void);
 
 		inline void SetLevelName(const std::string& levelName) { m_levelName = levelName; }
@@ -41,6 +41,7 @@ namespace VE
 
 		inline CRender* Renderer(void) const { return m_renderer; }
 		inline CPhysics* Physics(void) const { return m_physics; }
+		inline CCamera* Camera(void) const { return m_camera; }
 
 	private:
 		typedef std::unordered_set<IEntity*> EntitySet;
@@ -54,7 +55,10 @@ namespace VE
 
 		CRender* m_renderer;
 		CPhysics* m_physics;
+		CCamera* m_camera;
 		Tiled::CMapFile* m_mapFile;
 	};
+
+	CGameLevel* GameLevel(void);
 }
 #endif

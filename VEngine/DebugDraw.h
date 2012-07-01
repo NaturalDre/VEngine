@@ -12,11 +12,18 @@
 //#include <vengine\Render\Render.h>
 
 using namespace std;
+
+namespace VE
+{
+	class CCamera;
+}
+
 struct b2AABB;
 class DebugDraw : public b2Draw
 {
 public:
-	DebugDraw(void)
+	DebugDraw(VE::CCamera* cam)
+		: m_cam(cam)
 	{
 	uint32 flags = 0;
 	flags = e_shapeBit | e_jointBit /*| e_aabbBit*/ | e_pairBit | e_centerOfMassBit;
@@ -36,6 +43,9 @@ public:
     void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
     void DrawString(int x, int y, const char* string, ...); 
     void DrawAABB(b2AABB* aabb, const b2Color& color);
+
+private:
+	VE::CCamera* m_cam;
 };
 
 #endif

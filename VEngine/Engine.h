@@ -26,9 +26,18 @@ namespace VE
 		CEngine(void);
 		~CEngine(void);
 
+		/**
+		* Initializes the core functions of the engine.
+		*/
 		int Init(void);
+		/**
+		* Begins the game loop.
+		*/
 		int Run(void);
-
+		/**
+		* @param controller Is notified of specific system events during the game loop.
+		* @see SystemController.h
+		*/
 		void SetSystemController(ISystemController* controller);
 
 	private:
