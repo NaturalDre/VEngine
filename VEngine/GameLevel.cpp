@@ -28,7 +28,7 @@ namespace VE
 		m_mapFile = new Tiled::CMapFile;
 		m_physics = new CPhysics(m_camera);
 
-		m_player = new CPlayer(this);
+		m_player = CreatePlayer(this);
 		m_playerView = new CPlayerView(Renderer());
 		m_playerController = new CPlayerController(m_player);
 

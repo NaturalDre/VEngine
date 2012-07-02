@@ -16,7 +16,7 @@ namespace VE
 		bd.type = b2_dynamicBody;
 		bd.allowSleep = false;
 		bd.bullet = true;
-		bd.position.Set(5,5);
+		bd.position.Set(0,0);
 		bd.userData = static_cast<void*>(m_player);
 
 		b2FixtureDef fd;
@@ -32,8 +32,6 @@ namespace VE
 
 		m_body = m_world->CreateBody(&bd);
 		m_body->CreateFixture(&fd);
-
-		//m_player->SetBody(
 	}
 
 	CPlayerBody::~CPlayerBody(void)

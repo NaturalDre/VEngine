@@ -16,6 +16,8 @@ namespace VE
 		CBitmap(const std::string& filename = "");
 		// Create a sub bitmap. Note: You must free the parent before this is deleted.
 		CBitmap(const CBitmap& parent, size_t x, size_t y, size_t w, size_t h);
+		// Take ownership of this ALLEGRO_BITMAP
+		CBitmap(ALLEGRO_BITMAP* bitmap);
 		// Copy
 		CBitmap(const CBitmap& rhs); 
 		// Move Copy
@@ -24,6 +26,9 @@ namespace VE
 		const CBitmap& operator=(const CBitmap& rhs);
 		// Move Assignment
 		const CBitmap& operator=(CBitmap&& rhs);
+		//
+		operator bool() const { return IsValid(); }
+
 		~CBitmap(void);
 
 		//std::shared_ptr<CBitmap> CreateSubBitmap(size_t x, size_t y, size_t w, size_t h);
@@ -76,7 +81,7 @@ namespace VE
 	*	ALLEGRO_FLIP_HORIZONTAL, ALLEGRO_FLIP_VERTICAL.
 	* @note The top left ofthe bitmap is considered the origin(0,0).
 	*/
-	bool DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, int flags = 0);
+	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, int flags = 0);
 	/**
 	* Draw a rotated bitmap to the screen using world
 	* @param bitmap The bitmap to draw.
@@ -87,7 +92,7 @@ namespace VE
 	* @param flags Rules to apply to bitmap drawing. 
 	*	ALLEGRO_FLIP_HORIZONTAL, ALLEGRO_FLIP_VERTICAL.
 	*/
-	bool DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, b2Vec2 cpos, float angle = 0.0f, int flags = 0);
+	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, b2Vec2 cpos, float angle = 0.0f, int flags = 0);
 }
 
 

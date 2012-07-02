@@ -5,6 +5,8 @@
 #include <list>
 #include "Tileset.h"
 #include "Layer.h"
+#include "..\Bitmap.h"
+
 
 struct lua_State;
 struct ALLEGRO_BITMAP;
@@ -55,9 +57,9 @@ namespace Tiled
 		*	You must free the memory. 
 		* CAUTION: 
 		*	If you don't free the memory before the tileset that you got it 
-		*	from is destroyed, then later free it, the behavior will be undefined.
+		*	from is destroyed the behavior will be undefined.
 		*/
-		static ALLEGRO_BITMAP* LoadTile(const std::list<CTileset*>& tilesets, size_t id);
+		static VE::CBitmap LoadTile(const std::list<CTileset*>& tilesets, size_t id);
 		/*
 		* GetImage()
 		*
@@ -67,7 +69,7 @@ namespace Tiled
 		*	Null pointer if it wasn't able to find and load the image. 
 		*	The image isn't loaded by this function, it is loaded when ReadMapFile() is called.
 		*/
-		ALLEGRO_BITMAP*  GetImage(void) const { return m_image; }
+		const VE::CBitmap&  GetImage(void) const { return m_image; }
 
 	private:
 		std::string m_name;
@@ -85,7 +87,7 @@ namespace Tiled
 		size_t m_tilesAcross;
 		size_t m_tilesDown;
 
-		ALLEGRO_BITMAP* m_image;
+		VE::CBitmap m_image;
 	};
 }
 

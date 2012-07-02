@@ -12,6 +12,8 @@ namespace VE
 	class CPlayerController: public IEntityController
 	{
 	protected:
+		void HandleKeyDown(const ALLEGRO_EVENT& ev);
+		void HandleKeyUp(const ALLEGRO_EVENT& ev);
 
 	public:
 		/*
@@ -33,6 +35,8 @@ namespace VE
 
 		bool m_movedLThisFrame;
 		bool m_movedRThisFrame;
+		bool m_movedUpThisFrame;
+		bool m_movedDownThisFrame;
 	};
 }
 #endif

@@ -14,8 +14,8 @@ CTileset::CTileset(void)
 
 CTileset::~CTileset(void)
 {
-	al_destroy_bitmap(m_image);
-	m_image = nullptr;
+	//al_destroy_bitmap(m_image);
+	//m_image = nullptr;
 }
 
 void CTileset::ReadMapFile(lua_State* L, size_t index)
@@ -55,17 +55,17 @@ CTileset* CTileset::ContainsGid(const std::list<CTileset*>& tilesets, size_t id)
 	return nullptr;
 }
 
-ALLEGRO_BITMAP* CTileset::LoadTile(const std::list<CTileset*>& tilesets, size_t id)
+VE::CBitmap CTileset::LoadTile(const std::list<CTileset*>& tilesets, size_t id)
 {
 	CTileset* ts = ContainsGid(tilesets, id);
-	if(!ts || !ts->GetImage())
+	if(!ts || !ts->GetImage().IsValid())
 		return nullptr;
 
 	ColRow  cr = GetColRow(ts->TilesAcross(), id);
 
-	return al_create_sub_bitmap(ts->GetImage(), 
+	return std::move(VE::CBitmap(ts->GetImage(), 
 		(cr.col - 1) * (ts->ImageWidth() + ts->Spacing()),
 		(cr.row - 1) * (ts->ImageHeight() + ts->Spacing()),
 		ts->TileWidth(),
-		ts->TileHeight());
+		ts->TileHeight()));
 }

@@ -3,8 +3,7 @@
 #include "TMR\MapFile.h"
 #include <algorithm>
 #include <allegro5\allegro5.h>
-#include "Physics.h"
-
+#include "Bitmap.h"
 namespace VE
 {
 	// Helper function to draw a tilelayer
@@ -71,11 +70,9 @@ namespace VE
 
 	void RenderLayer(CRender* renderer, const Tiled::CMapFile& mf, Tiled::CTileLayer* layer)
 	{
-		// Tile(sub bitmap)
-		ALLEGRO_BITMAP* tile = nullptr;
+		// FOr the sub bitmaps
+		CBitmap tile;
 		size_t prevID(0);
-
-		// TO DO: Use the camera's top left as values for below variables instead of 0
 
 		// Top left x and y position of the camera
 		const float tlx = renderer->Cam()->TopLeftPosPix().x;
@@ -85,8 +82,9 @@ namespace VE
 		const int startCol(tlx / mf.TileWidth());
 		const int startRow(tly / mf.TileHeight());
 
-		const int endCol = (GetDisplayWidth() / mf.TileWidth()) + 2; // +2 is buffer otherwise last col won't draw
-		const int endRow = (GetDisplayHeight() / mf.TileHeight()) + 2; // +2 is buffer otherwise last row won't draw
+
+		const int endCol = startCol + (GetDisplayWidth() / mf.TileWidth()) + 2; // +2 is buffer otherwise last col won't draw
+		const int endRow = startRow + (GetDisplayHeight() / mf.TileHeight()) + 2; // +2 is buffer otherwise last row won't draw
 
 		for (int row = startRow; row < endRow; ++row)
 		{
@@ -97,34 +95,18 @@ namespace VE
 					continue;
 				if (id != prevID)
 				{
-					if (tile)
-					{
-						al_destroy_bitmap(tile);
-						tile = nullptr;
-					}
 					prevID = id;
 					tile = Tiled::CTileset::LoadTile(mf.Tilesets(), id);
 				}
-				//if (tile)
-				//	al_draw_bitmap(tile, (col -1) * mf.GetTileWidth(), (row - 1) * mf.GetTileHeight(), 0);
 
 				prevID = id;
 
 				float dx = col * mf.TileWidth();
 				float dy = row * mf.TileHeight();
 
-				dx -= tlx;
-				dy -= tly;
-
 				if (tile)
-					al_draw_bitmap(tile, dx, dy, 0);
+					DrawBitmap(tile, PixToMtr(b2Vec2(dx, dy)));
 			}
-		}
-
-		if (tile)
-		{
-			al_destroy_bitmap(tile);
-			tile = nullptr;
 		}
 	}
 

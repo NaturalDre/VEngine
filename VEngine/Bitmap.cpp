@@ -25,6 +25,13 @@ public:
 		m_bitmap = al_create_sub_bitmap(parent.Raw(), x, y, w, h);
 	}
 
+	Bitmap(ALLEGRO_BITMAP* bitmap)
+		: m_bitmap(nullptr)
+	{
+		assert(bitmap != nullptr);
+		m_bitmap = bitmap;
+	}
+
 	Bitmap::Bitmap(const Bitmap& rhs)
 		: m_bitmap(nullptr)
 	{
@@ -88,14 +95,23 @@ CBitmap::CBitmap(const CBitmap& parent, size_t x, size_t y, size_t w, size_t h)
 	d = new Bitmap(*parent.d, x, y, w, h);
 }
 
-CBitmap::CBitmap(const CBitmap& rhs)
-	: d(new Bitmap(""))
+CBitmap::CBitmap(ALLEGRO_BITMAP* bitmap)
+	: d(nullptr)
 {
+	d = new Bitmap(bitmap);
+}
+
+CBitmap::CBitmap(const CBitmap& rhs)
+	: d(nullptr)
+{
+	d = new Bitmap("");
 	*this = rhs;
 }
 
 CBitmap::CBitmap(CBitmap&& rhs)
+	: d(nullptr)
 {
+	d = new Bitmap("");
 	*this = std::move(rhs);
 }
 
@@ -161,29 +177,27 @@ namespace VE
 		return true;
 	}
 
-	bool DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, int flags)
+	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, int flags)
 	{
 		if (!bitmap.IsValid())
-			return false;
+			return;
 		if (!VE::IsDrawable(bitmap, dpos))// Is the position to be drawn at out of view of the camera?
-			return false;												// If so, don't waste CPU time drawing it.
+			return;												// If so, don't waste CPU time drawing it.
 
 		dpos = MtrToPix(dpos);		// Meters->Pixels
 
 		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Camera(), dpos));
 		al_draw_bitmap(bitmap.GetRaw(), drawPos.x, drawPos.y, flags);
-
-		return true;
 	}
 
-	bool DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, b2Vec2 cpos, float angle, int flags)
+	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, b2Vec2 cpos, float angle, int flags)
 	{
 		if (!bitmap.IsValid())
-			return false;
+			return;
 		// Is the position to be drawn at out of view of the camera?
 		// If so, don't waste CPU time drawing it.
 		if (!VE::IsDrawable(bitmap, dpos))
-			return false;												
+			return;												
 
 		// We need to convert the positions to pixels 'cause that's
 		// what Allegro works with.
@@ -199,7 +213,5 @@ namespace VE
 		al_draw_rotated_bitmap(bitmap.GetRaw(), 
 			(bitmap.GetWidth() / 2.0f) + cpos.x,
 			(bitmap.GetHeight() / 2.0f) + cpos.y, drawPos.x, drawPos.y, angle, flags);
-
-		return true;
 	}
 }

@@ -16,7 +16,7 @@ namespace VE
 		CPlayerBody(CPlayer* player, b2World* world);
 		~CPlayerBody(void);
 
-		b2Body* Body(void) const { return m_body; }
+		b2Body* Raw(void) const { return m_body; }
 		b2Vec2 Position(void) const;
 
 	private:
