@@ -48,6 +48,9 @@ namespace VE
 		bool m_done;
 		bool m_needRedraw;
 		bool m_isInit;
+
+		double m_timeLastUpdated;
+		double m_gameTime;
 	};
 }
 #endif

@@ -4,16 +4,19 @@
 #include "Physics.h"
 #include "Entity.h"
 #include "Observable.h"
+#include "Constants.h"
 
 namespace VE
 {
 	class CPlayerBody;
+	class IWeapon;
 	class CPlayer: public IEntity
 	{
 	protected:
 		CPlayer(CGameLevel* level);
 
 	public:
+
 		virtual ~CPlayer(void);
 
 		/**
@@ -34,14 +37,13 @@ namespace VE
 		float GetYSpeed(void) const;
 		b2Vec2 GetSpeed(void) const;
 
-		/**
-		* Contains the physics properties and handles callbacks sent by
-		* the physics engine.
-		*/
-		//CPlayerBody* Body(void) const { return m_body; }
-		void MoveLeft(void);
-		void MoveRight(void);
+		IWeapon* GetCurrentWeapon(void) const;
+		size_t GetWeaponCount(void) const;
 
+		void SelectWeapon(size_t index);
+		Direction GetDirection(void) const;
+
+		void SetDirection(Direction dir);
 		// AdvanceLevel is for testing if observer class
 		void AdvanceLevel(void);
 		//void SetBody(b2Body* body) { m_body = body; }

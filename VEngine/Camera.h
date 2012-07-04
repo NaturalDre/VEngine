@@ -55,24 +55,20 @@ namespace VE
 			tl.y -= m_height / 2.0f;
 			return tl;
 		} 
-		/*
-		* Watch()
-		*
-		* Set what game object the camera should follow.
-		*
-		* Params:
-		*	IGameObject* -	The object that should be followed.
-		*		A null pointer means the camera follows nothing
-		*		and focuses on position (0,0) in the game world.
-		*/
+		/// Set the player for the camera to follow.
+		/// @param player The player to follow.
 		inline void Watch(CPlayer* player) { m_player = player; }
-		// Set the width of the camera in pixels
+		/// Set the width of the camera
+		/// @param width Pixels.
 		void SetWidth(size_t width) { if (width) m_width = width; }
-		// Set the height of the camera in pixels
+		/// Set the height of the camera.
+		/// @param Pixels.
 		void SetHeight(size_t height) { if (height) m_height = height; }
-		// Width of the camera in pixels
+		/// Width of the camera.
+		/// \return Pixels.
 		inline size_t Width(void) const { return m_width; }
-		// Height of the camera in pixels.
+		/// Height of the camera.
+		/// \return Pixels.
 		inline size_t Height(void) const { return m_height; }
 
 	private:
@@ -82,7 +78,6 @@ namespace VE
 		size_t m_width;
 		// The height of the camera. Pix.
 		size_t m_height;
-
 	};
 }
 #endif

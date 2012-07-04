@@ -6,6 +6,8 @@
 #include "TMR\MapFile.h"
 #include "Render.h"
 
+#include "Barrel.h"
+
 namespace VE
 {
 	CGameLevel* GAMELEVEL(nullptr);
@@ -16,17 +18,15 @@ namespace VE
 		, m_physics(nullptr)
 		, m_player(nullptr)
 		, m_playerView(nullptr)
-		, m_camera(nullptr)
 		, m_mapFile(nullptr)
 	{
 		assert(GAMELEVEL == nullptr);
 		GAMELEVEL = this;
 	
 		m_renderer = new CRender;
-		m_camera = new CCamera;
-
+		m_physics = new CPhysics(Renderer()->Cam());
 		m_mapFile = new Tiled::CMapFile;
-		m_physics = new CPhysics(m_camera);
+
 
 		m_player = CreatePlayer(this);
 		m_playerView = new CPlayerView(Renderer());
@@ -40,9 +40,10 @@ namespace VE
 		m_mapFile->ReadMapFile("Maps/Adventure/Adventure.lua", err);
 
 		m_renderer->SetMapFile(m_mapFile);
-		m_renderer->SetCam(m_camera);
 		m_renderer->SetPhysics(m_physics);
 		m_renderer->Cam()->Watch(m_player);
+
+		new CBarrel(this);
 	}
 
 	CGameLevel::~CGameLevel(void)
@@ -75,6 +76,8 @@ namespace VE
 		if (m_playerController)
 			m_playerController->Update(deltaTime);
 
+		for (auto iter = m_animations.begin(); iter != m_animations.end(); ++iter)
+			(*iter)->Logic(deltaTime);
 		for (auto iter = m_controllers.begin(); iter != m_controllers.end(); ++iter)
 			(*iter)->Update(deltaTime);
 	}

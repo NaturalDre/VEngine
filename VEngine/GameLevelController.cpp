@@ -27,7 +27,7 @@ namespace VE
 	void CGameLevelController::PushSystemEvent(ALLEGRO_EVENT& ev)
 	{
 		if (m_gameLevel)
-			m_gameLevel->Player()->HandleEvent(ev);
+			m_gameLevel->PlayerController()->HandleEvent(ev);
 	}
 
 	void CGameLevelController::Update(double deltaTime)
@@ -35,8 +35,6 @@ namespace VE
 		if (!m_gameLevel)
 			return;
 
-		//if (m_gameLevel->Player())
-		//m_gameLevel->Player()->
 		m_gameLevel->UpdateAll(deltaTime);
 	}
 

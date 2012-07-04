@@ -42,7 +42,7 @@ void CTileset::ReadMapFile(lua_State* L, size_t index)
 	m_tilesDown = m_imageHeight / (m_tileHeight + m_spacing);
 	m_lastGid = m_firstGid + (((m_imageWidth / (m_tileWidth + m_spacing)) * (m_imageHeight / (m_tileHeight + m_spacing)))-1);
 
-	m_image = al_load_bitmap(m_source.c_str());
+	m_image = VE::CBitmap(al_load_bitmap(m_source.c_str()));
 }
 
 CTileset* CTileset::ContainsGid(const std::list<CTileset*>& tilesets, size_t id)
@@ -59,7 +59,7 @@ VE::CBitmap CTileset::LoadTile(const std::list<CTileset*>& tilesets, size_t id)
 {
 	CTileset* ts = ContainsGid(tilesets, id);
 	if(!ts || !ts->GetImage().IsValid())
-		return nullptr;
+		return VE::CBitmap();
 
 	ColRow  cr = GetColRow(ts->TilesAcross(), id);
 

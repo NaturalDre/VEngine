@@ -28,7 +28,7 @@ namespace VE
 		void SetMapFile(Tiled::CMapFile* mapFile) { m_mapFile = mapFile; }
 
 		CCamera* Cam(void) const { return m_camera; }
-		void SetCam(CCamera* cam) { m_camera = cam; }
+		//void SetCam(CCamera* cam) { m_camera = cam; }
 
 		void SetPhysics(CPhysics* physics) { m_physics = physics; }
 
@@ -40,7 +40,6 @@ namespace VE
 		// I only have a reference to the physics engine to draw the debug data for it.
 		CPhysics* m_physics;
 	};
-
 	// Current width of the screen window.
 	size_t GetDisplayWidth(void);
 	// Current height of the screen window.

@@ -3,6 +3,7 @@
 
 namespace VE
 {
+	class IBullet;
 	class CGameLevel;
 	class IEntity
 	{
@@ -14,6 +15,8 @@ namespace VE
 
 		inline CGameLevel* GameLevel(void) const { return m_gameLevel; }
 
+		virtual bool OnContact(IBullet* bullet) { return false; } // Return true to accept he contact
+		virtual bool OnContact(IEntity* entity) { return false; } // Return true to accept he contact
 	private:
 		CGameLevel* m_gameLevel; // Game level this entity is a part of.
 	};

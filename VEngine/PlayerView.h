@@ -3,8 +3,7 @@
 
 #include "View.h"
 #include "Observer.h"
-#include "Bitmap.h"
-
+#include "MultiAnimation.h"
 namespace VE
 {
 	class CPlayer;
@@ -24,6 +23,7 @@ namespace VE
 	private:
 		CPlayer* m_player;
 		CBitmap m_bitmap;
+		CMultiAnimation m_anims;
 	};
 }
 #endif

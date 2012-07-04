@@ -2,6 +2,8 @@
 #include <iostream>
 #include "PlayerBody.h"
 #include "GameLevel.h"
+#include "Weapon_AK47.h"
+#include "PlayerEvents.h"
 
 using namespace VE;
 
@@ -12,7 +14,6 @@ float ImpulseForDistanceX(float desiredVel, b2Body* body)
 		float velChange = desiredVel - vel.x;
 		float impulse = body->GetMass() * velChange;
 		return impulse;
-		//GetCharacterBody()->ApplyLinearImpulse(b2Vec2(impulse, 0), GetCharacterBody()->GetWorldCenter());
 }
 
 b2Vec2 ImpulseForDistance(const b2Vec2& desiredVel, b2Body* body)
@@ -43,9 +44,9 @@ namespace VE
 		CPlayerBody* m_body;
 		b2Vec2 m_speed;
 		b2Vec2 m_vel;
-
-		bool m_movedRThisFrame;
-		bool m_movedLThisFrame;
+		Direction m_dir;
+		IWeapon* m_currentWeapon;
+		std::list<IWeapon*> m_weapons;
 	};
 }
 
@@ -57,10 +58,12 @@ CPlayerImpl::CPlayerImpl(CGameLevel* level)
 	, m_body(nullptr)
 	, m_speed(0,0)
 	, m_vel(5,5)
-	, m_movedRThisFrame(false)
-	, m_movedLThisFrame(false)
+	, m_currentWeapon(nullptr)
 {
 	m_body = new CPlayerBody(this, GameLevel()->Physics()->World());
+	m_weapons.push_back(new Weapon_AK47(GameLevel()->Physics(), this));
+
+	m_currentWeapon = m_weapons.front();
 }
 
 CPlayerImpl::~CPlayerImpl(void)
@@ -114,34 +117,34 @@ float CPlayer::GetYSpeed(void) const { return Impl(this)->m_speed.y; }
 
 b2Vec2 CPlayer::GetSpeed(void) const { return Impl(this)->m_speed; }
 
-
-void CPlayer::MoveRight(void)
-{
-	CPlayerImpl* impl = Impl(this);
-
-	if (impl->m_movedRThisFrame)
-		return;
-
-	impl->m_speed.x += impl->m_vel.x;
-}
-
-void CPlayer::MoveLeft(void)
-{
-	CPlayerImpl* impl = Impl(this);
-
-	if (impl->m_movedLThisFrame)
-		return;
-
-	impl->m_speed.x -= impl->m_vel.x;
-}
+IWeapon* CPlayer::GetCurrentWeapon(void) const { return Impl(this)->m_currentWeapon; }
 
 void CPlayer::Update(double deltaTime)
 {
 	CPlayerImpl* impl = Impl(this);
+
+	if (impl->GetCurrentWeapon())
+		impl->GetCurrentWeapon()->Update(deltaTime);
 	b2Body* body = impl->m_body->Raw();
 
 	body->ApplyLinearImpulse(b2Vec2(ImpulseForDistance(impl->m_speed, body)), body->GetWorldCenter()); 
 	//impl->m_speed.SetZero();
+}
+
+Direction CPlayer::GetDirection(void) const
+{
+	return Impl(this)->m_dir;
+}
+
+void CPlayer::SetDirection(Direction dir)
+{
+	CPlayerImpl* impl = Impl(this);
+	// Only update direction if it is a new direction
+	if (impl->m_dir != dir)
+	{
+		impl->m_dir = dir;
+		impl->m_publisher.NotifyAll("DirectionChanged", new DirectionChanged(impl->m_dir));
+	}
 }
 
 void CPlayer::AdvanceLevel(void)

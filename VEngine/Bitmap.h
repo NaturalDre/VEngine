@@ -13,11 +13,11 @@ namespace VE
 	{
 	public:
 		/// Load a bitmap from a file.
-		CBitmap(const std::string& filename = "");
+		explicit CBitmap(const std::string& filename = "");
 		// Create a sub bitmap. Note: You must free the parent before this is deleted.
 		CBitmap(const CBitmap& parent, size_t x, size_t y, size_t w, size_t h);
 		// Take ownership of this ALLEGRO_BITMAP
-		CBitmap(ALLEGRO_BITMAP* bitmap);
+		explicit CBitmap(ALLEGRO_BITMAP* bitmap);
 		// Copy
 		CBitmap(const CBitmap& rhs); 
 		// Move Copy
@@ -65,7 +65,8 @@ namespace VE
 		* \note See Allegro Manual: ALLEGRO_PIXEL_FORMAT
 		*/
 		int GetFormat(void) const;
-
+		//
+		void ConvertMaskToAlpha(size_t r, size_t g, size_t b);
 	private:
 		class Bitmap;
 		Bitmap* d; // Implementation of the bitmap.

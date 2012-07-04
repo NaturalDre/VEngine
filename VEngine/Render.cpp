@@ -1,9 +1,10 @@
 #include "Render.h"
 #include "View.h"
 #include "TMR\MapFile.h"
+#include "Bitmap.h"
 #include <algorithm>
 #include <allegro5\allegro5.h>
-#include "Bitmap.h"
+
 namespace VE
 {
 	// Helper function to draw a tilelayer
@@ -14,12 +15,13 @@ namespace VE
 		, m_camera(nullptr)
 		, m_physics(nullptr)
 	{
-
+		m_camera = new CCamera;
 	}
 
 	CRender::~CRender(void)
 	{
-
+		delete m_camera;
+		m_camera = nullptr;
 	}
 
 	void CRender::AddView(IView* view)

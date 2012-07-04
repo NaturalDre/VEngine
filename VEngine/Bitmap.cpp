@@ -78,6 +78,13 @@ public:
 	bool IsLocked(void) const { if (IsValid()) return al_is_bitmap_locked(m_bitmap); return false; }
 	int GetFlags(void) const { if (IsValid()) return al_get_bitmap_flags(m_bitmap); return false; }
 	int GetFormat(void) const { if (IsValid()) return al_get_bitmap_format(m_bitmap); return false; }
+	void ConvertMaskToAlpha(size_t r, size_t g, size_t b) { if (IsValid()) al_convert_mask_to_alpha(m_bitmap, al_map_rgb(r,g,b));}
+
+	void Reset(void)
+	{
+		al_destroy_bitmap(m_bitmap);
+		m_bitmap = nullptr;
+	}
 
 private:
 	ALLEGRO_BITMAP* m_bitmap;
@@ -137,6 +144,7 @@ const CBitmap& CBitmap::operator=(CBitmap&& rhs)
 	return *this;
 }
 
+void CBitmap::Reset(void) { d->Reset(); }
 bool CBitmap::IsValid(void) const { return d->IsValid(); }
 ALLEGRO_BITMAP* CBitmap::GetRaw(void) const { return d->Raw(); }
 size_t CBitmap::GetWidth(void) const { return d->GetWidth();}
@@ -145,6 +153,7 @@ bool CBitmap::IsSubBitmap(void) const { return d->IsSubBitmap(); }
 bool CBitmap::IsLocked(void) const { return d->IsLocked(); }
 int CBitmap::GetFlags(void) const { return d->GetFlags(); }
 int CBitmap::GetFormat(void) const { return d->GetFormat(); }
+void CBitmap::ConvertMaskToAlpha(size_t r, size_t g, size_t b) { d->ConvertMaskToAlpha(r,g,b); }
 
 namespace VE
 {
@@ -186,7 +195,7 @@ namespace VE
 
 		dpos = MtrToPix(dpos);		// Meters->Pixels
 
-		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Camera(), dpos));
+		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Renderer()->Cam(), dpos));
 		al_draw_bitmap(bitmap.GetRaw(), drawPos.x, drawPos.y, flags);
 	}
 
@@ -205,7 +214,7 @@ namespace VE
 		cpos = MtrToPix(cpos);
 
 		// Where on the user's screen is the position at?
-		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Camera(), dpos));
+		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Renderer()->Cam(), dpos));
 
 		// Box2D considers the center (0,0), not the top left, so
 		// we need to do some conversating when providing the center position

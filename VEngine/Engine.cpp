@@ -17,6 +17,8 @@ namespace VE
 		, m_done(false)
 		, m_controller(nullptr)
 		, m_isInit(false)
+		, m_timeLastUpdated(0)
+		, m_gameTime(0)
 	{
 
 	}
@@ -85,8 +87,13 @@ namespace VE
 
 	void CEngine::Update(void)
 	{
+		const double ct = al_current_time();
+		const double dt = ct - m_timeLastUpdated;
+		m_timeLastUpdated = ct;
+		//m_timeLastUpdated = ct;
+
 		if (m_controller)
-			m_controller->Update(0);
+			m_controller->Update(dt);
 	}
 
 	void CEngine::Render(void)

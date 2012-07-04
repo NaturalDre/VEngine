@@ -12,10 +12,9 @@ namespace Tiled
 
 namespace VE
 {
-	//class IEntityController;
 	class IEntity;
 	class IView;
-
+	class IAnimation;
 	class CCamera;
 	class CRender;
 	class CPhysics;
@@ -33,21 +32,25 @@ namespace VE
 		inline void SetLevelName(const std::string& levelName) { m_levelName = levelName; }
 		inline std::string LevelName(void) const { return m_levelName; }
 
-		// Call Update on all Updatable Controllers
+		/// Calls Update on all Updatable Controllers
 		void UpdateAll(double deltaTime);
 
-		inline CPlayerController* Player(void) const { return m_playerController; }
+		inline CPlayer* Player(void) const { return m_player; }
+		inline CPlayerController* PlayerController(void) const { return m_playerController; }
 		void SetPlayerController(CPlayerController* controller);
 
 		inline CRender* Renderer(void) const { return m_renderer; }
 		inline CPhysics* Physics(void) const { return m_physics; }
-		inline CCamera* Camera(void) const { return m_camera; }
+
+		void AddAnimation(IAnimation* anim) { m_animations.insert(anim); }
+		void RemoveAnimation(IAnimation* anim) { m_animations.erase(anim); }
 
 	private:
 		typedef std::unordered_set<IEntity*> EntitySet;
-
+		typedef std::unordered_set<IAnimation*> AnimationSet;
 		std::string m_levelName;
 		EntitySet m_controllers;
+		AnimationSet m_animations;
 
 		CPlayer* m_player;
 		CPlayerView* m_playerView;
@@ -55,7 +58,6 @@ namespace VE
 
 		CRender* m_renderer;
 		CPhysics* m_physics;
-		CCamera* m_camera;
 		Tiled::CMapFile* m_mapFile;
 	};
 

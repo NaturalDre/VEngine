@@ -1,29 +1,17 @@
-#ifndef CONTACTCALLBACK_H
-#define CONTACTCALLBACK_H
+#ifndef BULLET_H
+#define BULLET_H
 
-#include <Box2D\Dynamics\b2WorldCallbacks.h>
-
+#include "ContactCallback.h"
+#include <Box2D\Box2D.h>
 namespace VE
 {
-	class IEntity;
-	class CContactListener;
-	class IContactCallback
+	class IWeapon;
+	class IBullet: private IContactCallback
 	{
-		friend CContactListener;
+		friend IWeapon;
 	protected:
-		IContactCallback(IEntity* entity = nullptr, void* userdata = nullptr)
-			: m_entity(entity)
-			, m_userdata(userdata)
-		{
-
-		}
-
-		void SetEntity(IEntity* entity) { m_entity = m_entity; }
-		void SetUserData(void* userdata) { m_userdata = userdata; }
-
-
 		/// Called when two fixtures begin to touch.
-		virtual void BeginContact(b2Contact* contact) {}
+		virtual void BeginContact(b2Contact* contact) { }
 
 		/// Called when two fixtures cease to touch.
 		virtual void EndContact(b2Contact* contact) { }
@@ -49,13 +37,11 @@ namespace VE
 		virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) { }
 
 	public:
-		virtual ~IContactCallback(void) { }
+		virtual ~IBullet(void) = 0 { }
+		float GetDamage(void) { return m_damage; }
 
-		IEntity* Entity(void) const { return m_entity; }
-		void* UserData(void) const { return m_userdata; }
 	private:
-		IEntity* m_entity;
-		void* m_userdata;
+		float m_damage;
 	};
-};
+}
 #endif

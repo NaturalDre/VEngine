@@ -13,6 +13,16 @@ namespace Tiled
 	class TiledObject;
 }
 
+enum
+{
+	e_Friendly = 0x0001
+	, e_Player
+	, e_Enemy
+	, e_FriendlyBullet
+	, e_EnemyBullet
+	, e_Static
+};
+
 namespace VE
 {
 	class CContactListener;

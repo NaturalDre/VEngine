@@ -20,14 +20,14 @@ namespace Tiled
 		~CTileset(void);
 
 		void ReadMapFile(lua_State* L, size_t index);
-		
+
 		inline std::string Name(void) const { return m_name; }
 		inline std::string Source(void) const { return m_source; }
 		inline std::string Trans(void) const { return m_trans; }
 
 		inline size_t FirstGid(void) const { return m_firstGid; }
 		inline size_t LastGid(void) const { return m_lastGid; }
-		
+
 		inline size_t TileWidth(void) const { return m_tileWidth; }
 		inline size_t TileHeight(void) const { return m_tileHeight; }
 		inline size_t ImageWidth(void) const { return m_tileWidth; }
@@ -78,7 +78,7 @@ namespace Tiled
 
 		size_t m_firstGid;
 		size_t m_lastGid;
-		
+
 		size_t m_tileWidth;
 		size_t m_tileHeight;
 		size_t m_imageWidth;

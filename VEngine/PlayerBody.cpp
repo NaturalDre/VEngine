@@ -18,17 +18,20 @@ namespace VE
 		bd.bullet = true;
 		bd.position.Set(0,0);
 		bd.userData = static_cast<void*>(m_player);
+		bd.fixedRotation = true;
 
 		b2FixtureDef fd;
 		fd.density = 0.3f;
 		fd.friction = 0.3f;
 		fd.restitution = 0.0f;
 		fd.userData = this;
+		//fd.filter.categoryBits = e_Player;
+		//fd.filter.maskBits = e_Enemy | e_Static;
 
 		b2PolygonShape shape;
 		fd.shape = &shape;
 
-		shape.SetAsBox(0.5, 1);
+		shape.SetAsBox(0.5, 0.5);
 
 		m_body = m_world->CreateBody(&bd);
 		m_body->CreateFixture(&fd);
