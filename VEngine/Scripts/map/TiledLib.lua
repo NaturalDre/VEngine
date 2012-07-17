@@ -1,4 +1,33 @@
--- New Functions
+-- This is a helper function to call constructor
+-- for classes exported by Luabind.
+-- Checks if a variable exists in the global space
+-- with this name and checks if it's a function.
+-- If it is a function it calls it and passes it
+-- 'data'.
+function CallFactory(name, data)
+	func = _G[name];
+	if (type(func) == 'userdata')
+		then func(data);
+		print(name .. " factory called.");
+	end
+end
+-- Gathers every object in each objectgroup from
+-- the Tiled map file and stores them in 'data'
+function LoadObjects(data)
+	assert(type(map) == 'table', "map is not a table");
+	local layers = map.layers;
+
+	for layerKey,layerVal in pairs(layers) do
+		if(layerVal.type == 'objectgroup')
+			then for objectKey, objectVal in pairs(layerVal.objects) do
+				--if (objectVal.name ~= "")
+					--then data[objectVal.name
+				table.insert(data, objectVal);
+			end
+		end
+	end
+	print(#data .. " Objects Loaded. ");
+end
 
 function GetMapVersion()
 	return map.version;
@@ -122,4 +151,4 @@ function GetLayerDataSize(a)
 	return #map.layers[a].data
 end
 
--- Old functions
+print("TiledLib.lua loaded.");

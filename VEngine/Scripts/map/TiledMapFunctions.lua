@@ -121,5 +121,3 @@ end
 function GetLayerDataSize(a)
 	return #map.layers[a].data
 end
-
--- Old functions

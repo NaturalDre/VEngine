@@ -3,18 +3,52 @@
 
 #include <string>
 #include <list>
+#include <map>
 #include "Tileset.h"
 #include "Layer.h"
 #include "..\Bitmap.h"
 
-
 struct lua_State;
 struct ALLEGRO_BITMAP;
 
+namespace luabind
+{
+	namespace adl
+	{
+		class object;
+	}
+}
+
 namespace Tiled
 {
+	class Tile
+	{
+	protected:
+
+	public:
+		typedef std::map<const std::string, const std::string> Properties;
+
+		Tile(void): m_id(0) { }
+		Tile(size_t id, const Properties& properties): m_id(id), m_properties(properties) { }
+		Tile(size_t id, Properties&& properties): m_id(id), m_properties(std::move(properties)) { }
+
+		size_t GetID(void) const { return m_id; }
+		const Properties& GetProperties(void) { return m_properties; }
+
+		void SetID(size_t id) { m_id = id; }
+		void SetProperties(const Properties& props) { m_properties = props; }
+		void SetProperties(Properties&& props) { m_properties = std::move(props); }
+	private:
+
+		size_t m_id;
+		Properties m_properties;
+	};
+
 	class CTileset
 	{
+	protected:
+		//static Tile::Properties ConvertTableToProperties(const luabind::object& table);
+		static std::list<Tile> ReadTiles(lua_State* L, size_t index);
 	public:
 		CTileset(void);
 		~CTileset(void);
@@ -88,6 +122,8 @@ namespace Tiled
 		size_t m_tilesDown;
 
 		VE::CBitmap m_image;
+
+		std::list<Tile> m_tiles;
 	};
 }
 

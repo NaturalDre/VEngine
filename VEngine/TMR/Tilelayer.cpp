@@ -3,6 +3,7 @@
 #include <lua.hpp>
 #include <assert.h>
 #include "TiledLua.h"
+#include <luabind\luabind.hpp>
 
 using namespace Tiled;
 
@@ -16,19 +17,14 @@ bool CTileLayer::ReadMap(lua_State* L, const size_t layerIndex, CMapFile* mapFil
 	SetWidth(mapFile->Width());
 	SetHeight(mapFile->Height());
 
-	if(PushLayer(L, layerIndex))
-	{
-		// STK: table
-		m_properties = GetProperties(L);
-		// STK: table
-		lua_pop(L, 1);
-		// STK:
-	}
+	// STK: --
+	luabind::object data = luabind::call_function<luabind::object>(L, "GetLayerObject", layerIndex);
+	data.push(L);
+	// STK: -- table
+	m_properties = GetProperties(L);
+	lua_pop(L, 1);
 
-	//m_data.resize(mapFile->GetWidth() * mapFile->GetHeight(), 0);
 	m_data.resize(mapFile->Height(), std::vector<size_t>(mapFile->Width(), 0));
-	//for (size_t i = 0, element = 1; i < (GetWidth() * GetHeight()); ++i)
-	//	m_data[i] = DataValue(L, layerIndex, element++);
 
 	for (size_t row = 0, element = 1; row < GetHeight(); ++row)
 	{

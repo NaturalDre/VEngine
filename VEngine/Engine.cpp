@@ -5,6 +5,10 @@
 #include <allegro5\allegro_primitives.h>
 #include <algorithm>
 #include <physfs.h>
+#include <luabind\luabind.hpp>
+#include <lua.hpp>
+#include <lualib.h>
+#include <lauxlib.h>
 #include "SystemController.h"
 #include "View.h"
 
@@ -16,6 +20,7 @@ namespace VE
 		, m_display(nullptr)
 		, m_done(false)
 		, m_controller(nullptr)
+		//, m_luaEnv(nullptr)
 		, m_isInit(false)
 		, m_timeLastUpdated(0)
 		, m_gameTime(0)
@@ -55,6 +60,11 @@ namespace VE
 
 		PHYSFS_init(nullptr);
 		al_set_physfs_file_interface();
+
+		//m_luaEnv = lua_open();
+		//luaL_openlibs(m_luaEnv);
+		//luabind::open(m_luaEnv);
+
 
 		m_isInit = true;
 		return 0;

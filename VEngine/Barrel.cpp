@@ -35,7 +35,7 @@ namespace VE
 
 	void CBarrel::Update(double dt)
 	{
-
+		IEntity::Update(dt);
 	}
 
 	bool CBarrel::OnContact(IBullet* bullet)

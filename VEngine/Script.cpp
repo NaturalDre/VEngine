@@ -3,121 +3,74 @@
 #include <sstream>
 #include <assert.h>
 #include "Utility.h"
+#include <luabind\luabind.hpp>
+#include <boost\lexical_cast.hpp>
+
+using namespace luabind;
 
 namespace VE
 {
-	static int instances = 0;
-	//bool LoadScript(CScript* script);
+	//static int instances = 0;
+
 	void ProvideGlobal(lua_State* L, const char* key);
 
-	CScript::CScript(const std::string& filename, lua_State* state, const std::string& scriptID)
-		: m_scriptID(scriptID)
-		, m_state(state)
-		, m_loaded(false)
+	luabind::object GetFactory(lua_State* L, const std::string& factory)
 	{
-		m_buffer = FileToBuffer(filename);
+		// STK: --
+		lua_getglobal(L, factory.c_str());
+		// STK: -- userdata?
+		if (!lua_isuserdata(L, -1))
+			return luabind::object();;
+		// STK: -- userdata
+		luabind::object func = luabind::object(luabind::from_stack(L, -1));
+		lua_pop(L, 1);
+		// STK: --
+		return std::move(func);
+	}
 
-		if (m_scriptID.empty())
-		{
-			std::stringstream ss;
-			ss << "Script_" << ++instances;
-			m_scriptID = ss.str();
-		}
+	//CScript::CScript(lua_State* L, const std::string& factoryFunc)
+	//{
 
-		assert(m_state != nullptr);
+	//	lua_getglobal(L, factoryFunc.c_str());
+	//	// STK: -- userdata?
+	//	if (!lua_isuserdata(L, -1))
+	//		return;
+	//	// STK: -- userdata
+	//	luabind::object c = luabind::object(luabind::from_stack(L, -1));
+	//	// STK: -- userdata
+	//	lua_pop(L, 1);
+	//	// STK: --
+	//	m_self = luabind::call_function<luabind::object>(c);
+	//}
+
+	CScript::CScript(const luabind::adl::object& obj)
+	{
+		if (!obj.is_valid() || luabind::type(obj) != LUA_TUSERDATA)
+			return;
+		m_self = obj;
 	}
 
 	CScript::~CScript(void)
 	{
+		m_self = luabind::object();
 
-	}
-
-	bool CScript::Push(void)
-	{
-		// STK: --
-		lua_getfield(m_state, LUA_REGISTRYINDEX, m_scriptID.c_str());
-		// STK: -- table?
-		if (!lua_istable(m_state, -1))
-		{
-			// STK: -- unknown
-			lua_pop(m_state, 1);
-			// STK: --
-			return false;
-		}
-		// STK: -- table
-		return true;
-	}
-
-	void CScript::Load(void)
-	{
-		if (IsLoaded())
-			Unload();
-		if (m_buffer.empty())
-			return;
-
-		if (luaL_loadbuffer(m_state, m_buffer.data(), m_buffer.size(), nullptr))
-		{
-			const char* error = lua_tostring(m_state, -1);
-			lua_pop(m_state, 1);
-			return;
-		}
-
-		// STK: func
-		lua_createtable(m_state, 0, 1);
-		ProvideGlobal(m_state, "io");
-		ProvideGlobal(m_state, "print");
-		// STK: func table
-		lua_pushvalue(m_state, -1);
-		// STK: func table table
-		lua_setfield(m_state, LUA_REGISTRYINDEX, m_scriptID.c_str());
-		// STK: func table
-		if (!lua_setfenv(m_state, -2))
-			return;
-		// STK: func
-		lua_pcall(m_state, 0, 0, 0);
-		// STK:
-
-		m_loaded = true;
-	}
-
-	void CScript::Unload(void)
-	{
-		if (m_state)
-			return;
-		// STK:
-		lua_pushnil(m_state);
-		// STK: nil
-		lua_setfield(m_state, LUA_REGISTRYINDEX, m_scriptID.c_str());
-		// STK:
-		m_loaded = false;
 	}
 
 	void CScript::Update(double dt)
 	{
-		if (!Push())
-			return;
-		// STK: table
-		lua_getfield(m_state, -1, "Update");
-		// STK: table func
-		lua_pushnumber(m_state, dt);
-		// STK: table func number
-		lua_pcall(m_state, 1, 0, 0);
-		// STK: table
-		lua_pop(m_state, 1);
-		// STK:
+		luabind::call_member<void>(GetSelf(), "OnUpdate", dt);
+
+		//if (m_scriptTable.is_valid())
+		//	luabind::call_function<void>(m_scriptTable,
+		//m_scriptTable["OnUpdate"].push(m_scriptTable.interpreter());
+		//lua_pushinteger(m_scriptTable.interpreter(), 1);
+		//lua_pcall(m_scriptTable.interpreter(), 1, 0, 0);
+		//auto t = luabind::type(m_scriptTable) == LUA_TUSERDATA;
 	}
 
 	void CScript::Render(void)
 	{
-		if (!Push())
-			return;
-		// STK: table
-		lua_getfield(m_state, -1, "Render");
-		// STK: table func number
-		lua_pcall(m_state, 0, 0, 0);
-		// STK: table
-		lua_pop(m_state, 1);
-		// STK:
+
 	}
 
 	void ProvideGlobal(lua_State* L, const char* key)

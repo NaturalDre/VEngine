@@ -1,10 +1,9 @@
 #include "TiledObject.h"
 #include <lua.hpp>
 #include "TiledLua.h"
-using namespace Tiled;
+#include <luabind\luabind.hpp>
 
-std::string GetStringVal(const std::string& key, lua_State* L);
-float GetFloatVal(const std::string& key, lua_State* L);
+using namespace Tiled;
 
 TiledObject::TiledObject(TiledObject&& rhs)
 	: m_name(rhs.m_name)
@@ -13,99 +12,68 @@ TiledObject::TiledObject(TiledObject&& rhs)
 	, m_y(rhs.m_y)
 	, m_width(rhs.m_width)
 	, m_height(rhs.m_height)
-	, m_properties(std::move(rhs.m_properties)) { }
+	, m_properties(std::move(rhs.m_properties))
+	, m_isValid(rhs.IsValid()) { }
 
+TiledObject::TiledObject(const luabind::adl::object& data)
+	: m_x(0)
+	, m_y(0)
+	, m_width(0)
+	, m_height(0)
+	, m_isValid(false)
+{
+	if (luabind::type(data) != LUA_TTABLE)
+		return;
+
+	try
+	{
+		m_name = luabind::object_cast<std::string>(data["name"]);
+		m_type = luabind::object_cast<std::string>(data["type"]);
+		m_x = luabind::object_cast<float>(data["x"]);
+		m_y = luabind::object_cast<float>(data["y"]);
+		m_width = luabind::object_cast<float>(data["width"]);
+		m_height = luabind::object_cast<float>(data["height"]);	
+
+		// STK: --
+		data.push(data.interpreter());
+		// STK: -- table
+		auto t = data.interpreter();
+		m_properties = GetProperties(data.interpreter());
+		// STK: -- table
+		lua_pop(data.interpreter(), 1);
+		// STK: --
+		m_isValid = true;
+	}
+	catch(...)
+	{
+
+	}
+}
 
 TiledObject TiledObject::CreateFromLua(lua_State* L)
 {
-	// STK: table? --
-	if (!lua_istable(L, 1))
-		throw(std::exception("Bottom object on the stack is not a table."));
-	// STK: table --
-	TiledObject obj;
-	obj.m_name = GetStringVal("name", L);
-	obj.m_type = GetStringVal("type", L);
-	obj.m_x = GetFloatVal("x", L);
-	obj.m_y = GetFloatVal("y", L);
-	obj.m_width = GetFloatVal("width", L);
-	obj.m_height = GetFloatVal("height", L);
-	obj.m_properties = std::move(GetProperties(L));
-	return obj;
-}
+	try
+	{
+		luabind::object data(luabind::from_stack(L, -1));
+		if (luabind::type(data) != LUA_TTABLE)
+			throw(std::exception("Variable passed to TiledObject::CreateFromLua is not a table."));
 
-/*
-* GetStringVal()
-* 
-* Gets and returns a string value from an luatable.
-* 
-* Params:
-*		const std::string& key: The key of the table whose value you want. Must not be empty.
-*		lua_State* L: The state the table is in. Must not be null.
-*
-* Returns: std::string
-*		The value of Table[key]. The lua_State is left the same as it was when passed.
-*
-* Throws: LuaError if Table[key] does not return a string value.
-*
-* Notes:
-*		The first value on the stack MUST be the table you want
-*		BEFORE you call this function. The function does not check
-*		to confirm that this is true. You should do so before the call.
-*/
-std::string GetStringVal(const std::string& key, lua_State* L)
-{
-	// STK: table --
-	lua_pushstring(L, key.c_str());
-	// STK: table -- string
-	lua_rawget(L, 1);
-	// STK: table -- string?
-	if (!lua_isstring(L, -1))
-	{
-		lua_pop(L, 1);
-		// STK: table --
-		return 0;
-		//throw(LuaError("Table object's " + key + " property did not return a string value.", "Not provided", __FILE__, __LINE__));
+		TiledObject obj;
+		obj.m_name = luabind::object_cast<std::string>(data["name"]);
+		obj.m_type = luabind::object_cast<std::string>(data["type"]);
+		obj.m_x = luabind::object_cast<float>(data["x"]);
+		obj.m_y = luabind::object_cast<float>(data["y"]);
+		obj.m_width = luabind::object_cast<float>(data["width"]);
+		obj.m_height = luabind::object_cast<float>(data["height"]);
+
+		for(luabind::iterator iter = luabind::iterator(data["properties"]), end; iter != end; ++iter)
+		{
+			obj.m_properties.insert(std::pair<const std::string, const std::string>
+				(luabind::object_cast<const std::string>(iter.key())
+				, luabind::object_cast<std::string>(*iter)));
+		}
+
+		return obj;
 	}
-	// STK: table -- string
-	std::string val(lua_tostring(L, -1));
-	lua_pop(L, 1);
-	return std::move(val);
-}
-/*
-* GetFloatVal()
-* 
-* Gets and returns a float value from an luatable.
-* 
-* Params:
-*		const std::string& key: The key of the table whose value you want. Must not be empty.
-*		lua_State* L: The state the table is in. Must not be null.
-*
-* Returns: float
-*		The value of Table[key]. The lua_State is left the same as it was when passed.
-*
-* Throws: LuaError if Table[key] does not return a float value.
-*
-* Notes:
-*		The first value on the stack MUST be the table you want
-*		BEFORE you call this function. The function does not check
-*		to confirm that this is true. You should do so before the call.
-*/
-float GetFloatVal(const std::string& key, lua_State* L)
-{
-	// STK: table --
-	lua_pushstring(L, key.c_str());
-	// STK: table -- string
-	lua_rawget(L, 1);
-	// STK: table -- number?
-	if (!lua_isnumber(L, -1))
-	{
-		lua_pop(L, 1);
-		// STK: table --
-		return 0;
-		//throw(LuaError("Table object's " + key + "property did not return a string value.", "Not provided", __FILE__, __LINE__));
-	}
-	// STK: table -- number
-	float val(lua_tonumber(L, -1));
-	lua_pop(L, 1);
-	return val;
+	catch (...) { return TiledObject(); }
 }

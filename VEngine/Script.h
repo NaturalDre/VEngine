@@ -3,41 +3,35 @@
 
 #include <string>
 #include <vector>
+#include <luabind\object.hpp>
 
 struct lua_State;
 
+#define Call_Func luabind::call_function<luabind::object>
+
 namespace VE
 {
+	luabind::object GetFactory(lua_State* L, const std::string& factory);
 	class CScript
 	{
-		friend bool LoadScript(CScript* script);
 	protected:
-		//static bool LoadScript(CScript*);
+
 
 	public:
-		CScript(const std::string& filename, lua_State* state, const std::string& scriptID = "");
+		//CScript(lua_State* L, const std::string& factoryFunc);
+		CScript(const luabind::adl::object& obj);
+
 		~CScript(void);
 
-		const std::string& ScriptID(void) const { return m_scriptID; }
-		// Attempts to push this script's table to the top of the stack.
-		// If it returns true, it found and put the table at the top of the stack
-		// and you must pop it off. If false then it couldn't find itself(Which
-		// should NEVER happen) and you don't have to pop anything.
-		bool Push(void);
+		const luabind::adl::object GetSelf(void) const { return m_self; }
 
-		void Load(void);
-		void Unload(void);
-
-		bool IsLoaded(void) const { return m_loaded; }
+		bool IsValid(void) const { return m_self.is_valid(); }
 
 		void Update(double dt);
 		void Render(void);
 	private:
-		std::string m_scriptID;
-		std::string m_filename;
 		std::vector<char> m_buffer;
-		lua_State* m_state;
-		bool m_loaded;
+		luabind::adl::object m_self;
 	};
 }
 #endif

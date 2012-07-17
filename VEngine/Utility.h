@@ -14,6 +14,8 @@
 
 void vWarning(const std::string&);
 
+#define vError vWarning
+
 template<typename T>
 T StringTo(std::string val) { return boost::lexical_cast<T>(val); }
 inline std::string ConvertToString(double val) { return boost::lexical_cast<std::string>(val); }

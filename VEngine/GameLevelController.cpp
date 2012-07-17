@@ -26,7 +26,7 @@ namespace VE
 
 	void CGameLevelController::PushSystemEvent(ALLEGRO_EVENT& ev)
 	{
-		if (m_gameLevel)
+		if (m_gameLevel && m_gameLevel->PlayerController())
 			m_gameLevel->PlayerController()->HandleEvent(ev);
 	}
 

@@ -2,6 +2,7 @@
 #define PHYSICS_H
 
 #include <Box2D\Box2D.h>
+#include "TMR\TiledObject.h"
 
 const float SCALE(32.0f);
 
@@ -96,10 +97,15 @@ namespace VE
 	{ 
 		return PixToMtr(posPix) + b2Vec2(PixToMtr(widthPix) / 2.0f, PixToMtr(heightPix) / 2.0f); 
 	}
+	inline b2Vec2 TiledToBoxCoords(const Tiled::TiledObject& obj)
+	{
+		return PixToMtr(b2Vec2(obj.X(), obj.Y())) + b2Vec2(PixToMtr(obj.Width()) / 2.0f, PixToMtr(obj.Height()) / 2.0f);
+	}
 	//*
 	//	Tiled does not position it's objects using the center of the object like Box2D tends 
 	//	to do. So we need a helper function to do that for us and return it in meters.
 	//*	
 	b2Vec2 GetWorldCenterMtrs(const Tiled::TiledObject& obj);
 }
+
 #endif

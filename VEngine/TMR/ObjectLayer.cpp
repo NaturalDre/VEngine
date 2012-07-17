@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "TiledLua.h"
+#include <luabind\luabind.hpp>
 
 using namespace Tiled;
 
@@ -14,20 +15,20 @@ CObjectLayer::CObjectLayer(void)
 
 void CObjectLayer::ReadMapFile(CMapFile* mapFile, lua_State* L, size_t layer)
 {
-	const size_t objects = NumberOfObjects(L, layer);
-	if(PushLayer(L, layer))
-	{
-		// STK: Table
-		m_properties = Tiled::GetProperties(L);
-		// STK: Table
-		lua_pop(L, 1);
-		// STK:
-	}
+
+
+	luabind::object data = luabind::call_function<luabind::object>(L, "GetLayerObject", layer);
+	data.push(L);
+	// STK: -- table
+	m_properties = GetProperties(L);
+	lua_pop(L, 1);
+	// STK: --
+
+	const size_t objects = luabind::call_function<size_t>(L, "GetNumOfObjLayerObjects", layer);
 	for (size_t i = 1; i <= objects; ++i)
 	{
-		bool success = PushTiledObject(L, layer, i);
-		m_objects.push_back(TiledObject::CreateFromLua(L));
-		lua_pop(L, 1);
+		luabind::object obj = luabind::call_function<luabind::object>(L, "GetObjLayerObject", layer, i);
+		m_objects.push_back(TiledObject(obj));
 	}
 }
 

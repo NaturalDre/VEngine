@@ -8,7 +8,7 @@ struct ALLEGRO_TIMER;
 struct ALLEGRO_DISPLAY;
 union ALLEGRO_EVENT;
 
-
+struct lua_State;
 
 namespace VE
 {
@@ -40,11 +40,14 @@ namespace VE
 		*/
 		void SetSystemController(ISystemController* controller);
 
+		//lua_State* GetLuaState(void) const { return m_luaEnv; }
+
 	private:
 		ALLEGRO_EVENT_QUEUE* m_evQ;
 		ALLEGRO_TIMER* m_timer;
 		ALLEGRO_DISPLAY* m_display;
 		ISystemController* m_controller;
+		//lua_State* m_luaEnv;
 		bool m_done;
 		bool m_needRedraw;
 		bool m_isInit;

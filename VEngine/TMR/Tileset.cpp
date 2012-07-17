@@ -1,9 +1,10 @@
 #include "Tileset.h"
+#include "TiledLua.h"
 #include <lauxlib.h>
 #include <assert.h>
-#include "TiledLua.h"
 #include <allegro5\allegro5.h>
 #include "..\Utility.h"
+#include <luabind\luabind.hpp>
 
 using namespace Tiled;
 
@@ -14,28 +15,97 @@ CTileset::CTileset(void)
 
 CTileset::~CTileset(void)
 {
-	//al_destroy_bitmap(m_image);
-	//m_image = nullptr;
+
+}
+
+Tile::Properties ConvertTableToProperties(const luabind::object& table)
+{
+	Tile::Properties props;
+	for (luabind::iterator iter = luabind::iterator(table), end; iter != end; ++iter)
+	{
+			props.insert(std::pair<const std::string, const std::string>
+				(luabind::object_cast<const std::string>(iter.key())
+				, luabind::object_cast<std::string>(*iter)));
+	}
+	return std::move(props);
+}
+
+std::list<Tile> CTileset::ReadTiles(lua_State* L, size_t index)
+{
+	std::list<Tile> tiles;
+
+	luabind::object data(luabind::call_function<luabind::object>(L, "GetTilesetTiles", index));
+
+	if (luabind::type(data) != LUA_TTABLE)
+		return tiles;
+
+	for (luabind::iterator iter = luabind::iterator(data), end; iter != end; ++iter)
+	{
+		luabind::object tile = *iter;
+		
+		tiles.push_back(Tile(luabind::object_cast<int>(tile["id"]), ConvertTableToProperties(tile["properties"])));
+	}
+
+	//try 
+	//{
+	//	// STK: --
+	//	PushTilesetTiles(L, index);
+	//	// STK: -- table
+	//	lua_insert(L, 1);
+	//	// STK: table --
+	//	lua_pushnil(L);
+	//	// STK: table -- nil
+	//	while(lua_next(L, 1))
+	//	{
+	//		// STK: table -- string table?
+	//		if (!lua_istable(L, -1))
+	//			throw(std::exception("Value is not a table."));
+	//		// STK: table -- string table
+	//		lua_getfield(L, -1, "id");
+	//		// STK: table -- string table number?
+	//		if (!lua_isnumber(L, -1))
+	//		{
+	//			lua_pop(L, 2);
+	//			// STK: table -- string
+	//			continue;
+	//		}
+	//		// STK: table -- string table number
+	//		int id = lua_tonumber(L, -1);
+	//		lua_pop(L, 1);
+	//		// STK: table -- string table
+	//		tiles.push_back(Tile(id, GetProperties(L)));
+	//		lua_pop(L, 1);
+	//		// STK: table -- string
+	//	}
+	//	// STK: table --
+	//	lua_remove(L, 1);
+	//	// STK: --
+	//}
+	//catch(...)
+	//{
+	//	tiles.clear();
+	//}
+	return std::move(tiles);
 }
 
 void CTileset::ReadMapFile(lua_State* L, size_t index)
 {
-	m_firstGid = GetTilesetFirstGid(index, L);
-	m_tileWidth = GetTilesetTileWidth(index, L);
-	m_tileHeight = GetTilesetTileHeight(index, L);
-	m_source = GetTilesetImage(index, L);
-	m_imageWidth = GetTilesetImgW(index, L);
-	m_imageHeight = GetTilesetImgH(index, L);
-	m_trans = GetTilesetTrans(index, L);
-	m_spacing = GetTilesetSpacing(index, L);
-	m_name = GetTilesetName(index, L);
-	m_tileWidth = GetTilesetTileWidth(index, L);
-	m_tileHeight = GetTilesetTileHeight(index, L);
+	m_firstGid = luabind::call_function<size_t>(L, "GetTilesetFirstGid", index);
+	m_tileWidth = luabind::call_function<size_t>(L, "GetTilesetTileWidth", index);
+	m_tileHeight = luabind::call_function<size_t>(L, "GetTilesetTileHeight", index);
+	m_source = luabind::call_function<std::string>(L, "GetTilesetImage", index);
+	m_imageWidth = luabind::call_function<size_t>(L, "GetTilesetImageWidth", index);
+	m_imageHeight = luabind::call_function<size_t>(L, "GetTilesetImageHeight", index);
+	m_trans = luabind::call_function<std::string>(L, "GetTilesetTrans", index);
+	m_spacing = luabind::call_function<size_t>(L, "GetTilesetSpacing", index);
+	m_name = luabind::call_function<std::string>(L, "GetTilesetName", index);
+
+	m_tiles = ReadTiles(L, index);
 
 	if (m_tileWidth == 0)
-		throw("A tileset's tileWidth MUST NOT be zero");
+		throw(std::exception("A tileset's tileWidth MUST NOT be zero"));
 	if (m_tileHeight == 0)
-		throw("A tileset's tileHeight MUST NOT be zero");
+		throw(std::exception("A tileset's tileHeight MUST NOT be zero"));
 
 	m_tilesAcross = m_imageWidth / (m_tileWidth + m_spacing);
 	assert((m_tileHeight + m_spacing));

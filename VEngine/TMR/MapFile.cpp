@@ -1,9 +1,10 @@
 #include "MapFile.h"
 #include <assert.h>
-#include <lua.hpp>
 #include "Tilelayer.h"
 #include "ObjectLayer.h"
 #include "TiledLua.h"
+#include <luabind\luabind.hpp>
+#include "..\Utility.h"
 
 using namespace Tiled;
 
@@ -20,26 +21,27 @@ CMapFile::CMapFile(void)
 
 void CMapFile::LoadMapData(lua_State* L)
 {
-	m_version = GetVersion(L);
-	m_orientation = GetOrientation(L);
-	m_width = GetMapWidth(L);
-	m_height = GetMapHeight(L);
-	m_tileWidth = GetTileWidth(L);
-	m_tileHeight = GetTileHeight(L);
+	m_version = luabind::call_function<std::string>(L, "GetMapVersion");
+	m_orientation = luabind::call_function<std::string>(L, "GetMapOrientation");
+	m_width = luabind::call_function<size_t>(L, "GetMapWidth");
+	m_height = luabind::call_function<size_t>(L, "GetMapHeight");
+	m_tileWidth = luabind::call_function<size_t>(L, "GetMapTileWidth");
+	m_tileHeight = luabind::call_function<size_t>(L, "GetMapTileHeight");
 }
 
 void CMapFile::LoadLayers(lua_State* L)
 {
-	for (size_t i = 1; i <= GetNumOfTilesets(L); ++i)
+
+	for (size_t i = 1; i <= luabind::call_function<size_t>(L, "GetNumberOfTilesets"); ++i)
 	{
 		CTileset* ts = new CTileset;
 		ts->ReadMapFile(L, i);
 		m_tilesets.push_back(ts);
 	}
 
-	for (size_t i = 1, max = GetLayerCount(L); i <= max; ++i)
+	for (size_t i = 1, max = luabind::call_function<size_t>(L, "GetNumberOfLayers"); i <= max; ++i)
 	{
-		const std::string type = GetLayerType(L, i);
+		const std::string type = luabind::call_function<std::string>(L, "GetLayerType", i);
 
 		if(type == "tilelayer")
 		{
@@ -64,6 +66,7 @@ bool CMapFile::ReadMapFile(const std::string& mapFile, std::string& err)
 {
 	// Open an lua state
 	lua_State* L = lua_open();
+	luabind::open(L);
 
 	if (!L)
 	{

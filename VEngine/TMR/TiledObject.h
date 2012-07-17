@@ -6,6 +6,14 @@
 
 struct lua_State;
 
+namespace luabind
+{
+	namespace adl
+	{
+		class object;
+	}
+}
+
 namespace Tiled
 {
 	/*
@@ -19,7 +27,8 @@ namespace Tiled
 	{
 		typedef std::map<const std::string, const std::string> TiledObjectProperties;
 	public:
-		TiledObject(void): m_x(0), m_y(0), m_width(0), m_height(0) {}
+		TiledObject(void): m_x(0), m_y(0), m_width(0), m_height(0), m_isValid(false) {}
+		TiledObject(const luabind::adl::object& data);
 		TiledObject(TiledObject&& rhs);
 
 	public:
@@ -30,6 +39,7 @@ namespace Tiled
 		inline float Width(void) const { return m_width; }
 		inline float Height(void) const { return m_height; }
 
+		bool IsValid(void) const { return m_isValid; }
 
 		static TiledObject CreateFromLua(lua_State* L);
 	private:
@@ -40,6 +50,8 @@ namespace Tiled
 		float m_width;
 		float m_height;
 		TiledObjectProperties m_properties;
+
+		bool m_isValid; 
 	};
 }
 #endif

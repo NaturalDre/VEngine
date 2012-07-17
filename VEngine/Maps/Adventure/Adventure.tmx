@@ -2,6 +2,11 @@
 <map version="1.0" orientation="orthogonal" width="100" height="50" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="Tileset1" tilewidth="32" tileheight="32">
   <image source="Tileset1.png" trans="ffffff" width="1024" height="2016"/>
+  <tile id="1061">
+   <properties>
+    <property name="physics_isStatic" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="1" width="100" height="50">
   <data encoding="base64" compression="zlib">
@@ -13,4 +18,19 @@
    eJzt28ENwjAMheEKVYzCIEgMwihsjjhwgjRxFKd+zv9JvVaJXxyXA9sGAAAAVdf97BXkMKqOt473rJxhae+1OnrWrCfDLHr3vnLNsPYdFhH92I+zHMvRWSarWLh3ACAn67xlPvuyzlvms5aW/qHH5mnpH3pMF73UZladPHrpsv9/lHneOV5Zl3KoPaub2RNkcw7yiIcsNK2QBd+t7WbUit+A7ajVrzs1cfHYjx/MU8uiJw/lOTh67U/D+zyy+FDOY/RcegXIw2PWKmdsoTI3Mn1PrXK2vkr7tdbBcvdbZDpbLUr7tdbBcvcrydifynvK2J8R9qR8JjKKcCaAUbhfYuF+0afUU95rjVALpZ7y/h+/Ui1UUeM+b0wKFjk=
   </data>
  </layer>
+ <objectgroup name="Object Layer 1" width="100" height="50">
+  <object type="RigidBody" x="96" y="288" width="32" height="32"/>
+  <object type="RigidBody" x="288" y="256" width="32" height="32"/>
+  <object type="RigidBody" x="544" y="288" width="32" height="32"/>
+  <object type="RigidBody" x="224" y="608" width="32" height="32"/>
+  <object type="RigidBody" x="608" y="608" width="32" height="32"/>
+  <object type="RigidBody" x="672" y="768" width="32" height="32"/>
+  <object type="RigidBody" x="864" y="672" width="32" height="32"/>
+  <object type="RigidBody" x="1152" y="672" width="32" height="32"/>
+  <object type="RigidBody" x="1280" y="256" width="32" height="32"/>
+  <object type="RigidBody" x="864" y="224" width="32" height="32"/>
+  <object type="RigidBody" x="768" y="416" width="32" height="32"/>
+  <object type="RigidBody" x="992" y="448" width="32" height="32"/>
+  <object type="RigidBody" x="1440" y="352" width="32" height="32"/>
+ </objectgroup>
 </map>
