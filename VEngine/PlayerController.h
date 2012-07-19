@@ -35,14 +35,14 @@ namespace VE
 		* Params:
 		*	player - The player model that this controller will control.
 		*/
-		CPlayerController(CPlayer* player = nullptr);
+		CPlayerController(CPlayer* player);
 		~CPlayerController(void);
 
 		void HandleEvent(const ALLEGRO_EVENT& ev);
 		void Update(double deltaTime);
 
 		void SetPlayer(CPlayer* player);
-
+		inline CPlayer* GetPlayer(void) const { return m_player; }
 	private:
 		CPlayer* m_player;
 		std::vector<bool> m_keys;

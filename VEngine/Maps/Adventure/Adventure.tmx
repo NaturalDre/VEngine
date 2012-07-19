@@ -4,7 +4,7 @@
   <image source="Tileset1.png" trans="ffffff" width="1024" height="2016"/>
   <tile id="1061">
    <properties>
-    <property name="physics_isStatic" value="true"/>
+    <property name="physics_type" value="static"/>
    </properties>
   </tile>
  </tileset>

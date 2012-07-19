@@ -17,38 +17,36 @@ namespace VE
 	CGameLevel* GAMELEVEL(nullptr);
 
 	CGameLevel::CGameLevel(void)
-		: m_playerController(nullptr)
+		: m_player(nullptr)
+		, m_playerController(nullptr)
 		, m_renderer(nullptr)
 		, m_physics(nullptr)
-		, m_player(nullptr)
 		, m_playerView(nullptr)
 		, m_mapFile(nullptr)
 		, m_scriptEnv(nullptr)
 	{
 		assert(GAMELEVEL == nullptr);
 		GAMELEVEL = this;
-	
+
 		m_renderer = new CRender;
 		m_physics = new CPhysics(Renderer()->Cam());
 		m_mapFile = new Tiled::CMapFile;
+		m_playerController = new CPlayerController(nullptr);
+		m_playerView = new CPlayerView(m_renderer);
 
 		m_renderer->SetMapFile(m_mapFile);
 		m_renderer->SetPhysics(m_physics);
-		m_renderer->Cam()->Watch(m_player);
-
-		Setup();
 	}
 
 	CGameLevel::~CGameLevel(void)
 	{
+		RemovePlayer();
+
 		delete m_playerController;
 		m_playerController = nullptr;
 
 		delete m_playerView;
 		m_playerView = nullptr;
-
-		delete m_player;
-		m_player = nullptr;
 
 		delete m_physics;
 		m_physics = nullptr;
@@ -59,29 +57,18 @@ namespace VE
 		delete m_renderer;
 		m_renderer = nullptr;
 
+		// No need to close the state. We don't own it.
+		m_scriptEnv = nullptr;
+		
 		GAMELEVEL = nullptr;
-	}
 
-	void CGameLevel::Setup(void)
-	{
-
-
-
-		//m_player = CreatePlayer(this);
-		//m_playerView = new CPlayerView(Renderer());
-		//m_playerController = new CPlayerController(m_player);
-
-		//m_playerView->SetPlayer(m_player);
-		//m_playerController->SetPlayer(m_player);
-
-		// Test: Will likely call ReadMapFile from somewhere else.
-		//m_mapFile->ReadMapFile("Maps/Adventure/Adventure.lua");		
 	}
 
 	void CGameLevel::UpdateAll(double deltaTime)
 	{
 		if (m_scriptEnv)
 			luaL_dostring(m_scriptEnv, "Main:Update()");
+
 		m_physics->Simulate();
 
 		if (m_playerController)
@@ -93,6 +80,28 @@ namespace VE
 			(*iter)->Update(deltaTime);
 	}
 
+	void CGameLevel::AddPlayer(void)
+	{
+		if (m_player)
+			delete m_player;
+
+		m_player = CreatePlayer(this);
+
+		m_playerController->SetPlayer(m_player);
+		m_playerView->SetPlayer(m_player);
+		m_renderer->Cam()->Watch(m_player);
+	}
+
+	void CGameLevel::RemovePlayer(void)
+	{
+		m_renderer->Cam()->Watch(nullptr);
+		m_playerView->SetPlayer(nullptr);
+		m_playerController->SetPlayer(nullptr);
+
+		delete m_player;
+		m_player = nullptr;	
+	}
+
 	void CGameLevel::SetScriptEnv(lua_State* L)
 	{
 		if (m_scriptEnv)
@@ -100,41 +109,25 @@ namespace VE
 		m_scriptEnv = L;
 	}
 
+	CPlayer* CGameLevel::GetPlayer(void) const
+	{
+		return m_playerController->GetPlayer();
+	}
+
 	void CGameLevel::LoadMap(const std::string& filename)
 	{
 		m_mapFile->ReadMapFile(filename);
-		m_player = CreatePlayer(this);
-		m_playerView = new CPlayerView(Renderer());
-		m_playerController = new CPlayerController(m_player);
+		//m_player = CreatePlayer(this);
+		//m_playerView = new CPlayerView(Renderer());
+		//m_playerController = new CPlayerController(m_player);
 
-		m_playerView->SetPlayer(m_player);
-		m_playerController->SetPlayer(m_player);
-		m_renderer->Cam()->Watch(m_player);
+		//m_playerView->SetPlayer(m_player);
+		//m_playerController->SetPlayer(m_player);
+		//m_renderer->Cam()->Watch(m_player);
 
-		luaL_dostring(m_scriptEnv, "Main = Main(); Main:StartUp();");
-
-
-
-		//auto test = new CBarrel(this);
-		//try
-		//{
-		//	auto s = new CScript(
-		//		Call_Func(
-		//		GetFactory(m_scriptEnv, "BadScript"), "Test"));
-		//	luabind::call_member<void>(s->GetSelf(), "Talk2", "Pie");
-		//	test->AddScript(s);
-		//	luaL_dostring(m_scriptEnv, "LoadObjects(Objects);");
-		//}
-
-		//catch(const luabind::error& e)
-		//{
-		//	vError(lua_tostring(e.state(), -1));
-		//	lua_pop(e.state(), -1);
-		//}
-		//catch(const luabind::cast_failed& e)
-		//{
-		//	auto t = e.what();
-		//}
+		//luaL_dostring(m_scriptEnv, "Main = Main(); Main:StartUp();");
+		//luabind::settable(luabind::globals(m_scriptEnv), "Game", this);
+		//luaL_dostring(m_scriptEnv, "print(type(GameLevel)); print(Game:LevelName()); ");
 	}
 
 	CGameLevel* GameLevel(void)

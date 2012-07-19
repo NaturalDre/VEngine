@@ -13,7 +13,7 @@ function CallFactory(name, data)
 end
 -- Gathers every object in each objectgroup from
 -- the Tiled map file and stores them in 'data'
-function LoadObjects(data)
+function StoreObjects(data)
 	assert(type(map) == 'table', "map is not a table");
 	local layers = map.layers;
 

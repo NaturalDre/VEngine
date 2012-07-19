@@ -61,11 +61,6 @@ namespace VE
 		PHYSFS_init(nullptr);
 		al_set_physfs_file_interface();
 
-		//m_luaEnv = lua_open();
-		//luaL_openlibs(m_luaEnv);
-		//luabind::open(m_luaEnv);
-
-
 		m_isInit = true;
 		return 0;
 	}

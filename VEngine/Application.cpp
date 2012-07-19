@@ -17,17 +17,23 @@ namespace VE
 		, m_L(nullptr)
 	{
 		m_engine = new CEngine;
-		m_controller = new CGameLevelController;
+		m_engine->Init();
 
 		m_L = lua_open();
 		luaL_openlibs(m_L);
 		luabind::open(m_L);
 
-		m_engine->Init();
 	}
 
 	CApplication::~CApplication(void)
 	{
+		// The engine owns the controller.
+		// TODO: See if engine should really own the controller.
+		m_controller = nullptr;
+
+		lua_close(m_L);
+		m_L = nullptr;
+
 		delete m_engine;
 		m_engine = nullptr;
 	}
@@ -36,6 +42,11 @@ namespace VE
 	{
 		SetupDirectories();
 		SetupScriptEnv();
+		m_controller = new CGameLevelController;
+
+
+		luabind::settable(luabind::globals(m_L), "Game", m_controller->GameLevel());
+
 
 		m_controller->GameLevel()->SetScriptEnv(m_L);
 		m_engine->SetSystemController(m_controller);
@@ -67,6 +78,7 @@ namespace VE
 	{
 		Init();
 		m_controller->GameLevel()->LoadMap("Maps/Adventure/Adventure.lua");
+		luaL_dostring(m_L, "Main = Main(); Main:StartUp()");
 		return m_engine->Run();
 	}
 }
