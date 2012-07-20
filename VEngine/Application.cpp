@@ -68,7 +68,7 @@ namespace VE
 		luaL_dofile(m_L, "Scripts/game/common.lua");
 		luaL_dofile(m_L, "Scripts/BadScript.lua");
 		luaL_dofile(m_L, "Scripts/game/main.lua");
-		luaL_dofile(m_L, "Maps/Adventure/Adventure.lua");
+		//luaL_dofile(m_L, "Maps/Adventure/Adventure.lua");
 
 
 
@@ -77,6 +77,7 @@ namespace VE
 	int CApplication::Run(void)
 	{
 		Init();
+		/*m_controller->GameLevel()->LoadMap(luabind::globals(m_L)["map"]);*/
 		m_controller->GameLevel()->LoadMap("Maps/Adventure/Adventure.lua");
 		luaL_dostring(m_L, "Main = Main(); Main:StartUp()");
 		return m_engine->Run();

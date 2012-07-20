@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_set>
 #include <set>
+#include <luabind\object.hpp>
 
 struct lua_State;
 
@@ -54,6 +55,8 @@ namespace VE
 
 		void LoadMap(const std::string& filename);
 
+		void SetMainScript(const luabind::object& mainScript) { m_mainScript = mainScript; }
+
 	private:
 		typedef std::unordered_set<IEntity*> EntitySet;
 		typedef std::unordered_set<IAnimation*> AnimationSet;
@@ -68,7 +71,7 @@ namespace VE
 		CRender* m_renderer;
 		CPhysics* m_physics;
 		Tiled::CMapFile* m_mapFile;
-
+		luabind::object m_mainScript;
 		lua_State* m_scriptEnv;
 	};
 

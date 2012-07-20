@@ -47,13 +47,13 @@ namespace Tiled
 	class CTileset
 	{
 	protected:
-		//static Tile::Properties ConvertTableToProperties(const luabind::object& table);
 		static std::list<Tile> ReadTiles(lua_State* L, size_t index);
-	public:
-		CTileset(void);
-		~CTileset(void);
+		static void LoadTilesetProperties(CTileset& ts, const luabind::adl::object& data);
+		static std::list<Tile> LoadTilesetTiles(CTileset& ts, const luabind::adl::object& data);
 
-		void ReadMapFile(lua_State* L, size_t index);
+	public:
+		CTileset(const luabind::adl::object& tileset);
+		~CTileset(void);
 
 		inline std::string Name(void) const { return m_name; }
 		inline std::string Source(void) const { return m_source; }
@@ -70,6 +70,7 @@ namespace Tiled
 		inline size_t TilesAcross(void) const { return m_tilesAcross; }
 		inline size_t TilesDown(void) const { return m_tilesDown; }
 
+		inline bool IsValid(void) const { return m_isValid; }
 		/*
 		* ContainsGid()
 		*
@@ -106,6 +107,8 @@ namespace Tiled
 		const VE::CBitmap&  GetImage(void) const { return m_image; }
 
 	private:
+		bool m_isValid;
+
 		std::string m_name;
 		std::string m_source;
 		std::string m_trans;

@@ -95,7 +95,6 @@ namespace VE
 		const double ct = al_current_time();
 		const double dt = ct - m_timeLastUpdated;
 		m_timeLastUpdated = ct;
-		//m_timeLastUpdated = ct;
 
 		if (m_controller)
 			m_controller->Update(dt);
@@ -105,14 +104,6 @@ namespace VE
 	{
 		// Let the controller know rendering is about to begin(It should use this to know when to draw the map).
 		m_controller->Render();
-
-		//std::sort(m_views.begin(), m_views.end(), [](IView* lhs, IView* rhs)
-		//{
-		//	return lhs->DrawOrder() < rhs->DrawOrder();
-		//});
-
-		//for (auto iter = m_views.begin(); iter != m_views.end(); ++iter)
-		//	(*iter)->Draw();
 	}
 
 	void CEngine::HandleEvent(ALLEGRO_EVENT& ev)

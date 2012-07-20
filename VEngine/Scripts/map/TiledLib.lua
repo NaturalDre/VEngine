@@ -15,6 +15,10 @@ end
 -- the Tiled map file and stores them in 'data'
 function StoreObjects(data)
 	assert(type(map) == 'table', "map is not a table");
+	if (type(map) == 'nil') then
+		return;
+	end
+	
 	local layers = map.layers;
 
 	for layerKey,layerVal in pairs(layers) do
@@ -100,6 +104,10 @@ end
 
 function GetTilesetFirstGid(a)
 	return map.tilesets[a].firstgid
+end
+
+function GetLayer(a)
+	return map.layers[a];
 end
 
 function GetLayerType(a)

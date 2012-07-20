@@ -4,6 +4,7 @@
 #include <map>
 #include <list>
 #include <string>
+#include <luabind\object.hpp>
 #include "Tilelayer.h"
 #include "ObjectLayer.h"
 #include "Tileset.h"
@@ -18,13 +19,17 @@ namespace Tiled
 
 	class CMapFile
 	{
+	protected:
 		typedef std::map<const std::string, const std::string> MapProperties;
-		void LoadMapData(lua_State* L);
-		void LoadLayers(lua_State* L);
+		static void LoadMapData(CMapFile& map, lua_State* L);
+		static void LoadLayers(CMapFile& map, lua_State* L);
+
 	public:
 		CMapFile(void);
+		~CMapFile(void);
 
-		bool ReadMapFile(const std::string& mapFile, std::string& err = std::string(""));
+		bool Read(const std::string& mapFile, std::string& err = std::string(""));
+		bool Read(const luabind::object& data);
 
 		inline std::string Version(void) const { return m_version; }
 		inline std::string Orientation(void) const { return m_orientation; }
@@ -40,6 +45,8 @@ namespace Tiled
 		inline CObjectLayer* PhysicsLayer(void) const { return m_physicsLayer; }
 
 		inline bool IsValid(void) const { return m_valid; }
+		void Reset(void);
+
 	private:
 		std::string m_version;
 		std::string m_orientation;

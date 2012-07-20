@@ -12,6 +12,8 @@
 #define vMax(a,b) ((a > b) ? a : b )
 #define vContains(val, min, max) ((val >= min) && (val <= max))
 
+
+
 void vWarning(const std::string&);
 
 #define vError vWarning

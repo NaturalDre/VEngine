@@ -66,8 +66,8 @@ namespace VE
 
 	void CGameLevel::UpdateAll(double deltaTime)
 	{
-		if (m_scriptEnv)
-			luaL_dostring(m_scriptEnv, "Main:Update()");
+		if (m_mainScript.is_valid())
+			luabind::call_member<void>(m_mainScript, "Update", deltaTime);
 
 		m_physics->Simulate();
 
@@ -116,18 +116,10 @@ namespace VE
 
 	void CGameLevel::LoadMap(const std::string& filename)
 	{
-		m_mapFile->ReadMapFile(filename);
-		//m_player = CreatePlayer(this);
-		//m_playerView = new CPlayerView(Renderer());
-		//m_playerController = new CPlayerController(m_player);
+		if(luaL_dofile(m_scriptEnv, filename.c_str()))
+			return;
 
-		//m_playerView->SetPlayer(m_player);
-		//m_playerController->SetPlayer(m_player);
-		//m_renderer->Cam()->Watch(m_player);
-
-		//luaL_dostring(m_scriptEnv, "Main = Main(); Main:StartUp();");
-		//luabind::settable(luabind::globals(m_scriptEnv), "Game", this);
-		//luaL_dostring(m_scriptEnv, "print(type(GameLevel)); print(Game:LevelName()); ");
+		m_mapFile->Read(luabind::globals(m_scriptEnv)["map"]);
 	}
 
 	CGameLevel* GameLevel(void)
