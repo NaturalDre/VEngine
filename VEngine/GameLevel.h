@@ -1,17 +1,14 @@
 #ifndef ABSTRACTLEVELMODEL_H
 #define ABSTRACTLEVELMODEL_H
 
+#include "Process.h"
+#include "EngineCallback.h"
 #include <string>
 #include <unordered_set>
 #include <set>
 #include <luabind\object.hpp>
 
 struct lua_State;
-
-namespace Tiled
-{
-	class CMapFile;
-}
 
 namespace VE
 {
@@ -24,16 +21,18 @@ namespace VE
 	class CPlayer;
 	class CPlayerView;
 	class CPlayerController;
-	class CGameLevel//: public IObject
+	class CErrorLogger;
+	class CEngine;
+	class CGameMap;
+	class CGameLevel: public IEngineCallback, public IProcess
 	{
 	protected:
-
+		void Think(double dt);
+		void HandleEvent(const ALLEGRO_EVENT& ev);
+		void Render(void);
 	public:
-		CGameLevel(void);
+		CGameLevel(CErrorLogger* logger, CEngine* engine);
 		~CGameLevel(void);
-
-		/// Calls Update on all Updatable Controllers
-		void UpdateAll(double deltaTime);
 
 		void AddPlayer(void);
 		void RemovePlayer(void);
@@ -47,31 +46,38 @@ namespace VE
 		void AddAnimation(IAnimation* anim) { m_animations.insert(anim); }
 		void RemoveAnimation(IAnimation* anim) { m_animations.erase(anim); }
 
-		void AddEntity(IEntity* entity) { m_controllers.insert(entity); }
-		void RemoveEntity(IEntity* entity) { m_controllers.erase(entity); }
+		void AddEntity(IEntity* entity) { m_entities.insert(entity); }
+		void RemoveEntity(IEntity* entity) { m_entities.erase(entity); }
 
 		lua_State* GetScriptEnv(void) const { return m_scriptEnv; }
 		void SetScriptEnv(lua_State* L);
 
-		void LoadMap(const std::string& filename);
-
+		const luabind::object& GetMainScript(void) const { return m_mainScript; }
 		void SetMainScript(const luabind::object& mainScript) { m_mainScript = mainScript; }
 
+		inline CGameMap* GetMap(void) const { return m_gameMap; }
+		void LoadMap(const std::string& filename);
+
+		inline CErrorLogger* GetLogger(void) const { return m_logger; }
 	private:
 		typedef std::unordered_set<IEntity*> EntitySet;
 		typedef std::unordered_set<IAnimation*> AnimationSet;
 
-		EntitySet m_controllers;
-		AnimationSet m_animations;
+		luabind::object m_mainScript;
 
-		CPlayer* m_player;
-		CPlayerView* m_playerView;
-		CPlayerController* m_playerController;
+		EntitySet m_entities;
+		AnimationSet m_animations;
 
 		CRender* m_renderer;
 		CPhysics* m_physics;
-		Tiled::CMapFile* m_mapFile;
-		luabind::object m_mainScript;
+		CPlayer* m_player;
+		CPlayerView* m_playerView;
+		CPlayerController* m_playerController;
+		CErrorLogger* m_logger;
+
+
+		CGameMap* m_gameMap;
+
 		lua_State* m_scriptEnv;
 	};
 

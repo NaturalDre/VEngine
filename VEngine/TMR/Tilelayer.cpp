@@ -7,32 +7,39 @@
 
 using namespace Tiled;
 
-CTileLayer::CTileLayer(void)
+CTileLayer::CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile)
 {
+	if (!tilelayer.is_valid() || luabind::type(tilelayer) != LUA_TTABLE)
+		return;
 
-}
+	SetWidth(mapFile.GetWidth());
+	SetHeight(mapFile.GetHeight());
 
-bool CTileLayer::ReadMap(lua_State* L, const size_t layerIndex, CMapFile* mapFile)
-{
-	SetWidth(mapFile->Width());
-	SetHeight(mapFile->Height());
-
+	// For some stupid reason the following 2 lines of code are not equivilent to
+	// this one line: tilelayer["properties"].push(tilelayer.interpreter())
+	// and ends up with ReadProperties not getting a table at the top of the stack.
+	const luabind::object properties(tilelayer["properties"]);
 	// STK: --
-	luabind::object data = luabind::call_function<luabind::object>(L, "GetLayerObject", layerIndex);
-	data.push(L);
+	properties.push(tilelayer.interpreter());
 	// STK: -- table
-	m_properties = GetProperties(L);
-	lua_pop(L, 1);
 
-	m_data.resize(mapFile->Height(), std::vector<size_t>(mapFile->Width(), 0));
+	ReadProperties(tilelayer.interpreter(), this);
+	lua_pop(tilelayer.interpreter(), 1);
+	// STK: --
 
-	for (size_t row = 0, element = 1; row < GetHeight(); ++row)
+	const luabind::object data = tilelayer["data"];
+	if (!data.is_valid())
+		return;
+
+	m_data.resize(GetHeight(), std::vector<size_t>(GetWidth(), 0));
+
+	// Store the value of each key from Lua, which are in a 1D array, into a C++ 2D vector.
+	size_t row = 0;
+	for (luabind::iterator iter = luabind::iterator(tilelayer["data"]), end; iter != end; ++row)
 	{
-		for (size_t col = 0; col < GetWidth(); ++col)
-			m_data[row][col] = DataValue(L, layerIndex, element++);
+		for (size_t col = 0;col < GetWidth(); ++col)
+			m_data[row][col] = luabind::object_cast<size_t>(*iter++);
 	}
-
-	return true;
 }
 
 size_t CTileLayer::GetDataVal(size_t row, size_t col)

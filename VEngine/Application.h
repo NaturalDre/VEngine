@@ -1,11 +1,14 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "ErrorLogger.h"
+
 struct lua_State;
 
 namespace VE 
 {
 	class CEngine;
+	class CGameLevel;
 	class CGameLevelController;
 	class CApplication
 	{
@@ -23,7 +26,9 @@ namespace VE
 	private:
 		CEngine* m_engine;
 		lua_State* m_L;
-		CGameLevelController* m_controller;
+		CGameLevel* m_gameLevel;
+
+		CErrorLogger m_errorLogger;
 	};
 }
 

@@ -9,8 +9,8 @@ namespace VE
 	protected:
 
 	public:
-		virtual void Notify(IEvent* ev = nullptr) = 0;
-		virtual ~IObserver(void) {}
+		virtual void Notify(int eventCode) { }
+		virtual ~IObserver(void) = 0 {}
 	private:
 
 	};

@@ -2,7 +2,7 @@
 #define PLAYEREVENTS_H
 
 #include "Event.h"
-#include "Constants.h"
+#include "Common.h"
 #include <allegro5\allegro5.h>
 
 namespace VE
@@ -12,10 +12,10 @@ namespace VE
 	private:
 
 	public:
-		DirectionChanged(Direction dir): IEvent(ALLEGRO_GET_EVENT_TYPE('D', 'I', 'R', 'C')), m_dir(dir) { }
-		Direction GetDir(void) const { return m_dir; }
+		DirectionChanged(DIRECTION dir): IEvent(ALLEGRO_GET_EVENT_TYPE('D', 'I', 'R', 'C')), m_dir(dir) { }
+		DIRECTION GetDir(void) const { return m_dir; }
 	private:
-		Direction m_dir;
+		DIRECTION m_dir;
 	};
 };
 

@@ -3,15 +3,18 @@
 #include "Tilelayer.h"
 #include "ObjectLayer.h"
 #include "TiledLua.h"
-#include <luabind\luabind.hpp>
 #include "..\Utility.h"
+#include "..\Bitmap.h"
+#include "..\Render.h"
+#include <luabind\luabind.hpp>
+
 #include <boost\foreach.hpp>
 
 using namespace Tiled;
 
 bool LoadTiledLib(lua_State* L)
 {
-	return !luaL_dofile(L, "Scripts/map/TiledLib.lua");
+	return DoFile(L, "Scripts/map/TiledLib.lua");
 }
 
 CMapFile::CMapFile(void)
@@ -20,8 +23,9 @@ CMapFile::CMapFile(void)
 	m_height = 0;
 	m_tileHeight = 0;
 	m_tileWidth = 0;
+	//m_playerLayer = 1;
 
-	m_physicsLayer = nullptr;
+	//m_physicsLayer = nullptr;
 	m_valid = false;
 }
 
@@ -56,62 +60,79 @@ void CMapFile::LoadLayers(CMapFile& map, lua_State* L)
 		const std::string type = luabind::object_cast<std::string>(data["type"]);
 
 		if (type == "tilelayer")
-		{
-
-		}
+			map.m_tileLayers.push_back( new CTileLayer(data, map));
 		else if (type == "objectgroup")
 		{
-
+			CObjectLayer* layer = new CObjectLayer(data);
+			map.m_objectLayers.push_back(layer);
+			//if (layer->GetProperty("type") == "physics")
+			//	map.m_physicsLayer = layer;
+			//else
+			//	map.m_objectLayers.push_back(layer);
 		}
-
-		//const std::string type = luabind::call_function<std::string>(L, "GetLayerType", i);
-
-		//if(type == "tilelayer")
-		//{
-		//	CTileLayer* layer = new CTileLayer;
-		//	layer->ReadMap(L, i, &map);
-		//	map.m_tileLayers.push_back(layer);
-		//}
-		//else if (type == "objectgroup")
-		//{
-		//	CObjectLayer* layer = new CObjectLayer;
-		//	layer->ReadMapFile(&map, L, i);
-
-		//	if (layer->Property("type") == "physics")
-		//		map.m_physicsLayer = layer;
-		//	else
-		//		map.m_objectLayers.push_back(layer);
-		//}
 	}
 }
 
-bool CMapFile::Read(const std::string& mapFile, std::string& err)
+//void CMapFile::RenderLayer(VE::CRender* renderer, CTileLayer* tilelayer)
+//{
+//		// FOr the sub bitmaps
+//		VE::CBitmap tile;
+//		size_t prevID(0);
+//
+//		// Top left x and y position of the camera
+//		const float tlx = renderer->Cam()->TopLeftPosPix().x;
+//		const float tly = renderer->Cam()->TopLeftPosPix().y;	
+//
+//
+//		const int startCol(static_cast<int>(tlx / GetTileWidth()));
+//		const int startRow(static_cast<int>(tly / GetTileHeight()));
+//
+//
+//		const int endCol = startCol + (VE::GetDisplayWidth() / GetTileWidth()) + 2; // +2 is buffer otherwise last col won't draw
+//		const int endRow = startRow + (VE::GetDisplayHeight() / GetTileHeight()) + 2; // +2 is buffer otherwise last row won't draw
+//
+//		for (int row = startRow; row < endRow; ++row)
+//		{
+//			for (int col = startCol; col < endCol; ++col)
+//			{
+//				int id = tilelayer->GetDataVal(row, col);
+//				if (id == 0)
+//					continue;
+//				if (id != prevID)
+//				{
+//					prevID = id;
+//					tile = Tiled::CTileset::LoadTile(GetTilesets(), id);
+//				}
+//
+//				prevID = id;
+//
+//				int dx = col * GetTileWidth();
+//				int dy = row * GetTileHeight();
+//
+//				if (tile)
+//					DrawBitmap(tile, VE::PixToMtr(b2Vec2(static_cast<float>(dx), static_cast<float>(dy))));
+//			}
+//		}
+//}
+
+bool CMapFile::Read(const std::string& mapFile)
 {
+	Reset();
 	// Open an lua state
 	lua_State* L = lua_open();
+	if (!L)
+		return false;
+
 	luaL_openlibs(L);
 	luabind::open(L);
 
-	if (!L)
-	{
-		err = "Unable to create Lua State.";
-		return false;
-	}
-
-	// Attempt to load the file.
+	// Attempt to load the file and load the script which 
+	// contains Lua functions for operating on Tiled's 
+	// Lua map files.
 	// NOTE: Non-zero is error.
-	if (luaL_dofile(L, mapFile.c_str()))
+	if (luaL_dofile(L, mapFile.c_str()) || !LoadTiledLib(L))
 	{
-		err = "Unable to load file.";
-		return false;
-	}
-	// Load the script which contains Lua functions for operating 
-	// on Tiled's Lua map files.
-	// NOTE: Non-zero is error
-	if (!LoadTiledLib(L))
-	{
-		err = "Unable to load Lua file that contains functions for "
-			"operating on Tiled's Lua map file.";
+		lua_close(L);
 		return false;
 	}
 
@@ -155,8 +176,14 @@ void CMapFile::Reset(void)
 		delete tileset;
 	m_tilesets.clear();
 	
-	delete m_physicsLayer;
-	m_physicsLayer = nullptr;
+	//delete m_physicsLayer;
+	//m_physicsLayer = nullptr;
 
 	m_valid = false;
 }
+
+//void Tiled::CMapFile::Render(VE::CRender* renderer,  size_t begin, size_t end)
+//{
+//	for (size_t i = begin; (i < m_tileLayers.size()) && (i <= end); ++i)
+//		RenderLayer(renderer, m_tileLayers.at(i));
+//}

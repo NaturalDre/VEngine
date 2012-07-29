@@ -3,40 +3,48 @@
 #include "GameLevel.h"
 #include "Player.h"
 #include "Weapon_AK47.h"
+#include "Entity.h"
+#include <allegro5\altime.h>
 
 namespace VE
 {
-	Bullet_AK47::Bullet_AK47(b2World* world, Weapon_AK47* weapon, const Direction dir)
-		: m_body(nullptr)
+	Bullet_AK47::Bullet_AK47(b2World* world, Weapon_AK47* weapon, const DIRECTION dir)
+		: m_world(world)
+		, m_body(nullptr)
 		, m_weapon(weapon)
 	{
+		if (!m_world)
+			return;
+		m_timeCreated = al_get_time();
+		SetDamage(10);
 		b2BodyDef bd;
 		bd.type = b2_dynamicBody;
 		bd.bullet = true;
 		bd.allowSleep = false;
 		bd.fixedRotation = true;
 
+		// We don't want all bullets in a straight line
+		float r = (-0.5f) + ((rand() % 10) / 10.0f);
 
-		//const Direction dir = dir;
-		if (dir == e_Right)
+		if (dir == RIGHT)
 		{
 			bd.linearVelocity.Set(10, 0);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(2, 0);
+			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(1, r);
 		}
-		else if(dir == e_Left)
+		else if(dir == LEFT)
 		{
 			bd.linearVelocity.Set(-10, 0);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(-2, 0);
+			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(-1, r);
 		}
-		else if (dir == e_Up)
+		else if (dir == UP)
 		{
 			bd.linearVelocity.Set(0, -10);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(0, -2);
+			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(r, -1);
 		}
-		else if (dir == e_Down)
+		else if (dir == DOWN)
 		{
 			bd.linearVelocity.Set(0, 10);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(0, 2);
+			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(r, 1);
 		}
 
 		b2FixtureDef fd;
@@ -55,10 +63,17 @@ namespace VE
 		m_body->CreateFixture(&fd);
 	}
 
+	void Bullet_AK47::Destroy(void)
+	{
+		if (m_world && m_body)
+			m_world->DestroyBody(m_body);
+		m_body = nullptr;
+	}
+
 	Bullet_AK47::~Bullet_AK47(void)
 	{
-		GameLevel()->Physics()->World()->DestroyBody(m_body);
-		m_body = nullptr;
+		Destroy();
+		m_world = nullptr;
 		m_weapon = nullptr;
 	}
 
@@ -69,7 +84,6 @@ namespace VE
 			return;
 		if (!entity->OnContact(this))
 			return;
-
 		m_weapon->Done(this);
 	}
 }

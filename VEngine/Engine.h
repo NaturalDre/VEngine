@@ -2,7 +2,7 @@
 #define ENGINE_H
 
 #include <vector>
-
+#include <list>
 struct ALLEGRO_EVENT_QUEUE;
 struct ALLEGRO_TIMER;
 struct ALLEGRO_DISPLAY;
@@ -12,12 +12,13 @@ struct lua_State;
 
 namespace VE
 {
-	class ISystemController;
+	class IEngineCallback;
+	class IProcess;
 	class IView;
 	class CEngine
 	{
+		typedef std::list<IProcess*> Processes;
 	protected:
-
 		void Update(void);
 		void Render(void);
 		void HandleEvent(ALLEGRO_EVENT& ev);
@@ -26,28 +27,22 @@ namespace VE
 		CEngine(void);
 		~CEngine(void);
 
-		/**
-		* Initializes the core functions of the engine.
-		*/
+		/// Initializes the core functions of the engine.
 		int Init(void);
-		/**
-		* Begins the game loop.
-		*/
+		/// Begins the game loop.
 		int Run(void);
-		/**
-		* @param controller Is notified of specific system events during the game loop.
-		* @see SystemController.h
-		*/
-		void SetSystemController(ISystemController* controller);
-
-		//lua_State* GetLuaState(void) const { return m_luaEnv; }
-
+		/// @param callback Is notified of specific system events during the game loop.
+		/// @see EngineCallback.h
+		void SetCallback(IEngineCallback* callback) { m_callback = callback; }
+		///
+		void AddProcess(IProcess* process);
+		void RemoveProcess(IProcess* process);
 	private:
 		ALLEGRO_EVENT_QUEUE* m_evQ;
 		ALLEGRO_TIMER* m_timer;
 		ALLEGRO_DISPLAY* m_display;
-		ISystemController* m_controller;
-		//lua_State* m_luaEnv;
+		IEngineCallback* m_callback;
+		Processes m_processes;
 		bool m_done;
 		bool m_needRedraw;
 		bool m_isInit;

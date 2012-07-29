@@ -4,7 +4,7 @@
 #include "Physics.h"
 #include "Entity.h"
 #include "Observable.h"
-#include "Constants.h"
+#include "Common.h"
 
 namespace VE
 {
@@ -41,32 +41,28 @@ namespace VE
 		size_t GetWeaponCount(void) const;
 
 		void SelectWeapon(size_t index);
-		Direction GetDirection(void) const;
+		DIRECTION GetDirection(void) const;
 
-		void SetDirection(Direction dir);
+		void SetDirection(DIRECTION dir);
 		// AdvanceLevel is for testing if observer class
 		void AdvanceLevel(void);
 		//void SetBody(b2Body* body) { m_body = body; }
-		/**
-		* Subscribe to a specific set of events that this object generates.
-		*
-		* List of Topics: Currently there are none.
-		* @param topic The kinds of events you want to listen for. 
-		* @param observer The object who will be notified of these events.
-		*/
+
+		/// Subscribe to a specific set of events that this object generates.
+		///
+		/// List of Topics: Currently there are none.
+		/// @param topic The kinds of events you want to listen for. 
+		/// @param observer The object who will be notified of these events.
 		void SubscribeTo(const std::string& topic, IObserver* observer);
-		/**
-		* Subscribe from a set of events that this object generates.
-		*
-		* @param topic The topic you no longer to to be notified about.
-		* @param observer The object that no longer wants these events.
-		*/
+		/// Subscribe from a set of events that this object generates.
+		///
+		/// @param topic The topic you no longer to to be notified about.
+		/// @param observer The object that no longer wants these events.
 		void SubscribeFrom(const std::string& topic, IObserver* observer);
-		/**
-		* Subscribe from all events that this object generates.
-		*
-		* @param observer The object that no longer wants to listen to events from this object.
-		*/
+		///
+		/// Subscribe from all events that this object generates.
+		///
+		/// @param observer The object that no longer wants to listen to events from this object.
 		void SubscribeFromAll(IObserver* observer);
 	};
 

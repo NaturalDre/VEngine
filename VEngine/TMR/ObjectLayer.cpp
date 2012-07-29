@@ -1,41 +1,27 @@
 #include "ObjectLayer.h"
+#include "TiledLua.h"
 #include <lua.hpp>
 #include <assert.h>
 #include <algorithm>
-
-#include "TiledLua.h"
 #include <luabind\luabind.hpp>
 
 using namespace Tiled;
 
-CObjectLayer::CObjectLayer(void)
+CObjectLayer::CObjectLayer(const luabind::object& objectlayer)
 {
+	if (!objectlayer.is_valid() || luabind::type(objectlayer) != LUA_TTABLE)
+		return;
 
-}
-
-void CObjectLayer::ReadMapFile(CMapFile* mapFile, lua_State* L, size_t layer)
-{
-
-
-	luabind::object data = luabind::call_function<luabind::object>(L, "GetLayerObject", layer);
-	data.push(L);
-	// STK: -- table
-	m_properties = GetProperties(L);
-	lua_pop(L, 1);
+	// For some stupid reason the following 2 lines are not equivilent to
+	// this one line: objectlayer["properties"].push(objectlayer.interpreter())
+	// and ends up with ReadProperties not getting a table at the top of the stack.
+	const luabind::object properties(objectlayer["properties"]);
 	// STK: --
-
-	const size_t objects = luabind::call_function<size_t>(L, "GetNumOfObjLayerObjects", layer);
-	for (size_t i = 1; i <= objects; ++i)
-	{
-		luabind::object obj = luabind::call_function<luabind::object>(L, "GetObjLayerObject", layer, i);
-		m_objects.push_back(TiledObject(obj));
-	}
-}
-
-std::string CObjectLayer::Property(const std::string& prop)
-{
-	for(auto iter = m_properties.begin(); iter != m_properties.end(); ++iter)
-		if (iter->first == prop)
-			return iter->second;
-	return "";
+	properties.push(objectlayer.interpreter());
+	// STK: -- table
+	ReadProperties(objectlayer.interpreter(), this);
+	lua_pop(objectlayer.interpreter(), 1);
+	// STK: --
+	for (luabind::iterator iter = luabind::iterator(objectlayer["objects"]), end; iter != end; ++iter)
+		m_objects.push_back(Tiled::Object(*iter));
 }

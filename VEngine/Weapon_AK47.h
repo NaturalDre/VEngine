@@ -3,40 +3,50 @@
 
 #include "Weapon.h"
 #include "Bullet_AK47.h"
+#include "Bitmap.h"
 #include <list>
 #include <memory>
+#include <luabind\object.hpp>
 
 namespace VE
 {
-	//typedef std::unique_ptr<Bullet_AK47> pAK47Bullet;
-	//typedef Bullet_AK47* pAK47Bullet;
-	//class CGameLevel;
 	class CPlayer;
-	class CPhysics;
+	class CGameLevel;
 	class Weapon_AK47: public IWeapon
 	{
 	protected:
 		void Update(double dt);
+		void Render(void);
 
+		void ForceFinishOldBullets(void);
 
+		void FreeFiredBullets(void);
+		void FreeFinishedBullets(void);
+
+		void CallScriptFunc(const std::string& function);
 	public:
-		Weapon_AK47(CPhysics* physics, CPlayer* player);
+		Weapon_AK47(CGameLevel* level, CPlayer* player);
 		~Weapon_AK47(void);
 
-		void Fire(Direction dir);
+		void Fire(DIRECTION dir);
 		void Reload(void);
+		/// Bullets that his weapon shoots(aka created) should call this 
+		/// when they are 'done'. Being done will usually mean the
+		/// bullet has hit something and now needs to be removed
+		/// from the world.
 		void Done(IBullet* bullet);
 		/// \return The player that is using this weapon.
-		CPlayer* Player(void) const { return m_player; }
+		CPlayer* GetPlayer(void) const { return m_player; }
 	private:
 		std::list<Bullet_AK47*> m_firedBullets;
-		std::list<IBullet*> m_finishedBullets;
-		CPhysics* m_physics;
-		CPlayer* m_player;
-		/// How long to wait 'til the weapon can be fired again
-		double m_fireRate; 
+		std::list<Bullet_AK47*> m_finishedBullets;
+		CBitmap m_bulletImage;
+		CGameLevel* m_gameLevel; /// We do not own what this points to.
+		CPlayer* m_player;	/// We do not own what this points to.
+		luabind::object m_self;
+		const double m_fireRate; /// How long to wait 'til the weapon can be fired again
 		double m_fireTimeout;
-		double m_reloadTime;
+		const double m_reloadTime;
 		double m_reloadTimeout;
 	};
 }

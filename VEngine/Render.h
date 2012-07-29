@@ -1,13 +1,9 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <vector>
 #include "Camera.h"
-
-namespace Tiled
-{
-	class CMapFile;
-}
+#include "Process.h"
+#include <vector>
 
 namespace VE
 {
@@ -15,8 +11,12 @@ namespace VE
 	class CCamera;
 	class CPhysics;
 	class CBitmap;
-	class CRender
+	class CGameMap;
+	class CRender: public IProcess
 	{
+	protected:
+		void Think(double dt) { }
+
 	public:
 		CRender(void);
 		~CRender(void);
@@ -24,8 +24,8 @@ namespace VE
 		void AddView(IView* view);
 		void RemoveView(IView* view);
 
-		Tiled::CMapFile* MapFile(void) const { return m_mapFile; }
-		void SetMapFile(Tiled::CMapFile* mapFile) { m_mapFile = mapFile; }
+		CGameMap* MapFile(void) const { return m_gameMap; }
+		void SetMapFile(CGameMap* gameMap) { m_gameMap = gameMap; }
 
 		CCamera* Cam(void) const { return m_camera; }
 		//void SetCam(CCamera* cam) { m_camera = cam; }
@@ -35,7 +35,7 @@ namespace VE
 		void Render(void);
 	private:
 		std::vector<IView*> m_views;
-		Tiled::CMapFile* m_mapFile;
+		CGameMap* m_gameMap;
 		CCamera* m_camera;
 		// I only have a reference to the physics engine to draw the debug data for it.
 		CPhysics* m_physics;

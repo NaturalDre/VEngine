@@ -2,7 +2,8 @@
 #define WEAPON_H
 
 #include "Entity.h"
-#include "Constants.h"
+#include "Common.h"
+
 struct ALLEGRO_BITMAP;
 
 namespace VE
@@ -41,11 +42,12 @@ namespace VE
 	public:
 		virtual ~IWeapon(void) { }
 
-		virtual void Update(double dt) { };
+		virtual void Update(double dt) = 0;
+		virtual void Render(void) = 0;
 		/// Fire a bullet from the weapon.
 		/// \note Derived classes should handle whether or not
 		///		the weapon can be fired.
-		virtual void Fire(Direction dir) = 0;
+		virtual void Fire(DIRECTION dir) = 0;
 		/// Reload this weapon.
 		/// \note Derived classes should handle whether or not
 		///		the weapon can be reloaded.
@@ -68,6 +70,7 @@ namespace VE
 		inline WeaponState GetState(void) const { return m_state; }
 		/// Icon of the weapon to be used with the GUI.
 		virtual ALLEGRO_BITMAP* GetIcon(void) const { return nullptr; }
+
 
 	private:
 		size_t m_ammo;

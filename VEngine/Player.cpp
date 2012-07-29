@@ -44,7 +44,7 @@ namespace VE
 		CPlayerBody* m_body;
 		b2Vec2 m_speed;
 		b2Vec2 m_vel;
-		Direction m_dir;
+		DIRECTION m_dir;
 		IWeapon* m_currentWeapon;
 		std::list<IWeapon*> m_weapons;
 	};
@@ -61,9 +61,11 @@ CPlayerImpl::CPlayerImpl(CGameLevel* level)
 	, m_currentWeapon(nullptr)
 {
 	m_body = new CPlayerBody(this, GameLevel()->Physics()->World());
-	m_weapons.push_back(new Weapon_AK47(GameLevel()->Physics(), this));
+	m_weapons.push_back(new Weapon_AK47(GameLevel(), this));
 
 	m_currentWeapon = m_weapons.front();
+
+	SetDirection(RIGHT);
 }
 
 CPlayerImpl::~CPlayerImpl(void)
@@ -128,22 +130,22 @@ void CPlayer::Update(double deltaTime)
 	b2Body* body = impl->m_body->Raw();
 
 	body->ApplyLinearImpulse(b2Vec2(ImpulseForDistance(impl->m_speed, body)), body->GetWorldCenter()); 
-	//impl->m_speed.SetZero();
 }
 
-Direction CPlayer::GetDirection(void) const
+DIRECTION CPlayer::GetDirection(void) const
 {
 	return Impl(this)->m_dir;
 }
 
-void CPlayer::SetDirection(Direction dir)
+void CPlayer::SetDirection(DIRECTION dir)
 {
 	CPlayerImpl* impl = Impl(this);
 	// Only update direction if it is a new direction
 	if (impl->m_dir != dir)
 	{
 		impl->m_dir = dir;
-		impl->m_publisher.NotifyAll("DirectionChanged", new DirectionChanged(impl->m_dir));
+		impl->m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('D', 'I', 'R', 'C'));
+		//impl->m_publisher.NotifyAll("DirectionChanged", new DirectionChanged(impl->m_dir));
 	}
 }
 

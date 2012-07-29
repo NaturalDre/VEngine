@@ -9,7 +9,7 @@
 using namespace Tiled;
 using namespace luabind;
 
-Tile::Properties ConvertTableToProperties(const luabind::object& table)
+static Tile::Properties ConvertTableToProperties(const luabind::object& table)
 {
 	Tile::Properties props;
 	for (luabind::iterator iter = luabind::iterator(table), end; iter != end; ++iter)
@@ -61,8 +61,7 @@ void CTileset::LoadTilesetProperties(CTileset& ts, const luabind::adl::object& t
 	assert((ts.m_tileHeight + ts.m_spacing));
 	ts.m_tilesDown = ts.m_imageHeight / (ts.m_tileHeight + ts.m_spacing);
 	ts.m_lastGid = ts.m_firstGid + (((ts.m_imageWidth / (ts.m_tileWidth + ts.m_spacing)) * (ts.m_imageHeight / (ts.m_tileHeight + ts.m_spacing)))-1);
-
-	ts.m_image = VE::CBitmap(al_load_bitmap(ts.m_source.c_str()));
+	ts.m_image = VE::CBitmap(al_load_bitmap(("Images/Tilesets/" + ts.m_source).c_str()));
 }
 
 std::list<Tile> CTileset::LoadTilesetTiles(CTileset& ts, const luabind::adl::object& data)
@@ -83,7 +82,7 @@ std::list<Tile> CTileset::LoadTilesetTiles(CTileset& ts, const luabind::adl::obj
 	return std::move(tiles);
 }
 
-CTileset* CTileset::ContainsGid(const std::list<CTileset*>& tilesets, size_t id)
+CTileset* CTileset::ContainsGid(const std::vector<CTileset*>& tilesets, size_t id)
 {
 	for (auto iter = tilesets.begin(); iter != tilesets.end(); ++iter)
 	{
@@ -93,7 +92,7 @@ CTileset* CTileset::ContainsGid(const std::list<CTileset*>& tilesets, size_t id)
 	return nullptr;
 }
 
-VE::CBitmap CTileset::LoadTile(const std::list<CTileset*>& tilesets, size_t id)
+VE::CBitmap CTileset::LoadTile(const std::vector<CTileset*>& tilesets, size_t id)
 {
 	CTileset* ts = ContainsGid(tilesets, id);
 	if(!ts || !ts->GetImage().IsValid())

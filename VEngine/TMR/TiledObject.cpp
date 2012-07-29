@@ -1,11 +1,10 @@
-#include "TiledObject.h"
+#include "Object.h"
 #include <lua.hpp>
 #include "TiledLua.h"
 #include <luabind\luabind.hpp>
 
-using namespace Tiled;
 
-TiledObject::TiledObject(TiledObject&& rhs)
+Tiled::Object::Object(Object&& rhs)
 	: m_name(rhs.m_name)
 	, m_type(rhs.m_type)
 	, m_x(rhs.m_x)
@@ -15,7 +14,7 @@ TiledObject::TiledObject(TiledObject&& rhs)
 	, m_properties(std::move(rhs.m_properties))
 	, m_isValid(rhs.IsValid()) { }
 
-TiledObject::TiledObject(const luabind::adl::object& data)
+Tiled::Object::Object(const luabind::adl::object& data)
 	: m_x(0)
 	, m_y(0)
 	, m_width(0)
@@ -50,7 +49,7 @@ TiledObject::TiledObject(const luabind::adl::object& data)
 	}
 }
 
-TiledObject TiledObject::CreateFromLua(lua_State* L)
+Tiled::Object Tiled::Object::CreateFromLua(lua_State* L)
 {
 	try
 	{
@@ -58,7 +57,7 @@ TiledObject TiledObject::CreateFromLua(lua_State* L)
 		if (luabind::type(data) != LUA_TTABLE)
 			throw(std::exception("Variable passed to TiledObject::CreateFromLua is not a table."));
 
-		TiledObject obj;
+		Tiled::Object obj;
 		obj.m_name = luabind::object_cast<std::string>(data["name"]);
 		obj.m_type = luabind::object_cast<std::string>(data["type"]);
 		obj.m_x = luabind::object_cast<float>(data["x"]);
@@ -75,5 +74,5 @@ TiledObject TiledObject::CreateFromLua(lua_State* L)
 
 		return obj;
 	}
-	catch (...) { return TiledObject(); }
+	catch (...) { return Tiled::Object(); }
 }

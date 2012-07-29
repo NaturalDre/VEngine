@@ -4,6 +4,8 @@
 #include "View.h"
 #include "Observer.h"
 #include "MultiAnimation.h"
+#include "Common.h"
+
 namespace VE
 {
 	class CPlayer;
@@ -12,7 +14,8 @@ namespace VE
 	{
 	protected:
 		void Draw(void);
-		void Notify(IEvent* ev = nullptr);
+		void Notify(int eventCode);
+		void ChangeDirection(DIRECTION dir);
 	public:
 		CPlayerView(CRender* render);
 		~CPlayerView(void);
@@ -22,7 +25,6 @@ namespace VE
 
 	private:
 		CPlayer* m_player;
-		CBitmap m_bitmap;
 		CMultiAnimation m_anims;
 	};
 }

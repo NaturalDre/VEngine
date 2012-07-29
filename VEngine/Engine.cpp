@@ -9,8 +9,9 @@
 #include <lua.hpp>
 #include <lualib.h>
 #include <lauxlib.h>
-#include "SystemController.h"
+#include "EngineCallback.h"
 #include "View.h"
+#include "Process.h"
 
 namespace VE
 {
@@ -19,8 +20,6 @@ namespace VE
 		, m_evQ(nullptr)
 		, m_display(nullptr)
 		, m_done(false)
-		, m_controller(nullptr)
-		//, m_luaEnv(nullptr)
 		, m_isInit(false)
 		, m_timeLastUpdated(0)
 		, m_gameTime(0)
@@ -30,8 +29,8 @@ namespace VE
 
 	CEngine::~CEngine(void)
 	{
-		delete m_controller;
-		m_controller = nullptr;
+		// We don't own it.
+		m_callback = nullptr;
 
 		al_destroy_display(m_display);
 		m_display = nullptr;
@@ -96,25 +95,41 @@ namespace VE
 		const double dt = ct - m_timeLastUpdated;
 		m_timeLastUpdated = ct;
 
-		if (m_controller)
-			m_controller->Update(dt);
+		for(auto iter = m_processes.begin(); iter != m_processes.end(); ++iter)
+		{
+			if ((*iter)->ShouldDelete())
+			{
+				delete *iter;
+				iter = m_processes.erase(iter);
+				if (iter == m_processes.end())
+					break;
+			}
+			else
+				(*iter)->Think(dt);
+		}
 	}
 
 	void CEngine::Render(void)
 	{
 		// Let the controller know rendering is about to begin(It should use this to know when to draw the map).
-		m_controller->Render();
+		m_callback->Render();
 	}
 
 	void CEngine::HandleEvent(ALLEGRO_EVENT& ev)
 	{
-		if (m_controller)
-			m_controller->PushSystemEvent(ev);
+		if (m_callback)
+			m_callback->HandleEvent(ev);
 	}
 
-	void CEngine::SetSystemController(ISystemController* controller)
+
+	void CEngine::AddProcess(IProcess* process)
 	{
-		delete m_controller;
-		m_controller = controller;
+		m_processes.push_back(process);
+		m_processes.sort();
+	}
+
+	void CEngine::RemoveProcess(IProcess* process)
+	{
+		m_processes.remove(process);
 	}
 }

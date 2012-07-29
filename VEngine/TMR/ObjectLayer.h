@@ -1,9 +1,10 @@
 #ifndef OBJECTLAYER_H
 #define OBJECTLAYER_H
 
-#include <list>
 #include "Layer.h"
-#include "TiledObject.h"
+#include "Object.h"
+#include <list>
+#include <luabind\object.hpp>
 
 struct lua_State;
 
@@ -13,23 +14,16 @@ namespace Tiled
 
 	class CObjectLayer: public ILayer
 	{
-		typedef std::map<const std::string, const std::string> LayerProperties;	
 	public:
-		CObjectLayer(void);
+		CObjectLayer(const luabind::object& objectlayer);
 
-		void ReadMapFile(CMapFile* mapFile, lua_State* L, size_t layer);
+		int GetType(void) const { return e_ObjectLayer; }
 
-		int Type(void) const { return e_ObjectLayer; }
-
-		LayerProperties Properties(void) const { return m_properties; }
-		const std::list<TiledObject>& Objects(void) { return m_objects; }
-
+		const std::list<Object>& Objects(void) { return m_objects; }
 
 		std::string Property(const std::string& prop);
 	private:
-	
-		LayerProperties m_properties;
-		std::list<TiledObject> m_objects;
+		std::list<Object> m_objects;
 	};
 };
 

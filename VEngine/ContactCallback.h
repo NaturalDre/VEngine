@@ -11,15 +11,15 @@ namespace VE
 	{
 		friend CContactListener;
 	protected:
-		IContactCallback(IEntity* entity = nullptr, void* userdata = nullptr)
-			: m_entity(entity)
-			, m_userdata(userdata)
+		IContactCallback(/*IEntity* entity = nullptr, void* userdata = nullptr*/)
+			//: m_entity(entity)
+			//, m_userdata(userdata)
 		{
 
 		}
 
-		void SetEntity(IEntity* entity) { m_entity = m_entity; }
-		void SetUserData(void* userdata) { m_userdata = userdata; }
+		//void SetEntity(IEntity* entity) { m_entity = m_entity; }
+		//void SetUserData(void* userdata) { m_userdata = userdata; }
 
 
 		/// Called when two fixtures begin to touch.
@@ -51,11 +51,11 @@ namespace VE
 	public:
 		virtual ~IContactCallback(void) { }
 
-		IEntity* Entity(void) const { return m_entity; }
-		void* UserData(void) const { return m_userdata; }
+		//IEntity* Entity(void) const { return m_entity; }
+		//void* UserData(void) const { return m_userdata; }
 	private:
-		IEntity* m_entity;
-		void* m_userdata;
+		//IEntity* m_entity;
+		//void* m_userdata;
 	};
 };
 #endif

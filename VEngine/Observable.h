@@ -19,8 +19,7 @@ namespace VE
 		CObservable(void) { }
 		~CObservable(void) { }
 
-		void NotifyAll(IEvent* ev);
-		void NotifyAll(const std::string& topic, IEvent* ev);
+		void NotifyAll(int eventType);
 
 		// Register with specific topic
 		void Register(const std::string& topic, IObserver* observer);

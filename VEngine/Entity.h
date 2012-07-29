@@ -13,7 +13,7 @@ namespace VE
 	public:
 		IEntity(CGameLevel* level);
 
-		virtual ~IEntity(void) { }
+		virtual ~IEntity(void);
 		virtual void Update(double deltaTime);
 
 		inline CGameLevel* GameLevel(void) const { return m_gameLevel; }

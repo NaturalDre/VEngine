@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 #include <map>
 #include "Tileset.h"
 #include "Layer.h"
@@ -82,7 +83,7 @@ namespace Tiled
 		*
 		* Check if a list of tilsets contain the gid
 		*/
-		static CTileset* ContainsGid(const std::list<CTileset*>& tilesets, size_t id);
+		static CTileset* ContainsGid(const std::vector<CTileset*>& tilesets, size_t id);
 		/*
 		* LoadTile()
 		*
@@ -94,7 +95,7 @@ namespace Tiled
 		*	If you don't free the memory before the tileset that you got it 
 		*	from is destroyed the behavior will be undefined.
 		*/
-		static VE::CBitmap LoadTile(const std::list<CTileset*>& tilesets, size_t id);
+		static VE::CBitmap LoadTile(const std::vector<CTileset*>& tilesets, size_t id);
 		/*
 		* GetImage()
 		*

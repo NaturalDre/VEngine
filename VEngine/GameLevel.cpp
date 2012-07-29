@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "PlayerView.h"
 #include "GameLevel.h"
-#include "TMR\MapFile.h"
+#include "GameMap.h"
 #include "Render.h"
 #include "Barrel.h"
 #include <lua.hpp>
@@ -16,25 +16,30 @@ namespace VE
 {
 	CGameLevel* GAMELEVEL(nullptr);
 
-	CGameLevel::CGameLevel(void)
-		: m_player(nullptr)
+	CGameLevel::CGameLevel(CErrorLogger* logger, CEngine* engine)
+		: IProcess(engine)
+		, m_player(nullptr)
 		, m_playerController(nullptr)
 		, m_renderer(nullptr)
 		, m_physics(nullptr)
 		, m_playerView(nullptr)
-		, m_mapFile(nullptr)
+		, m_gameMap(nullptr)
 		, m_scriptEnv(nullptr)
+		, m_logger(logger)
 	{
 		assert(GAMELEVEL == nullptr);
 		GAMELEVEL = this;
 
+		assert(engine != nullptr);
+		assert(m_logger != nullptr);
+
 		m_renderer = new CRender;
 		m_physics = new CPhysics(Renderer()->Cam());
-		m_mapFile = new Tiled::CMapFile;
+		m_gameMap = new CGameMap;
 		m_playerController = new CPlayerController(nullptr);
 		m_playerView = new CPlayerView(m_renderer);
 
-		m_renderer->SetMapFile(m_mapFile);
+		m_renderer->SetMapFile(m_gameMap);
 		m_renderer->SetPhysics(m_physics);
 	}
 
@@ -51,8 +56,8 @@ namespace VE
 		delete m_physics;
 		m_physics = nullptr;
 
-		delete m_mapFile;
-		m_mapFile = nullptr;
+		delete m_gameMap;
+		m_gameMap = nullptr;
 
 		delete m_renderer;
 		m_renderer = nullptr;
@@ -64,20 +69,32 @@ namespace VE
 
 	}
 
-	void CGameLevel::UpdateAll(double deltaTime)
+	void CGameLevel::Think(double dt)
 	{
 		if (m_mainScript.is_valid())
-			luabind::call_member<void>(m_mainScript, "Update", deltaTime);
+			luabind::call_member<void>(m_mainScript, "Update", dt);
 
 		m_physics->Simulate();
 
 		if (m_playerController)
-			m_playerController->Update(deltaTime);
+			m_playerController->Update(dt);
 
 		for (auto iter = m_animations.begin(); iter != m_animations.end(); ++iter)
-			(*iter)->Logic(deltaTime);
-		for (auto iter = m_controllers.begin(); iter != m_controllers.end(); ++iter)
-			(*iter)->Update(deltaTime);
+			(*iter)->Logic(dt);
+		for (auto iter = m_entities.begin(); iter != m_entities.end(); ++iter)
+			(*iter)->Update(dt);
+	}
+
+	void CGameLevel::HandleEvent(const ALLEGRO_EVENT& ev)
+	{
+		if (GetPlayerController())
+			GetPlayerController()->HandleEvent(ev);
+	}
+
+	void CGameLevel::Render(void)
+	{
+		if (Renderer())
+			Renderer()->Render();
 	}
 
 	void CGameLevel::AddPlayer(void)
@@ -104,8 +121,8 @@ namespace VE
 
 	void CGameLevel::SetScriptEnv(lua_State* L)
 	{
-		if (m_scriptEnv)
-			lua_close(m_scriptEnv);
+		if (m_scriptEnv == m_mainScript.interpreter())
+			m_mainScript = luabind::object();
 		m_scriptEnv = L;
 	}
 
@@ -116,10 +133,10 @@ namespace VE
 
 	void CGameLevel::LoadMap(const std::string& filename)
 	{
-		if(luaL_dofile(m_scriptEnv, filename.c_str()))
+		if(!DoFile(m_scriptEnv, filename))
 			return;
 
-		m_mapFile->Read(luabind::globals(m_scriptEnv)["map"]);
+		m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
 	}
 
 	CGameLevel* GameLevel(void)

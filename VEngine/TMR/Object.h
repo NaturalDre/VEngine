@@ -23,13 +23,13 @@ namespace Tiled
 	* an 'objectlayer'.
 	*
 	*/
-	class TiledObject
+	class Object
 	{
 		typedef std::map<const std::string, const std::string> TiledObjectProperties;
 	public:
-		TiledObject(void): m_x(0), m_y(0), m_width(0), m_height(0), m_isValid(false) {}
-		TiledObject(const luabind::adl::object& data);
-		TiledObject(TiledObject&& rhs);
+		Object(void): m_x(0), m_y(0), m_width(0), m_height(0), m_isValid(false) {}
+		Object(const luabind::adl::object& data);
+		Object(Object&& rhs);
 
 	public:
 		inline const std::string& Name(void) const { return m_name; }
@@ -41,7 +41,7 @@ namespace Tiled
 
 		bool IsValid(void) const { return m_isValid; }
 
-		static TiledObject CreateFromLua(lua_State* L);
+		static Object CreateFromLua(lua_State* L);
 	private:
 		std::string m_name;
 		std::string m_type;

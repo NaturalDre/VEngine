@@ -4,25 +4,11 @@
 
 namespace VE
 {
-	void CObservable::NotifyAll(IEvent* ev)
+	void CObservable::NotifyAll(int eventType)
 	{
 		for(auto topicIter = m_topics.begin(); topicIter != m_topics.end(); ++topicIter)
 			for(auto obsIter = topicIter->second.begin(); obsIter != topicIter->second.end(); ++obsIter)
-				(*obsIter)->Notify(ev);
-	}
-
-	void CObservable::NotifyAll(const std::string& topic, IEvent* ev)
-	{
-		auto topicIter = m_topics.find(topic);
-		if (topicIter == m_topics.end())
-			return;
-
-		for (auto obsIter = topicIter->second.begin(); obsIter != topicIter->second.end(); ++obsIter)
-		{
-			(*obsIter)->Notify(ev);
-		}
-
-		delete ev;
+				(*obsIter)->Notify(eventType);
 	}
 
 	void CObservable::Register(const std::string& topic, IObserver* observer)

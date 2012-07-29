@@ -1,6 +1,6 @@
 #include "RigidBody.h"
 #include <luabind\object.hpp>
-#include "TMR\TiledObject.h"
+#include "TMR\Object.h"
 #include "GameLevel.h"
 
 namespace VE
@@ -11,7 +11,7 @@ namespace VE
 		if (luabind::type(obj) != LUA_TTABLE)
 			return;
 
-		Tiled::TiledObject to(obj);
+		Tiled::Object to(obj);
 
 		b2BodyDef bd;
 		bd.type = b2_staticBody;
