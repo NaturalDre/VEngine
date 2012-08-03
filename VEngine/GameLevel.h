@@ -59,6 +59,7 @@ namespace VE
 		void LoadMap(const std::string& filename);
 
 		inline CErrorLogger* GetLogger(void) const { return m_logger; }
+
 	private:
 		typedef std::unordered_set<IEntity*> EntitySet;
 		typedef std::unordered_set<IAnimation*> AnimationSet;

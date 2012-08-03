@@ -35,7 +35,7 @@ namespace VE
 
 		m_renderer = new CRender;
 		m_physics = new CPhysics(Renderer()->Cam());
-		m_gameMap = new CGameMap;
+		m_gameMap = new CGameMap(this);
 		m_playerController = new CPlayerController(nullptr);
 		m_playerView = new CPlayerView(m_renderer);
 
@@ -99,10 +99,13 @@ namespace VE
 
 	void CGameLevel::AddPlayer(void)
 	{
+		if (!m_gameMap->IsValid())
+			return;
 		if (m_player)
 			delete m_player;
 
-		m_player = CreatePlayer(this);
+		//const float x = luabind::object_cast<float>(
+		m_player = CreatePlayer(this, m_gameMap->GetPlayerSpawn());
 
 		m_playerController->SetPlayer(m_player);
 		m_playerView->SetPlayer(m_player);

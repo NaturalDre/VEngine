@@ -6,6 +6,7 @@
 
 struct lua_State;
 
+
 #define vMin(a,b) ((a < b) ? a : b )
 #define vMax(a,b) ((a > b) ? a : b )
 #define vContains(val, min, max) ((val >= min) && (val <= max))

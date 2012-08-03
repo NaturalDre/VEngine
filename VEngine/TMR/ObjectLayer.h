@@ -18,10 +18,9 @@ namespace Tiled
 		CObjectLayer(const luabind::object& objectlayer);
 
 		int GetType(void) const { return e_ObjectLayer; }
-
-		const std::list<Object>& Objects(void) { return m_objects; }
-
-		std::string Property(const std::string& prop);
+		const Object* FindObject(const std::string& name) const;
+		std::list<const Object*> FindObjects(const std::string& name) const;
+		const std::list<Object>& GetObjects(void) { return m_objects; }
 	private:
 		std::list<Object> m_objects;
 	};

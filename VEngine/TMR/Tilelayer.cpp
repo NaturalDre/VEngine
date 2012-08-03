@@ -15,6 +15,7 @@ CTileLayer::CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile
 	SetWidth(mapFile.GetWidth());
 	SetHeight(mapFile.GetHeight());
 
+	this->SetName(luabind::object_cast<std::string>(tilelayer["name"]));
 	// For some stupid reason the following 2 lines of code are not equivilent to
 	// this one line: tilelayer["properties"].push(tilelayer.interpreter())
 	// and ends up with ReadProperties not getting a table at the top of the stack.
@@ -42,9 +43,27 @@ CTileLayer::CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile
 	}
 }
 
+void CTileLayer::SetDataVal(size_t row, size_t col, size_t value)
+{
+	if (!m_data.empty() && row < m_data.size() && col < m_data.front().size())
+		m_data[row][col] = value;
+}
+
 size_t CTileLayer::GetDataVal(size_t row, size_t col)
 {
 	if (!m_data.empty() && row < m_data.size() && col < m_data.front().size())
 		return m_data[row][col];
 	return 0;
+}
+
+void CTileLayer::ReplaceAll(size_t oldGid, size_t newGid)
+{
+	for(size_t row = 0; row < m_data.size(); ++row)
+	{
+		for(size_t col = 0; col < m_data.front().size(); ++col)
+		{
+			if (GetDataVal(row, col) == oldGid)
+				SetDataVal(row, col, newGid);
+		}
+	}
 }

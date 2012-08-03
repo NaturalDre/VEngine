@@ -3,7 +3,7 @@
 
 #include "Entity.h"
 #include "Common.h"
-
+#include "Physics.h"
 struct ALLEGRO_BITMAP;
 
 namespace VE
@@ -48,6 +48,7 @@ namespace VE
 		/// \note Derived classes should handle whether or not
 		///		the weapon can be fired.
 		virtual void Fire(DIRECTION dir) = 0;
+		virtual void Fire(const b2Vec2& pos) { };
 		/// Reload this weapon.
 		/// \note Derived classes should handle whether or not
 		///		the weapon can be reloaded.

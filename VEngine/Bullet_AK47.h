@@ -17,6 +17,7 @@ namespace VE
 
 	public:
 		Bullet_AK47(b2World* world, Weapon_AK47* weapon, const DIRECTION dir);
+		Bullet_AK47(b2World* world, Weapon_AK47* weapon, const b2Vec2& pos);
 		virtual ~Bullet_AK47(void);
 
 		inline b2Body* GetBody(void) const { return m_body; }

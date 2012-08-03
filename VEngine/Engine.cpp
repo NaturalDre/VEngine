@@ -46,6 +46,7 @@ namespace VE
 	{
 		al_init();
 		al_install_keyboard();
+		al_install_mouse();
 		al_init_image_addon();
 		al_init_primitives_addon();
 
@@ -56,6 +57,7 @@ namespace VE
 		al_register_event_source(m_evQ, al_get_timer_event_source(m_timer));
 		al_register_event_source(m_evQ, al_get_display_event_source(m_display));
 		al_register_event_source(m_evQ, al_get_keyboard_event_source());
+		al_register_event_source(m_evQ, al_get_mouse_event_source());
 
 		PHYSFS_init(nullptr);
 		al_set_physfs_file_interface();

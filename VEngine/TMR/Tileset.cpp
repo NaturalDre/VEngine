@@ -33,10 +33,11 @@ CTileset::CTileset(const luabind::adl::object& tileset)
 		m_tiles = LoadTilesetTiles(*this, tileset["tiles"]);
 		m_isValid = true;
 	}
-	catch(...)
+	catch(const luabind::error& e)
 	{
-
+		lua_pop(e.state(), 1);
 	}
+	catch(...) { }
 }
 
 CTileset::~CTileset(void)
@@ -61,7 +62,6 @@ void CTileset::LoadTilesetProperties(CTileset& ts, const luabind::adl::object& t
 	assert((ts.m_tileHeight + ts.m_spacing));
 	ts.m_tilesDown = ts.m_imageHeight / (ts.m_tileHeight + ts.m_spacing);
 	ts.m_lastGid = ts.m_firstGid + (((ts.m_imageWidth / (ts.m_tileWidth + ts.m_spacing)) * (ts.m_imageHeight / (ts.m_tileHeight + ts.m_spacing)))-1);
-	ts.m_image = VE::CBitmap(al_load_bitmap(("Images/Tilesets/" + ts.m_source).c_str()));
 }
 
 std::list<Tile> CTileset::LoadTilesetTiles(CTileset& ts, const luabind::adl::object& data)
@@ -92,17 +92,17 @@ CTileset* CTileset::ContainsGid(const std::vector<CTileset*>& tilesets, size_t i
 	return nullptr;
 }
 
-VE::CBitmap CTileset::LoadTile(const std::vector<CTileset*>& tilesets, size_t id)
-{
-	CTileset* ts = ContainsGid(tilesets, id);
-	if(!ts || !ts->GetImage().IsValid())
-		return VE::CBitmap();
-
-	ColRow  cr = GetColRow(ts->TilesAcross(), id);
-
-	return std::move(VE::CBitmap(ts->GetImage(), 
-		(cr.col - 1) * (ts->ImageWidth() + ts->Spacing()),
-		(cr.row - 1) * (ts->ImageHeight() + ts->Spacing()),
-		ts->TileWidth(),
-		ts->TileHeight()));
-}
+//VE::CBitmap CTileset::LoadTile(const std::vector<CTileset*>& tilesets, size_t id)
+//{
+//	CTileset* ts = ContainsGid(tilesets, id);
+//	if(!ts || !ts->GetImage().IsValid())
+//		return VE::CBitmap();
+//
+//	ColRow  cr = GetColRow(ts->TilesAcross(), id);
+//
+//	return std::move(VE::CBitmap(ts->GetImage(), 
+//		(cr.col - 1) * (ts->ImageWidth() + ts->Spacing()),
+//		(cr.row - 1) * (ts->ImageHeight() + ts->Spacing()),
+//		ts->TileWidth(),
+//		ts->TileHeight()));
+//}

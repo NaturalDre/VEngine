@@ -9,7 +9,7 @@
 #include <luabind\luabind.hpp>
 
 #include <boost\foreach.hpp>
-
+#include "lualib.h"
 using namespace Tiled;
 
 bool LoadTiledLib(lua_State* L)
@@ -41,6 +41,12 @@ void CMapFile::LoadMapData(CMapFile& map, lua_State* L)
 	map.m_height = luabind::call_function<size_t>(L, "GetMapHeight");
 	map.m_tileWidth = luabind::call_function<size_t>(L, "GetMapTileWidth");
 	map.m_tileHeight = luabind::call_function<size_t>(L, "GetMapTileHeight");
+
+	// Put map.properties into an std::map<const string, const string>
+	luabind::object props = luabind::call_function<luabind::object>(L, "GetMap");
+	props.push(L);
+	map.m_properties = Tiled::GetProperties(L);
+	lua_pop(L, 1);
 }
 
 void CMapFile::LoadLayers(CMapFile& map, lua_State* L)
@@ -65,55 +71,9 @@ void CMapFile::LoadLayers(CMapFile& map, lua_State* L)
 		{
 			CObjectLayer* layer = new CObjectLayer(data);
 			map.m_objectLayers.push_back(layer);
-			//if (layer->GetProperty("type") == "physics")
-			//	map.m_physicsLayer = layer;
-			//else
-			//	map.m_objectLayers.push_back(layer);
 		}
 	}
 }
-
-//void CMapFile::RenderLayer(VE::CRender* renderer, CTileLayer* tilelayer)
-//{
-//		// FOr the sub bitmaps
-//		VE::CBitmap tile;
-//		size_t prevID(0);
-//
-//		// Top left x and y position of the camera
-//		const float tlx = renderer->Cam()->TopLeftPosPix().x;
-//		const float tly = renderer->Cam()->TopLeftPosPix().y;	
-//
-//
-//		const int startCol(static_cast<int>(tlx / GetTileWidth()));
-//		const int startRow(static_cast<int>(tly / GetTileHeight()));
-//
-//
-//		const int endCol = startCol + (VE::GetDisplayWidth() / GetTileWidth()) + 2; // +2 is buffer otherwise last col won't draw
-//		const int endRow = startRow + (VE::GetDisplayHeight() / GetTileHeight()) + 2; // +2 is buffer otherwise last row won't draw
-//
-//		for (int row = startRow; row < endRow; ++row)
-//		{
-//			for (int col = startCol; col < endCol; ++col)
-//			{
-//				int id = tilelayer->GetDataVal(row, col);
-//				if (id == 0)
-//					continue;
-//				if (id != prevID)
-//				{
-//					prevID = id;
-//					tile = Tiled::CTileset::LoadTile(GetTilesets(), id);
-//				}
-//
-//				prevID = id;
-//
-//				int dx = col * GetTileWidth();
-//				int dy = row * GetTileHeight();
-//
-//				if (tile)
-//					DrawBitmap(tile, VE::PixToMtr(b2Vec2(static_cast<float>(dx), static_cast<float>(dy))));
-//			}
-//		}
-//}
 
 bool CMapFile::Read(const std::string& mapFile)
 {
@@ -154,6 +114,35 @@ bool CMapFile::Read(const luabind::object& data)
 	return m_valid = true;
 }
 
+const std::string CMapFile::GetProperty(const std::string& key)
+{
+	auto iter = m_properties.find(key);
+	if (iter != m_properties.end())
+		return iter->second;
+	return "";
+}
+
+CTileset* CMapFile::GetTileset(const std::string& name) const
+{
+	for(auto iter = m_tilesets.begin(); iter != m_tilesets.end(); ++iter)
+	{
+		if ((*iter)->Name() == name)
+			return *iter;
+	}
+	return nullptr;
+}
+
+const Object* CMapFile::FindObject(const std::string& name) const
+{
+	for (auto iter = m_objectLayers.begin(); iter != m_objectLayers.end(); ++iter)
+	{
+		const Object* obj = (*iter)->FindObject(name);
+		if (obj)
+			return obj;
+	}
+	return nullptr;
+}
+
 void CMapFile::Reset(void)
 {
 	m_version.clear();
@@ -175,15 +164,6 @@ void CMapFile::Reset(void)
 	BOOST_FOREACH(CTileset* tileset, m_tilesets)
 		delete tileset;
 	m_tilesets.clear();
-	
-	//delete m_physicsLayer;
-	//m_physicsLayer = nullptr;
 
 	m_valid = false;
 }
-
-//void Tiled::CMapFile::Render(VE::CRender* renderer,  size_t begin, size_t end)
-//{
-//	for (size_t i = begin; (i < m_tileLayers.size()) && (i <= end); ++i)
-//		RenderLayer(renderer, m_tileLayers.at(i));
-//}

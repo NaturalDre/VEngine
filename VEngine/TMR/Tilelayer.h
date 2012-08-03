@@ -13,12 +13,15 @@ namespace Tiled
 	class CMapFile;
 	class CTileLayer: public ILayer
 	{
+	protected:
+		void SetDataVal(size_t row, size_t col, size_t value);
 	public:
 		CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile);
 
 		inline int GetType(void) const { return e_TileLayer; }
 		inline const std::vector<std::vector<size_t>>& GetData(void) const { return m_data; }
 		size_t GetDataVal(size_t row, size_t col);
+		void ReplaceAll(size_t oldGid, size_t newGid);
 
 	private:
 		std::vector<std::vector<size_t>> m_data;

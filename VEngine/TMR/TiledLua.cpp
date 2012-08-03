@@ -8,8 +8,6 @@ namespace Tiled
 
 	std::map<const std::string, const std::string> GetProperties(lua_State*L)
 	{
-		//auto t = lua_typename(L, lua_type(L, -1));
-		//auto b = lua_gettop(L);
 		// STK: -- table1
 		lua_pushstring(L, "properties");
 		// STK: -- table1 string
@@ -19,26 +17,38 @@ namespace Tiled
 		{
 			lua_pop(L, 1);
 			// STL: -- table1
-			throw(std::exception("Table has no 'properties' key."));
+			return std::map<const std::string, const std::string>();
 		}
 		// STK: -- table1 table2
 
 		lua_insert(L, 1);
 		// STK: table2 -- table1 
 		lua_pushnil(L);
-		// STK: table2 -- table1 nil
+		// STK: table2 -- table1 keyNil
 		std::map<const std::string, const std::string> props;
 		while(lua_next(L, 1))
 		{
-			// STK: table2 -- table1 string? string?
+			// STK: table2 -- table1 keyString? valueString?
 			if (!lua_isstring(L, -2))
+			{
+				lua_pop(L, 2);
+				// STK: table2 -- table1
+				lua_remove(L, 1);
+				// STK: -- table
 				throw(std::exception("A key in properties is a non string value."));
+			}
 			else if(!lua_isstring(L, -1))
-				throw(std::exception("A key in properties returned a non string value."));
-			// STK: table2 -- table1 string string
+			{
+				lua_pop(L, 2);
+				// STK: table2 -- table1
+				lua_remove(L, 1);
+				// STK: -- table
+				throw(std::exception("A value in properties contains a non string value."));
+			}
+			// STK: table2 -- table1 keyString valueString
 			props.insert(std::pair<const std::string, const std::string>(lua_tostring(L, -2),lua_tostring(L, -1)));
 			lua_pop(L, 1);
-
+			// STK: table2 -- table1 keyString
 		}
 		// STK: table2 -- table1
 		lua_remove(L, 1);

@@ -7,8 +7,8 @@
 
 namespace VE
 {
-	// Helper function to draw a tilelayer
-	void RenderLayer(CRender* renderer, const Tiled::CMapFile& mf, Tiled::CTileLayer* layer);
+	//// Helper function to draw a tilelayer
+	//void RenderLayer(CRender* renderer, const Tiled::CMapFile& mf, Tiled::CTileLayer* layer);
 
 	CRender::CRender(void)
 		: IProcess(nullptr)
@@ -70,47 +70,47 @@ namespace VE
 
 	}
 
-	void RenderLayer(CRender* renderer, const Tiled::CMapFile& mf, Tiled::CTileLayer* layer)
-	{
-		// For the sub bitmaps
-		CBitmap tile;
-		size_t prevID(0);
+	//void RenderLayer(CRender* renderer, const Tiled::CMapFile& mf, Tiled::CTileLayer* layer)
+	//{
+	//	// For the sub bitmaps
+	//	CBitmap tile;
+	//	size_t prevID(0);
 
-		// Top left x and y position of the camera
-		const float tlx = renderer->Cam()->TopLeftPosPix().x;
-		const float tly = renderer->Cam()->TopLeftPosPix().y;	
-
-
-		const int startCol(tlx / mf.GetTileWidth());
-		const int startRow(tly / mf.GetTileHeight());
+	//	// Top left x and y position of the camera
+	//	const float tlx = renderer->Cam()->TopLeftPosPix().x;
+	//	const float tly = renderer->Cam()->TopLeftPosPix().y;	
 
 
-		const int endCol = startCol + (GetDisplayWidth() / mf.GetTileWidth()) + 2; // +2 is buffer otherwise last col won't draw
-		const int endRow = startRow + (GetDisplayHeight() / mf.GetTileHeight()) + 2; // +2 is buffer otherwise last row won't draw
+	//	const int startCol(tlx / mf.GetTileWidth());
+	//	const int startRow(tly / mf.GetTileHeight());
 
-		for (int row = startRow; row < endRow; ++row)
-		{
-			for (int col = startCol; col < endCol; ++col)
-			{
-				int id = layer->GetDataVal(row, col);
-				if (id == 0)
-					continue;
-				if (id != prevID)
-				{
-					prevID = id;
-					tile = Tiled::CTileset::LoadTile(mf.GetTilesets(), id);
-				}
 
-				prevID = id;
+	//	const int endCol = startCol + (GetDisplayWidth() / mf.GetTileWidth()) + 2; // +2 is buffer otherwise last col won't draw
+	//	const int endRow = startRow + (GetDisplayHeight() / mf.GetTileHeight()) + 2; // +2 is buffer otherwise last row won't draw
 
-				float dx = col * mf.GetTileWidth();
-				float dy = row * mf.GetTileHeight();
+	//	for (int row = startRow; row < endRow; ++row)
+	//	{
+	//		for (int col = startCol; col < endCol; ++col)
+	//		{
+	//			int id = layer->GetDataVal(row, col);
+	//			if (id == 0)
+	//				continue;
+	//			if (id != prevID)
+	//			{
+	//				prevID = id;
+	//				tile = Tiled::CTileset::LoadTile(mf.GetTilesets(), id);
+	//			}
 
-				if (tile)
-					DrawBitmap(tile, PixToMtr(b2Vec2(dx, dy)));
-			}
-		}
-	}
+	//			prevID = id;
+
+	//			float dx = col * mf.GetTileWidth();
+	//			float dy = row * mf.GetTileHeight();
+
+	//			if (tile)
+	//				DrawBitmap(tile, PixToMtr(b2Vec2(dx, dy)));
+	//		}
+	//	}
+	//}
 
 	size_t GetDisplayWidth(void)
 	{

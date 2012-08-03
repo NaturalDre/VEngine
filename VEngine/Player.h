@@ -66,6 +66,6 @@ namespace VE
 		void SubscribeFromAll(IObserver* observer);
 	};
 
-	CPlayer* CreatePlayer(CGameLevel* level);
+	CPlayer* CreatePlayer(CGameLevel* level, const b2Vec2& spawnPos);
 }
 #endif

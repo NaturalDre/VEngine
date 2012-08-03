@@ -23,12 +23,14 @@ namespace VE
 		void FreeFiredBullets(void);
 		void FreeFinishedBullets(void);
 
+		bool CanFire(void) const { return (m_fireTimeout <= 0 && GetAmmoCount() > 0); }
 		void CallScriptFunc(const std::string& function);
 	public:
 		Weapon_AK47(CGameLevel* level, CPlayer* player);
 		~Weapon_AK47(void);
 
 		void Fire(DIRECTION dir);
+		void Fire(const b2Vec2& pos);
 		void Reload(void);
 		/// Bullets that his weapon shoots(aka created) should call this 
 		/// when they are 'done'. Being done will usually mean the

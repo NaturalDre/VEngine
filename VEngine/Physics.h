@@ -106,6 +106,11 @@ namespace VE
 	//	to do. So we need a helper function to do that for us and return it in meters.
 	//*	
 	b2Vec2 GetWorldCenterMtrs(const Tiled::Object& obj);
+
+	inline float GetAngle(const b2Vec2& v1, const b2Vec2& v2)
+	{
+		return atan2(v2.y - v1.y, v2.x - v1.x);
+	}
 }
 
 #endif

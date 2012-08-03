@@ -13,7 +13,7 @@ namespace VE
 	class CPlayerBody: public IContactCallback
 	{
 	public:
-		CPlayerBody(CPlayer* player, b2World* world);
+		CPlayerBody(CPlayer* player, const b2Vec2& spawnPos, b2World* world);
 		~CPlayerBody(void);
 
 		b2Body* Raw(void) const { return m_body; }

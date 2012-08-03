@@ -4,7 +4,7 @@
 
 namespace VE
 {
-	CPlayerBody::CPlayerBody(CPlayer* player, b2World* world)
+	CPlayerBody::CPlayerBody(CPlayer* player, const b2Vec2& spawnPos, b2World* world)
 		: m_world(world)
 		, m_player(player)
 		, m_body(nullptr)
@@ -16,7 +16,7 @@ namespace VE
 		bd.type = b2_dynamicBody;
 		bd.allowSleep = false;
 		bd.bullet = true;
-		bd.position.Set(0,0);
+		bd.position = spawnPos;
 		bd.userData = static_cast<void*>(m_player);
 		bd.fixedRotation = true;
 

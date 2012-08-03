@@ -67,6 +67,7 @@ namespace VE
 	void CApplication::SetupScriptEnv(void)
 	{
 		ExportBindings(m_L);
+
 		luabind::settable(luabind::globals(m_L), "Game", m_gameLevel);
 		luabind::settable(luabind::globals(m_L), "Logger", &m_errorLogger);
 

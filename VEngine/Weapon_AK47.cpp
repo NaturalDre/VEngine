@@ -114,8 +114,10 @@ namespace VE
 
 	void Weapon_AK47::Fire(DIRECTION dir)
 	{
-		if (m_fireTimeout > 0 || GetAmmoCount() <= 0)
+		if (!CanFire())
 			return;
+		//if (m_fireTimeout > 0 || GetAmmoCount() <= 0)
+		//	return;
 
 		m_fireTimeout = m_fireRate;
 
@@ -125,6 +127,19 @@ namespace VE
 		SetAmmo(GetAmmoCount() - 1);
 
 		CallScriptFunc("OnFire");
+	}
+
+	void Weapon_AK47::Fire(const b2Vec2& pos)
+	{
+		if (!CanFire())
+			return;
+
+		m_fireTimeout = m_fireRate;
+		Bullet_AK47* bullet(new Bullet_AK47(m_gameLevel->Physics()->World(), this, pos));
+		m_firedBullets.push_back(bullet);
+		SetAmmo(GetAmmoCount() -1);
+		CallScriptFunc("OnFire");
+
 	}
 
 	void Weapon_AK47::Reload(void)

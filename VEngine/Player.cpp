@@ -21,7 +21,7 @@ b2Vec2 ImpulseForDistance(const b2Vec2& desiredVel, b2Body* body)
 	b2Vec2 vel = body->GetLinearVelocity();
 	float xVelChange = desiredVel.x - vel.x;
 	float yVelChange = desiredVel.y - vel.y;
-
+	
 	b2Vec2 impulse(0,0);
 
 	impulse.x = body->GetMass() * xVelChange;
@@ -36,7 +36,7 @@ namespace VE
 	{
 		friend CPlayer;
 	public:
-		CPlayerImpl(CGameLevel* level);
+		CPlayerImpl(CGameLevel* level, const b2Vec2& spawnPos);
 		~CPlayerImpl(void);
 
 	private:
@@ -53,14 +53,15 @@ namespace VE
 inline CPlayerImpl* Impl(CPlayer* player) { return static_cast<CPlayerImpl*>(player); }
 inline const CPlayerImpl* Impl(const CPlayer* player) { return static_cast<const CPlayerImpl*>(player); }
 
-CPlayerImpl::CPlayerImpl(CGameLevel* level)
+CPlayerImpl::CPlayerImpl(CGameLevel* level, const b2Vec2& spawnPos)
 	: CPlayer(level)
 	, m_body(nullptr)
 	, m_speed(0,0)
 	, m_vel(5,5)
 	, m_currentWeapon(nullptr)
 {
-	m_body = new CPlayerBody(this, GameLevel()->Physics()->World());
+	m_body = new CPlayerBody(this, spawnPos, GameLevel()->Physics()->World());
+	
 	m_weapons.push_back(new Weapon_AK47(GameLevel(), this));
 
 	m_currentWeapon = m_weapons.front();
@@ -107,11 +108,34 @@ CPlayer::~CPlayer(void)
 
 b2Vec2 CPlayer::Position(void) const { return Impl(this)->m_body->Position(); }
 
-void CPlayer::SetXSpeed(float x) { Impl(this)->m_speed.x = x; }
+void CPlayer::SetXSpeed(float x) 
+{ 
+	auto impl = Impl(this);
+	if (GetXSpeed() != x)
+	{
+		impl->m_speed.x = x; 
+		impl->m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C'));
+	}
+}
 
-void CPlayer::SetYSpeed(float y) { Impl(this)->m_speed.y = y; }
+void CPlayer::SetYSpeed(float y) 
+{ 
+	auto impl = Impl(this);
+	if (GetYSpeed() != y)
+	{
+		impl->m_speed.y = y; 
+		impl->m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C'));
+	}
+}
 
-void CPlayer::SetSpeed(const b2Vec2& speed) { Impl(this)->m_speed = speed; }
+void CPlayer::SetSpeed(const b2Vec2& speed) 
+{ 
+	if (!(GetSpeed() == speed))
+	{
+		Impl(this)->m_speed = speed; 
+		Impl(this)->m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C'));
+	}
+}
 
 float CPlayer::GetXSpeed(void) const { return Impl(this)->m_speed.x; }
 
@@ -123,8 +147,7 @@ IWeapon* CPlayer::GetCurrentWeapon(void) const { return Impl(this)->m_currentWea
 
 void CPlayer::Update(double deltaTime)
 {
-	CPlayerImpl* impl = Impl(this);
-
+	auto impl = Impl(this);
 	if (impl->GetCurrentWeapon())
 		impl->GetCurrentWeapon()->Update(deltaTime);
 	b2Body* body = impl->m_body->Raw();
@@ -139,7 +162,7 @@ DIRECTION CPlayer::GetDirection(void) const
 
 void CPlayer::SetDirection(DIRECTION dir)
 {
-	CPlayerImpl* impl = Impl(this);
+	auto impl = Impl(this);
 	// Only update direction if it is a new direction
 	if (impl->m_dir != dir)
 	{
@@ -155,7 +178,7 @@ void CPlayer::AdvanceLevel(void)
 }
 
 
-CPlayer* VE::CreatePlayer(CGameLevel* level)
+CPlayer* VE::CreatePlayer(CGameLevel* level, const b2Vec2& spawnPos)
 {
-	return new CPlayerImpl(level);
+	return new CPlayerImpl(level, spawnPos);
 }

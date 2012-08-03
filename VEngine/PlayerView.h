@@ -16,6 +16,8 @@ namespace VE
 		void Draw(void);
 		void Notify(int eventCode);
 		void ChangeDirection(DIRECTION dir);
+
+		void OnSpeedChange(void);
 	public:
 		CPlayerView(CRender* render);
 		~CPlayerView(void);

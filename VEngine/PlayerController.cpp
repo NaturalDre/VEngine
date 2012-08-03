@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <allegro5\allegro5.h>
 #include "Weapon.h"
+#include "GameLevel.h"
+#include "Render.h"
 
 namespace VE
 {
@@ -27,7 +29,11 @@ namespace VE
 		if (!m_player)
 			return;
 
-		if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_CHAR)
+		if (ev.type == ALLEGRO_EVENT_MOUSE_AXES)
+		{
+			HandleMouseMove(ev);
+		}
+		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_CHAR)
 		{
 			m_keys[ev.keyboard.keycode] = true;
 			HandleKeyDown(ev);
@@ -53,32 +59,42 @@ namespace VE
 	{
 		DIRECTION tDir = m_player->GetDirection();
 
-		m_player->SetSpeed(b2Vec2(0,0));
+		b2Vec2 speed(0,0);
 		if (IsKeyDown(ALLEGRO_KEY_D) && !IsKeyDown(ALLEGRO_KEY_A))
 		{
-			m_player->SetXSpeed(5);
+			speed.x += 5;
 			tDir = RIGHT;
 		}
 		else if (IsKeyDown(ALLEGRO_KEY_A) && !IsKeyDown(ALLEGRO_KEY_D))
 		{
-			m_player->SetXSpeed(-5);
+			speed.x -= 5;
 			tDir = LEFT;
 		}
 		if (IsKeyDown(ALLEGRO_KEY_W) && !IsKeyDown(ALLEGRO_KEY_S))
 		{
-			m_player->SetYSpeed(-5);
+			speed.y -= 5;
 			tDir = UP;
 		}
 		else if (IsKeyDown(ALLEGRO_KEY_S) && !IsKeyDown(ALLEGRO_KEY_W))
 		{
-			m_player->SetYSpeed(5);
+			speed.y += 5;
 			tDir = DOWN;
 		}
 
+		m_player->SetSpeed(speed);
 		m_player->SetDirection(tDir);
 
+		//if (IsKeyDown(ALLEGRO_KEY_F))
+		//	m_player->GetCurrentWeapon()->Fire(m_player->GetDirection());
+		b2Vec2 fuck = (m_player->Position() + b2Vec2(10, 10));
 		if (IsKeyDown(ALLEGRO_KEY_F))
-			m_player->GetCurrentWeapon()->Fire(m_player->GetDirection());
+			m_player->GetCurrentWeapon()->Fire(m_mousePos);
+	}
+
+	void CPlayerController::HandleMouseMove(const ALLEGRO_EVENT& ev)
+	{
+		m_mousePos = GameLevel()->Renderer()->Cam()->TopLeftPosPix() + b2Vec2(ev.mouse.x, ev.mouse.y);
+		m_mousePos = PixToMtr(m_mousePos);
 	}
 
 	void CPlayerController::Update(double deltaTime)
