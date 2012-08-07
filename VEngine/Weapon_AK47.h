@@ -36,7 +36,7 @@ namespace VE
 		/// when they are 'done'. Being done will usually mean the
 		/// bullet has hit something and now needs to be removed
 		/// from the world.
-		void Done(IBullet* bullet);
+		void Done(IProjectile* bullet);
 		/// \return The player that is using this weapon.
 		CPlayer* GetPlayer(void) const { return m_player; }
 	private:

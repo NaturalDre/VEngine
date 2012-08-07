@@ -21,61 +21,17 @@
     <ClCompile Include="Bullet_AK47.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ContactListener.cpp" />
+    <ClCompile Include="CubeView.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="GameMap.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\class.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\class_info.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\class_registry.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\class_rep.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\create_class.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\error.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\exception_handler.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\function.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\inheritance.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\link_compatibility.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\object_rep.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\open.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\pcall.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\scope.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\stack_content_by_name.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\weak_ref.cpp" />
-    <ClCompile Include="luabind-0.9.1\src\wrapper_base.cpp" />
     <ClCompile Include="LuabindExport.cpp" />
-    <ClCompile Include="Lua\lapi.cpp" />
-    <ClCompile Include="Lua\lauxlib.cpp" />
-    <ClCompile Include="Lua\lbaselib.cpp" />
-    <ClCompile Include="Lua\lcode.cpp" />
-    <ClCompile Include="Lua\ldblib.cpp" />
-    <ClCompile Include="Lua\ldebug.cpp" />
-    <ClCompile Include="Lua\ldo.cpp" />
-    <ClCompile Include="Lua\ldump.cpp" />
-    <ClCompile Include="Lua\lfunc.cpp" />
-    <ClCompile Include="Lua\lgc.cpp" />
-    <ClCompile Include="Lua\linit.cpp" />
-    <ClCompile Include="Lua\liolib.cpp" />
-    <ClCompile Include="Lua\llex.cpp" />
-    <ClCompile Include="Lua\lmathlib.cpp" />
-    <ClCompile Include="Lua\lmem.cpp" />
-    <ClCompile Include="Lua\loadlib.cpp" />
-    <ClCompile Include="Lua\lobject.cpp" />
-    <ClCompile Include="Lua\lopcodes.cpp" />
-    <ClCompile Include="Lua\loslib.cpp" />
-    <ClCompile Include="Lua\lparser.cpp" />
-    <ClCompile Include="Lua\lstate.cpp" />
-    <ClCompile Include="Lua\lstring.cpp" />
-    <ClCompile Include="Lua\lstrlib.cpp" />
-    <ClCompile Include="Lua\ltable.cpp" />
-    <ClCompile Include="Lua\ltablib.cpp" />
-    <ClCompile Include="Lua\ltm.cpp" />
-    <ClCompile Include="Lua\lundump.cpp" />
-    <ClCompile Include="Lua\lvm.cpp" />
-    <ClCompile Include="Lua\lzio.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapParser.cpp" />
     <ClCompile Include="MultiAnimation.cpp" />
@@ -106,7 +62,11 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Barrel.h" />
     <ClInclude Include="BasicAnimation.h" />
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CubeView.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="PhysicsEntity.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Bullet_AK47.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
@@ -189,7 +149,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\boost_1_48_0;.\luabind-0.9.1;.\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\Program Files %28x86%29\boost\boost_1_50;.\luabind-0.9.1;.\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -198,8 +158,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\allegro\lib;C:\Box2D_v2.2.1\Build\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\allegro\lib;C:\Box2D_v2.2.1\Build\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;.\Lua\lib\debug;.\luabind-0.9.1\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;lua51.lib;luabind.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference />
   </ItemDefinitionGroup>

@@ -106,7 +106,7 @@ CPlayer::~CPlayer(void)
 
 }
 
-b2Vec2 CPlayer::Position(void) const { return Impl(this)->m_body->Position(); }
+b2Vec2 CPlayer::GetPosition(void) const { return Impl(this)->m_body->Position(); }
 
 void CPlayer::SetXSpeed(float x) 
 { 

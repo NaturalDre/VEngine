@@ -3,10 +3,17 @@
 
 #include <list>
 
+#ifndef CALLSCRIPTFUNCTION
+#define CALLSCRIPTFUNCTION
+#define CallFunction luabind::call_function<luabind::object>
+#endif
+
+class b2Contact;
+
 namespace VE
 {
 	class CScript;
-	class IBullet;
+	class IProjectile;
 	class CGameLevel;
 	class IEntity
 	{
@@ -16,19 +23,15 @@ namespace VE
 		virtual ~IEntity(void);
 		virtual void Update(double deltaTime);
 
-		inline CGameLevel* GameLevel(void) const { return m_gameLevel; }
+		inline CGameLevel* GetGameLevel(void) const { return m_gameLevel; }
 
-		virtual bool OnContact(IBullet* bullet) { return false; } // Return true to accept he contact
+		virtual bool OnContact(IProjectile* projectile, b2Contact* contact = nullptr) { return false; } // Return true to accept the contact
 		virtual bool OnContact(IEntity* entity) { return false; } // Return true to accept he contact
 
-		void AddScript(CScript* script) { m_scripts.push_back(script); }
-		void RemoveScript(CScript* script) { m_scripts.remove(script); }
-
-		const std::list<CScript*>& GetScripts(void) const { return m_scripts; }
-		std::list<CScript*>& GetScripts(void) { return m_scripts; }
+		CScript* GetScript(void) const { return m_script; }
 	private:
 		CGameLevel* m_gameLevel; // Game level this entity is a part of.
-		std::list<CScript*> m_scripts;
+		CScript* m_script;
 	};
 }
 #endif

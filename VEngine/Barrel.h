@@ -10,7 +10,7 @@ namespace VE
 	class CBarrel: public IEntity
 	{
 	protected:
-		bool OnContact(IBullet* bullet);
+		bool OnContact(IProjectile* bullet);
 		void Update(double dt);
 	public:
 		CBarrel(CGameLevel* level);

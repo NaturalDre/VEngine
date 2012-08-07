@@ -28,7 +28,7 @@ namespace VE
 		* Returns the position of the player.
 		* @return The position in meters.
 		*/
-		b2Vec2 Position(void) const;
+		b2Vec2 GetPosition(void) const;
 		void SetXSpeed(float x);
 		void SetYSpeed(float y);
 		void SetSpeed(const b2Vec2& speed);

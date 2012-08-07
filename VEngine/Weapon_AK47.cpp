@@ -59,7 +59,7 @@ namespace VE
 
 	void Weapon_AK47::FreeFiredBullets(void)
 	{
-		std::for_each(m_firedBullets.begin(), m_firedBullets.end(), [&](IBullet* bullet)
+		std::for_each(m_firedBullets.begin(), m_firedBullets.end(), [&](IProjectile* bullet)
 		{
 			delete bullet;
 		});
@@ -84,14 +84,14 @@ namespace VE
 
 	void Weapon_AK47::FreeFinishedBullets(void)
 	{
-		std::for_each(m_finishedBullets.begin(), m_finishedBullets.end(), [&](IBullet* bullet)
+		std::for_each(m_finishedBullets.begin(), m_finishedBullets.end(), [&](IProjectile* bullet)
 		{
 			delete bullet;
 		});
 		m_finishedBullets.clear();
 	}
 
-	void Weapon_AK47::Done(IBullet* bullet)
+	void Weapon_AK47::Done(IProjectile* bullet)
 	{
 		Bullet_AK47* b = static_cast<Bullet_AK47*>(bullet);
 		m_finishedBullets.push_back(b);

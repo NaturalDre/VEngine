@@ -38,7 +38,7 @@ namespace VE
 		IEntity::Update(dt);
 	}
 
-	bool CBarrel::OnContact(IBullet* bullet)
+	bool CBarrel::OnContact(IProjectile* bullet)
 	{
 		if (m_health > 0)
 		{

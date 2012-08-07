@@ -62,8 +62,8 @@ namespace VE
 		if (m_gameMap)
 			m_gameMap->Render(this, m_gameMap->GetPlayerLayer() + 1, m_gameMap->GetTileLayers().size());
 		
-		//if (m_physics)
-		//	m_physics->World()->DrawDebugData();
+		if (m_physics)
+			m_physics->World()->DrawDebugData();
 
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0,0,0));

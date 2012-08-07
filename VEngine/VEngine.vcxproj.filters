@@ -32,11 +32,11 @@
     <Filter Include="Source Files\Weapons">
       <UniqueIdentifier>{0540bec7-31e0-4fac-9396-4e9984b3b6de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Lua">
-      <UniqueIdentifier>{62544f66-aa95-4397-a329-cf4779879719}</UniqueIdentifier>
+    <Filter Include="Header Files\Enemies">
+      <UniqueIdentifier>{31c4462b-9ac1-4c53-8b38-6283bb9b2d22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\LuaBind">
-      <UniqueIdentifier>{467458ce-8288-4a35-94e5-8cbb9cebb376}</UniqueIdentifier>
+    <Filter Include="Source Files\Enemies">
+      <UniqueIdentifier>{78c9ba3d-401a-4f60-b55f-dd4a695d3803}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -163,146 +163,14 @@
     <ClCompile Include="GameMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\class.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\class_info.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\class_registry.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\class_rep.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\create_class.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\error.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\exception_handler.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\function.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\inheritance.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\link_compatibility.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\object_rep.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\open.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\pcall.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\scope.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\stack_content_by_name.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\weak_ref.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="luabind-0.9.1\src\wrapper_base.cpp">
-      <Filter>Source Files\LuaBind</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lapi.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lauxlib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lbaselib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lcode.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ldblib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ldebug.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ldo.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ldump.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lfunc.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lgc.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\linit.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\liolib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\llex.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lmathlib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lmem.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\loadlib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lobject.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lopcodes.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\loslib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lparser.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lstate.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lstring.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lstrlib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ltable.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ltablib.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ltm.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lundump.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lvm.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\lzio.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
     <ClCompile Include="MapParser.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeView.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source Files\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -405,9 +273,6 @@
     <ClInclude Include="Weapon_AK47.h">
       <Filter>Header Files\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Header Files\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet_AK47.h">
       <Filter>Header Files\Bullets</Filter>
     </ClInclude>
@@ -458,6 +323,21 @@
     </ClInclude>
     <ClInclude Include="MapParser.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeView.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

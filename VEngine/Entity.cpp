@@ -17,9 +17,6 @@ namespace VE
 	}
 	void IEntity::Update(double deltaTime)
 	{
-		for (auto iter = m_scripts.begin(); iter != m_scripts.end(); ++iter)
-		{
-			(*iter)->Update(deltaTime);
-		}
+		m_script->Update(deltaTime);
 	}
 }

@@ -35,7 +35,7 @@ namespace VE
 		if (!m_player)
 			return;
 
-		VE::DrawBitmap(m_anims.GetCurrentAnim().GetFrame(), m_player->Position(), b2Vec2(0,0));
+		VE::DrawBitmap(m_anims.GetCurrentAnim().GetFrame(), m_player->GetPosition(), b2Vec2(0,0));
 		m_player->GetCurrentWeapon()->Render();
 	}
 

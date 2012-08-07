@@ -8,10 +8,10 @@ struct ALLEGRO_BITMAP;
 
 namespace VE
 {
-	class IBullet;
+	class IProjectile;
 	class IWeapon: public IEntity
 	{
-		friend IBullet;
+		friend IProjectile;
 	public:
 		enum WeaponState { e_Ready, e_Reloading };
 
@@ -30,7 +30,7 @@ namespace VE
 		///
 		/// @param bullet The bullet that is done doing its job.
 		/// \note Do not delete the bullet before this function returns;
-		virtual void Done(IBullet* bullet) = 0;
+		virtual void Done(IProjectile* bullet) = 0;
 
 
 		void SetAmmo(size_t ammo) { m_ammo = ammo; }

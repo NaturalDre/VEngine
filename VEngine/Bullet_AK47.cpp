@@ -29,22 +29,22 @@ namespace VE
 		if (dir == RIGHT)
 		{
 			bd.linearVelocity.Set(10, 0);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(1, r);
+			bd.position = GameLevel()->GetPlayer()->GetPosition() + b2Vec2(1, r);
 		}
 		else if(dir == LEFT)
 		{
 			bd.linearVelocity.Set(-10, 0);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(-1, r);
+			bd.position = GameLevel()->GetPlayer()->GetPosition() + b2Vec2(-1, r);
 		}
 		else if (dir == UP)
 		{
 			bd.linearVelocity.Set(0, -10);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(r, -1);
+			bd.position = GameLevel()->GetPlayer()->GetPosition() + b2Vec2(r, -1);
 		}
 		else if (dir == DOWN)
 		{
 			bd.linearVelocity.Set(0, 10);
-			bd.position = GameLevel()->GetPlayer()->Position() + b2Vec2(r, 1);
+			bd.position = GameLevel()->GetPlayer()->GetPosition() + b2Vec2(r, 1);
 		}
 
 		b2FixtureDef fd;
@@ -78,14 +78,18 @@ namespace VE
 		bd.allowSleep = false;
 		bd.fixedRotation = true;
 
-		// We don't want all bullets in a straight line
-		float r = (-0.5f) + ((rand() % 10) / 10.0f);
+		{
+			// We don't want all bullets in a straight line
+			float random = (-0.5f) + ((rand() % 10) / 100.0f);
 
-		auto d = pos - GameLevel()->GetPlayer()->Position();
+			const b2Vec2 angleVec = pos - GameLevel()->GetPlayer()->GetPosition();
+			const float angleDegrees = GetAngle(GameLevel()->GetPlayer()->GetPosition(), pos);
 
-		bd.linearVelocity = d;
-		bd.position = GameLevel()->GetPlayer()->Position(); //+ b2Vec2(r, -1);
+			b2Vec2 vel = Rotate(b2Vec2(10, random), angleDegrees);
 
+			bd.linearVelocity = vel;
+			bd.position = GameLevel()->GetPlayer()->GetPosition(); //+ b2Vec2(r, -1);
+		}
 
 		b2FixtureDef fd;
 		fd.density = 0.3f;
@@ -120,10 +124,13 @@ namespace VE
 	void Bullet_AK47::BeginContact(b2Contact* contact)
 	{
 		IEntity* entity = static_cast<IEntity*>(contact->GetFixtureA()->GetBody()->GetUserData());
-		if (!entity)
+		if (!entity /*|| !entity->OnContact(this)*/)
 			return;
-		if (!entity->OnContact(this))
-			return;
-		m_weapon->Done(this);
+		else
+		{
+			bool val = entity->OnContact(this);
+			if (val)
+				m_weapon->Done(this);
+		}
 	}
 }

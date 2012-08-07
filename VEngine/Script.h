@@ -7,7 +7,10 @@
 
 struct lua_State;
 
-#define Call_Func luabind::call_function<luabind::object>
+//#ifndef CALLSCRIPTFUNCTION
+//#define CALLSCRIPTFUNCTION
+//#define CallFunction luabind::call_function<luabind::object>
+//#endif
 
 namespace VE
 {
@@ -16,19 +19,18 @@ namespace VE
 	{
 	protected:
 
-
 	public:
-		//CScript(lua_State* L, const std::string& factoryFunc);
-		CScript(const luabind::adl::object& obj);
+		CScript(const std::string& scriptName);
+		CScript(const luabind::adl::object& scriptObject);
 
 		~CScript(void);
 
-		const luabind::adl::object GetSelf(void) const { return m_self; }
+		const luabind::adl::object& GetSelf(void) const { return m_self; }
 
 		bool IsValid(void) const { return m_self.is_valid(); }
-
+		
 		void Update(double dt);
-		void Render(void);
+		//void Render(void);
 	private:
 		std::vector<char> m_buffer;
 		luabind::adl::object m_self;

@@ -80,7 +80,7 @@ namespace VE
 	* @param pos The position on the screen to draw at in meters.
 	* @param flags Rules to apply to bitmap drawing. 
 	*	ALLEGRO_FLIP_HORIZONTAL, ALLEGRO_FLIP_VERTICAL.
-	* @note The top left ofthe bitmap is considered the origin(0,0).
+	* @note The top left of the bitmap is considered the origin(0,0).
 	*/
 	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, int flags = 0);
 	/**
@@ -88,8 +88,9 @@ namespace VE
 	* @param bitmap The bitmap to draw.
 	* @param dpos The position on the screen to draw at in meters.
 	* @param cpos The center of the bitmap in local coordinates. By default
-	*	the center is also the origin therefore if a bitmap is 30 x 30 its
-	*	center is (15,15). This is necessary due to how Box2D works.
+	*	the center is also the origin(0,0) therefore if a bitmap is 30 x 30 its
+	*	center is represented as (0,0) in Box2D, not (15,15) like you'd expect.
+	*	This is necessary due to how Box2D works.
 	* @param flags Rules to apply to bitmap drawing. 
 	*	ALLEGRO_FLIP_HORIZONTAL, ALLEGRO_FLIP_VERTICAL.
 	*/

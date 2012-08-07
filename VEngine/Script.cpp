@@ -10,8 +10,6 @@ using namespace luabind;
 
 namespace VE
 {
-	//static int instances = 0;
-
 	void ProvideGlobal(lua_State* L, const char* key);
 
 	luabind::object GetFactory(lua_State* L, const std::string& factory)
@@ -28,50 +26,27 @@ namespace VE
 		return std::move(func);
 	}
 
-	//CScript::CScript(lua_State* L, const std::string& factoryFunc)
-	//{
-
-	//	lua_getglobal(L, factoryFunc.c_str());
-	//	// STK: -- userdata?
-	//	if (!lua_isuserdata(L, -1))
-	//		return;
-	//	// STK: -- userdata
-	//	luabind::object c = luabind::object(luabind::from_stack(L, -1));
-	//	// STK: -- userdata
-	//	lua_pop(L, 1);
-	//	// STK: --
-	//	m_self = luabind::call_function<luabind::object>(c);
-	//}
-
-	CScript::CScript(const luabind::adl::object& obj)
+	CScript::CScript(const luabind::adl::object& scriptObject)
 	{
-		if (!obj.is_valid() || luabind::type(obj) != LUA_TUSERDATA)
+		if (!scriptObject.is_valid() || luabind::type(scriptObject) != LUA_TUSERDATA)
 			return;
-		m_self = obj;
+		m_self = scriptObject;
 	}
 
 	CScript::~CScript(void)
 	{
 		m_self = luabind::object();
-
 	}
 
 	void CScript::Update(double dt)
 	{
 		luabind::call_member<void>(GetSelf(), "OnUpdate", dt);
-
-		//if (m_scriptTable.is_valid())
-		//	luabind::call_function<void>(m_scriptTable,
-		//m_scriptTable["OnUpdate"].push(m_scriptTable.interpreter());
-		//lua_pushinteger(m_scriptTable.interpreter(), 1);
-		//lua_pcall(m_scriptTable.interpreter(), 1, 0, 0);
-		//auto t = luabind::type(m_scriptTable) == LUA_TUSERDATA;
 	}
 
-	void CScript::Render(void)
-	{
+	//void CScript::Render(void)
+	//{
 
-	}
+	//}
 
 	void ProvideGlobal(lua_State* L, const char* key)
 	{

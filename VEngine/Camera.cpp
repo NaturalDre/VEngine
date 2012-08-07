@@ -20,14 +20,14 @@ namespace VE
 	b2Vec2 CCamera::PosPix(void) const 
 	{ 
 		if (m_player) 
-			return MtrToPix(m_player->Position()); 
+			return MtrToPix(m_player->GetPosition()); 
 		return b2Vec2(0,0); 
 	}
 
 	b2Vec2 CCamera::PosMtr(void) const 
 	{ 
 		if (m_player) 
-			return m_player->Position(); 
+			return m_player->GetPosition(); 
 		return b2Vec2(0,0); 
 	}
 }

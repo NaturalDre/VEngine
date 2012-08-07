@@ -1,14 +1,14 @@
 #ifndef BULLET_AK47_H
 #define BULLET_AK47_H
 
-#include "Bullet.h"
+#include "Projectile.h"
 #include "Physics.h"
 #include "Common.h"
 #include "ContactCallback.h"
 namespace VE
 {
 	class Weapon_AK47;
-	class Bullet_AK47: private IContactCallback, public IBullet
+	class Bullet_AK47: private IContactCallback, public IProjectile
 	{
 		friend Weapon_AK47;
 	protected:
