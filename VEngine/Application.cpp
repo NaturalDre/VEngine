@@ -31,6 +31,10 @@ namespace VE
 	{
 		m_gameLevel->SetScriptEnv(nullptr);
 
+		// The player must be freed before the state is closed, because
+		// the player may own a valid script.
+		// TO DO: Free all entities before closing the state.
+		m_gameLevel->RemovePlayer();
 		// The lua state needs to be closed before the controller,
 		// because the state may own some objects who depend
 		// on pointers owned by the controller. 

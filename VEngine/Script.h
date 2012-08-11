@@ -20,7 +20,7 @@ namespace VE
 	protected:
 
 	public:
-		CScript(const std::string& scriptName);
+		CScript(lua_State* state, const std::string& scriptName);
 		CScript(const luabind::adl::object& scriptObject);
 
 		~CScript(void);
@@ -33,7 +33,7 @@ namespace VE
 		//void Render(void);
 	private:
 		std::vector<char> m_buffer;
-		luabind::adl::object m_self;
+		luabind::object m_self;
 	};
 }
 #endif

@@ -25,8 +25,8 @@ namespace VE
 		fd.friction = 0.3f;
 		fd.restitution = 0.0f;
 		fd.userData = this;
-		//fd.filter.categoryBits = e_Player;
-		//fd.filter.maskBits = e_Enemy | e_Static;
+		fd.filter.categoryBits = CATEGORY_PLAYER;
+		fd.filter.maskBits = MASK_PLAYER;
 
 		b2PolygonShape shape;
 		fd.shape = &shape;

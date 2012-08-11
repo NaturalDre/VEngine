@@ -8,10 +8,8 @@ struct ALLEGRO_BITMAP;
 
 namespace VE
 {
-	class IProjectile;
 	class IWeapon: public IEntity
 	{
-		friend IProjectile;
 	public:
 		enum WeaponState { e_Ready, e_Reloading };
 
@@ -23,15 +21,6 @@ namespace VE
 			, m_rarity(rarity)
 			, m_state(e_Ready)
 		{}
-		/// Bullet's that are fired by this weapon should 
-		/// call this function when they need to be destroyed.
-		/// For example: When they have done damage or have been
-		/// alive for too long. They are deleted in the next Update() call.
-		///
-		/// @param bullet The bullet that is done doing its job.
-		/// \note Do not delete the bullet before this function returns;
-		virtual void Done(IProjectile* bullet) = 0;
-
 
 		void SetAmmo(size_t ammo) { m_ammo = ammo; }
 		void SetMaxAmmo(size_t maxAmmo) { m_maxAmmo; }
@@ -45,9 +34,9 @@ namespace VE
 		virtual void Update(double dt) = 0;
 		virtual void Render(void) = 0;
 		/// Fire a bullet from the weapon.
+		// @param pos The position that the weapon is being fired at.
 		/// \note Derived classes should handle whether or not
 		///		the weapon can be fired.
-		virtual void Fire(DIRECTION dir) = 0;
 		virtual void Fire(const b2Vec2& pos) { };
 		/// Reload this weapon.
 		/// \note Derived classes should handle whether or not

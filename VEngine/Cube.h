@@ -10,11 +10,10 @@ namespace VE
 	class CCube: public IEnemy
 	{
 	protected:
-		/// @see ContactCallback.h
-		virtual void BeginContact(b2Contact* contact);
-		/// @see ContactCallback.h
-		virtual void EndContact(b2Contact* contact);
+		void BeginContact(b2Contact* contact);
+		void EndContact(b2Contact* contact);
 
+		bool OnContact(IProjectile* projectile);
 		static b2Body* CreateBody(CCube& cube, const b2Vec2& spawnPos);
 		void Update(double dt);
 
@@ -27,6 +26,8 @@ namespace VE
 	private:
 		CCubeView* m_view;
 		b2Body* m_body;
+
+		float m_health;
 	};
 }
 #endif

@@ -5,27 +5,27 @@
 #include "Physics.h"
 #include "Common.h"
 #include "ContactCallback.h"
+
 namespace VE
 {
-	class Weapon_AK47;
-	class Bullet_AK47: private IContactCallback, public IProjectile
+	class CWeaponAK47;
+	class CBulletAK47: private IContactCallback, public IProjectile
 	{
-		friend Weapon_AK47;
+		friend CWeaponAK47;
 	protected:
 		void BeginContact(b2Contact* contact);
 		void Destroy(void);
 
 	public:
-		Bullet_AK47(b2World* world, Weapon_AK47* weapon, const DIRECTION dir);
-		Bullet_AK47(b2World* world, Weapon_AK47* weapon, const b2Vec2& pos);
-		virtual ~Bullet_AK47(void);
+		CBulletAK47(b2World* world, CWeaponAK47* weapon, const b2Vec2& pos);
+		virtual ~CBulletAK47(void);
 
 		inline b2Body* GetBody(void) const { return m_body; }
 		inline double GetTimeCreated(void) const { return m_timeCreated; }
 	private:
 		b2World* m_world;
 		b2Body* m_body;
-		Weapon_AK47* m_weapon;
+		CWeaponAK47* m_weapon;
 		double m_timeCreated;
 	};
 }

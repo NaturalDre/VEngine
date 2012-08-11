@@ -56,3 +56,8 @@ bool DoFile(lua_State* L, const std::string& filename)
 {
 	return DoBuffer(L, BufferFile(filename));
 }
+
+int GenerateEventID(char a, char b, char c, char d)
+{
+	return ALLEGRO_GET_EVENT_TYPE(a,b,c,d);
+}

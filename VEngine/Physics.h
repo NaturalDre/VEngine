@@ -5,6 +5,7 @@
 #include "TMR\Object.h"
 
 const float SCALE(32.0f);
+//const float PIXELSPERMETER(32.0f);
 
 
 class DebugDraw;

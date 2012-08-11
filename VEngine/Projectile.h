@@ -2,12 +2,11 @@
 #define BULLET_H
 
 #include <Box2D\Common\b2Math.h>
+
 namespace VE
 {
-	class IWeapon;
 	class IProjectile
 	{
-		friend IWeapon;
 	protected:
 		inline void SetDamage(float damage) { m_damage = damage; }
 

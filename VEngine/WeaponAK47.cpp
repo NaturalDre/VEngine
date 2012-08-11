@@ -1,5 +1,5 @@
-#include "Weapon_AK47.h"
-#include "Bullet_AK47.h"
+#include "WeaponAK47.h"
+#include "BulletAK47.h"
 #include "Physics.h"
 #include "GameLevel.h"
 #include "ErrorLogger.h"
@@ -10,7 +10,7 @@
 
 namespace VE
 {
-	Weapon_AK47::Weapon_AK47(CGameLevel* level, CPlayer* player)
+	CWeaponAK47::CWeaponAK47(CGameLevel* level, CPlayer* player)
 		: IWeapon(100, 100, 1, nullptr)
 		, m_fireRate(0.1f)
 		, m_fireTimeout(0)
@@ -28,7 +28,7 @@ namespace VE
 		m_bulletImage = CBitmap("Images/bulletm.png");
 	}
 
-	Weapon_AK47::~Weapon_AK47(void)
+	CWeaponAK47::~CWeaponAK47(void)
 	{
 		FreeFinishedBullets();
 		FreeFiredBullets();
@@ -36,7 +36,7 @@ namespace VE
 		m_gameLevel = nullptr;
 	}
 
-	void Weapon_AK47::Update(double dt)
+	void CWeaponAK47::Update(double dt)
 	{
 		ForceFinishOldBullets();
 		FreeFinishedBullets();
@@ -49,15 +49,15 @@ namespace VE
 
 	}
 
-	void Weapon_AK47::Render(void)
+	void CWeaponAK47::Render(void)
 	{
-		std::for_each(m_firedBullets.begin(), m_firedBullets.end(), [&](Bullet_AK47* bullet)
+		std::for_each(m_firedBullets.begin(), m_firedBullets.end(), [&](CBulletAK47* bullet)
 		{
 			VE::DrawBitmap(m_bulletImage, bullet->GetBody()->GetPosition());
 		});
 	}
 
-	void Weapon_AK47::FreeFiredBullets(void)
+	void CWeaponAK47::FreeFiredBullets(void)
 	{
 		std::for_each(m_firedBullets.begin(), m_firedBullets.end(), [&](IProjectile* bullet)
 		{
@@ -66,7 +66,7 @@ namespace VE
 		m_firedBullets.clear();
 	}
 
-	void Weapon_AK47::ForceFinishOldBullets(void)
+	void CWeaponAK47::ForceFinishOldBullets(void)
 	{
 		const double curTime = al_get_time();
 
@@ -82,7 +82,7 @@ namespace VE
 		};
 	}
 
-	void Weapon_AK47::FreeFinishedBullets(void)
+	void CWeaponAK47::FreeFinishedBullets(void)
 	{
 		std::for_each(m_finishedBullets.begin(), m_finishedBullets.end(), [&](IProjectile* bullet)
 		{
@@ -91,14 +91,14 @@ namespace VE
 		m_finishedBullets.clear();
 	}
 
-	void Weapon_AK47::Done(IProjectile* bullet)
+	void CWeaponAK47::Done(CBulletAK47* bullet)
 	{
-		Bullet_AK47* b = static_cast<Bullet_AK47*>(bullet);
-		m_finishedBullets.push_back(b);
-		m_firedBullets.remove(b);
+		/*CBulletAK47* b = static_cast<CBulletAK47*>(bullet);*/
+		m_finishedBullets.push_back(bullet);
+		m_firedBullets.remove(bullet);
 	}
 
-	void Weapon_AK47::CallScriptFunc(const std::string& function)
+	void CWeaponAK47::CallScriptFunc(const std::string& function)
 	{
 		if (m_self.is_valid())
 		{
@@ -106,43 +106,26 @@ namespace VE
 			catch(const luabind::error& e)
 			{
 				if (m_gameLevel->GetLogger())
-					m_gameLevel->GetLogger()->LogError("Weapon_AK47::CallScriptFunc() with parameter value " + function + " generated error: " + lua_tostring(e.state(), -1));
+					m_gameLevel->GetLogger()->LogError("CWeaponAK47::CallScriptFunc() with parameter value " + function + " generated error: " + lua_tostring(e.state(), -1));
 				lua_pop(e.state(), 1);
 			}
 		}
 	}
 
-	void Weapon_AK47::Fire(DIRECTION dir)
-	{
-		if (!CanFire())
-			return;
-		//if (m_fireTimeout > 0 || GetAmmoCount() <= 0)
-		//	return;
-
-		m_fireTimeout = m_fireRate;
-
-		Bullet_AK47* bullet(new Bullet_AK47(m_gameLevel->Physics()->World(), this, dir));
-		m_firedBullets.push_back(bullet);
-
-		SetAmmo(GetAmmoCount() - 1);
-
-		CallScriptFunc("OnFire");
-	}
-
-	void Weapon_AK47::Fire(const b2Vec2& pos)
+	void CWeaponAK47::Fire(const b2Vec2& pos)
 	{
 		if (!CanFire())
 			return;
 
 		m_fireTimeout = m_fireRate;
-		Bullet_AK47* bullet(new Bullet_AK47(m_gameLevel->Physics()->World(), this, pos));
+		CBulletAK47* bullet(new CBulletAK47(m_gameLevel->Physics()->World(), this, pos));
 		m_firedBullets.push_back(bullet);
 		SetAmmo(GetAmmoCount() -1);
 		CallScriptFunc("OnFire");
 
 	}
 
-	void Weapon_AK47::Reload(void)
+	void CWeaponAK47::Reload(void)
 	{
 		if (GetState() == e_Reloading)
 			return;

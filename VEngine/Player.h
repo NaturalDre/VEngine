@@ -10,10 +10,12 @@ namespace VE
 {
 	class CPlayerBody;
 	class IWeapon;
+
 	class CPlayer: public IEntity
 	{
+		friend CPlayer* CreatePlayer(CGameLevel* level, const b2Vec2& spawnpos);
 	protected:
-		CPlayer(CGameLevel* level);
+		CPlayer(CGameLevel* level, const b2Vec2& spawnPos);
 
 	public:
 
@@ -33,20 +35,17 @@ namespace VE
 		void SetYSpeed(float y);
 		void SetSpeed(const b2Vec2& speed);
 
-		float GetXSpeed(void) const;
-		float GetYSpeed(void) const;
-		b2Vec2 GetSpeed(void) const;
+		float GetXSpeed(void) const { return m_speed.x; }
+		float GetYSpeed(void) const { return m_speed.y; }
+		b2Vec2 GetSpeed(void) const { return m_speed; }
 
-		IWeapon* GetCurrentWeapon(void) const;
+		IWeapon* GetCurrentWeapon(void) const { return m_currentWeapon; }
 		size_t GetWeaponCount(void) const;
 
 		void SelectWeapon(size_t index);
-		DIRECTION GetDirection(void) const;
 
+		DIRECTION GetDirection(void) const{ return m_dir; }
 		void SetDirection(DIRECTION dir);
-		// AdvanceLevel is for testing if observer class
-		void AdvanceLevel(void);
-		//void SetBody(b2Body* body) { m_body = body; }
 
 		/// Subscribe to a specific set of events that this object generates.
 		///
@@ -64,6 +63,15 @@ namespace VE
 		///
 		/// @param observer The object that no longer wants to listen to events from this object.
 		void SubscribeFromAll(IObserver* observer);
+
+	private:
+		CObservable m_publisher;
+		CPlayerBody* m_body;
+		b2Vec2 m_speed;
+		b2Vec2 m_vel;
+		DIRECTION m_dir;
+		IWeapon* m_currentWeapon;
+		std::list<IWeapon*> m_weapons;
 	};
 
 	CPlayer* CreatePlayer(CGameLevel* level, const b2Vec2& spawnPos);

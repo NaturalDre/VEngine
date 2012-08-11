@@ -124,9 +124,6 @@
     <ClCompile Include="Barrel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet_AK47.cpp">
-      <Filter>Source Files\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,9 +135,6 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_AK47.cpp">
-      <Filter>Source Files\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="LuabindExport.cpp">
       <Filter>Source Files</Filter>
@@ -171,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletAK47.cpp">
+      <Filter>Source Files\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponAK47.cpp">
+      <Filter>Source Files\Weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,12 +270,6 @@
     <ClInclude Include="Weapon.h">
       <Filter>Header Files\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon_AK47.h">
-      <Filter>Header Files\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet_AK47.h">
-      <Filter>Header Files\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Barrel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -338,6 +332,12 @@
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletAK47.h">
+      <Filter>Header Files\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponAK47.h">
+      <Filter>Header Files\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

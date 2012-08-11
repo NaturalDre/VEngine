@@ -18,7 +18,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Barrel.cpp" />
     <ClCompile Include="BasicAnimation.cpp" />
-    <ClCompile Include="Bullet_AK47.cpp" />
+    <ClCompile Include="BulletAK47.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="CubeView.cpp" />
@@ -54,7 +54,7 @@
     <ClCompile Include="TMR\Tileset.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="View.cpp" />
-    <ClCompile Include="Weapon_AK47.cpp" />
+    <ClCompile Include="WeaponAK47.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -67,7 +67,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="Projectile.h" />
-    <ClInclude Include="Bullet_AK47.h" />
+    <ClInclude Include="BulletAK47.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ContactCallback.h" />
@@ -111,7 +111,7 @@
     <ClInclude Include="Vengine.h" />
     <ClInclude Include="View.h" />
     <ClInclude Include="Weapon.h" />
-    <ClInclude Include="Weapon_AK47.h" />
+    <ClInclude Include="WeaponAK47.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

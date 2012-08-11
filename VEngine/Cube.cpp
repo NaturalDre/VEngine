@@ -3,13 +3,16 @@
 #include "Player.h"
 #include "GameLevel.h"
 #include "Physics.h"
-
+#include "Projectile.h"
+#include "Script.h"
+#include <luabind\luabind.hpp>
 namespace VE
 {
 	CCube::CCube(CGameLevel* gameLevel, const b2Vec2& spawnPos)
 		: IEnemy(gameLevel)
 		, m_view(nullptr)
 		, m_body(nullptr)
+		, m_health(100.0f)
 	{
 		assert(gameLevel != nullptr);
 		m_view = new CCubeView(this, GetGameLevel()->Renderer());
@@ -27,7 +30,6 @@ namespace VE
 		m_body = nullptr;
 	}
 
-
 	void CCube::BeginContact(b2Contact* contact)
 	{
 
@@ -36,6 +38,31 @@ namespace VE
 	void CCube::EndContact(b2Contact* contact) 
 	{
 
+	}
+
+	bool CCube::OnContact(IProjectile* projectile)
+	{
+		if (projectile && m_health > 0)
+		{
+			m_health -= projectile->GetDamage();
+			if(GetScript() && GetScript()->IsValid())
+			{
+				const luabind::object onDamageTaken = GetScript()->GetSelf()["OnDamageTaken"];
+				if (luabind::type(onDamageTaken) == LUA_TFUNCTION)
+					luabind::call_function<void>(onDamageTaken);
+			}
+			if (m_health <= 0)
+			{
+				m_health = 0;
+				if (GetScript() && GetScript()->IsValid())
+				{
+					const luabind::object onDeath = GetScript()->GetSelf()["OnDeath"];
+					if (luabind::type(onDeath) == LUA_TFUNCTION)
+						luabind::call_function<void>(onDeath);
+				}
+			}
+		}
+		return true;
 	}
 
 	b2Body* CCube::CreateBody(CCube& cube, const b2Vec2& spawnPos)
@@ -62,6 +89,8 @@ namespace VE
 			b2FixtureDef fd;
 			fd.shape = &shape;
 			fd.userData = static_cast<IContactCallback*>(&cube);
+			fd.filter.categoryBits = CATEGORY_ENEMY;
+			fd.filter.maskBits = MASK_ENEMY;
 
 			body->CreateFixture(&fd);
 		}

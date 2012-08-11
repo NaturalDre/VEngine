@@ -26,9 +26,17 @@ namespace VE
 		return std::move(func);
 	}
 
+	CScript::CScript(lua_State* state, const std::string& scriptName)
+	{
+		// Load the script. Inside the lua_State should be different functions
+		// for creating a script. This line will call that function with no parameters.
+		m_self = luabind::call_function<luabind::object>(state, scriptName.c_str());
+	}
+
 	CScript::CScript(const luabind::adl::object& scriptObject)
 	{
-		if (!scriptObject.is_valid() || luabind::type(scriptObject) != LUA_TUSERDATA)
+		// Make sure the object passed is valid and is either userdata or a table.
+		if (!scriptObject.is_valid() || (luabind::type(scriptObject) != LUA_TUSERDATA || luabind::type(scriptObject) != LUA_TTABLE))
 			return;
 		m_self = scriptObject;
 	}
@@ -40,13 +48,9 @@ namespace VE
 
 	void CScript::Update(double dt)
 	{
-		luabind::call_member<void>(GetSelf(), "OnUpdate", dt);
+		if (GetSelf().is_valid())
+			luabind::call_member<void>(GetSelf(), "OnUpdate", dt);
 	}
-
-	//void CScript::Render(void)
-	//{
-
-	//}
 
 	void ProvideGlobal(lua_State* L, const char* key)
 	{

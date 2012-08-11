@@ -12,7 +12,7 @@
 #include "Physics.h"
 #include "TMR\MapFile.h"
 #include "ErrorLogger.h"
-#include "Weapon_AK47.h"
+#include "WeaponAK47.h"
 #include "GameMap.h"
 using namespace luabind;
 using namespace VE;
@@ -28,7 +28,7 @@ void ExportBindings(lua_State* L)
 	// CErrorLogger
 	luabind::module(L)
 		[
-			class_<CErrorLogger>("ErrorLogger")
+			class_<CErrorLogger>("CErrorLogger")
 			.def("LogError", &CErrorLogger::LogError)
 			.def("LogNote", &CErrorLogger::LogNote)
 		];
@@ -36,20 +36,20 @@ void ExportBindings(lua_State* L)
 	/// CScript
 	luabind::module(L)
 		[
-			class_<CScript>("Script")
+			class_<CScript>("CScript")
 			.def(constructor<const object&>())
 		];
 	/// CRigidBody
 	luabind::module(L)
 		[
-			class_<CRigidBody>("RigidBody")
+			class_<CRigidBody>("CRigidBody")
 			.def(constructor<const object&>())
 			.def("Free", &CRigidBody::Free)
 		];
 	/// CGameLevel
 	luabind::module(L)
 		[
-			class_<CGameLevel>("GameLevel")
+			class_<CGameLevel>("CGameLevel")
 			//.def(constructor<>())
 			.def("AddPlayer", &CGameLevel::AddPlayer)
 			.def("RemovePlayer", &CGameLevel::RemovePlayer)
@@ -68,13 +68,13 @@ void ExportBindings(lua_State* L)
 	/// IEntity
 	luabind::module(L)
 		[
-			class_<IEntity>("Entity")
+			class_<IEntity>("IEntity")
 		];
 
 	/// CPlayer
 	luabind::module(L)
 		[
-			class_<CPlayer, IEntity>("Player")
+			class_<CPlayer, IEntity>("CPlayer")
 			.def("SetXSpeed", &CPlayer::SetXSpeed)
 			.def("SetYSpeed", &CPlayer::SetYSpeed)
 			.def("GetXSpeed", &CPlayer::GetXSpeed)
@@ -83,7 +83,7 @@ void ExportBindings(lua_State* L)
 	/// CPlayerController
 	luabind::module(L)
 		[
-			class_<CPlayerController>("PlayerController")
+			class_<CPlayerController>("CPlayerController")
 			.def("SetPlayer", &CPlayerController::SetPlayer)
 			.def("GetPlayer", &CPlayerController::GetPlayer)
 		];
@@ -107,7 +107,7 @@ void ExportBindings(lua_State* L)
 	/// Tiled::CMapFile
 	luabind::module(L)
 		[
-			class_<Tiled::CMapFile>("MapFile")
+			class_<Tiled::CMapFile>("CMapFile")
 			//.def(constructor<>())
 			//.def("Read", (bool(Tiled::CMapFile::*)(const std::string&)) &Tiled::CMapFile::Read)
 			//.def("ReadFromTable", (bool(Tiled::CMapFile::*)(const luabind::object&)) &Tiled::CMapFile::Read)
@@ -126,21 +126,21 @@ void ExportBindings(lua_State* L)
 
 	luabind::module(L)
 		[
-			class_<CGameMap, Tiled::CMapFile>("GameMap")
+			class_<CGameMap, Tiled::CMapFile>("CGameMap")
 		];
 
 	luabind::module(L)
 		[
-			class_<IWeapon>("Weapon")
+			class_<IWeapon>("IWeapon")
 			.def("GetAmmoCount", &IWeapon::GetAmmoCount)
 			.def("GetMaxAmmo", &IWeapon::GetMaxAmmo)
 			.def("GetRarity", &IWeapon::GetRarity)
 		];
 
-	/// Weapon_AK47
+	/// CWeaponAK47
 	luabind::module(L)
 		[
-			class_<Weapon_AK47, IWeapon>("Weapon_AK47")
-			.def("GetPlayer()", &Weapon_AK47::GetPlayer)
+			class_<CWeaponAK47, IWeapon>("CWeaponAK47")
+			.def("GetPlayer()", &CWeaponAK47::GetPlayer)
 		];
 }
