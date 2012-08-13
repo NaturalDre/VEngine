@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Polygon.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Triangle.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\ProjectDependencies\gwen\Renderers\Allegro\Allegro.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationBase.cpp" />
     <ClCompile Include="Application.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="TMR\TiledObject.cpp" />
     <ClCompile Include="TMR\Tilelayer.cpp" />
     <ClCompile Include="TMR\Tileset.cpp" />
+    <ClCompile Include="UIConsole.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="View.cpp" />
     <ClCompile Include="WeaponAK47.cpp" />
@@ -107,14 +109,12 @@
     <ClInclude Include="TMR\Object.h" />
     <ClInclude Include="TMR\Tilelayer.h" />
     <ClInclude Include="TMR\Tileset.h" />
+    <ClInclude Include="UIConsole.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vengine.h" />
     <ClInclude Include="View.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponAK47.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C583B7BA-6214-4F71-B500-D7BD2C5EB4A2}</ProjectGuid>
@@ -149,7 +149,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\Program Files %28x86%29\boost\boost_1_50;.\luabind-0.9.1;.\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\Program Files %28x86%29\boost\boost_1_50;.\luabind-0.9.1;.\Lua;C:\ProjectDependencies\gwen\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -158,8 +158,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\allegro\lib;C:\Box2D_v2.2.1\Build\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;.\Lua\lib\debug;.\luabind-0.9.1\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;lua51.lib;luabind.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\allegro\lib;C:\Box2D_v2.2.1\Build\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;.\Lua\lib\debug;.\luabind-0.9.1\lib\debug;C:\ProjectDependencies\gwen\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;lua51.lib;luabind.lib;gwend_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference />
   </ItemDefinitionGroup>
@@ -169,7 +169,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\boost_1_48_0;C:\Box2D_v2.2.1;C:\allegro\include;.\luabind-0.9.1;.\Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_48_0;C:\Box2D_v2.2.1;C:\allegro\include;.\luabind-0.9.1;.\Lua;C:\ProjectDependencies\gwen\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CompileAs>CompileAsCpp</CompileAs>

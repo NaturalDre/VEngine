@@ -12,6 +12,7 @@ namespace VE
 		: m_world(world)
 		, m_body(nullptr)
 		, m_weapon(weapon)
+		, m_done(false)
 	{
 		if (!m_world)
 			return;
@@ -68,23 +69,6 @@ namespace VE
 
 	void CBulletAK47::BeginContact(b2Contact* contact)
 	{
-		contact->SetEnabled(false);
-		IEntity* entity(nullptr);
-		if (contact->GetFixtureA()->GetBody() == m_body)
-			entity = static_cast<IEntity*>(contact->GetFixtureB()->GetBody()->GetUserData());
-		else
-			entity = static_cast<IEntity*>(contact->GetFixtureA()->GetBody()->GetUserData());
-
-		if (entity)
-		{
-			bool ignoreCollision = entity->OnContact(static_cast<IProjectile*>(this));
-			if (ignoreCollision)
-			{
-				contact->SetEnabled(false);
-				return;
-			}
-		}
-
-		m_weapon->Done(this);
+		m_done = true;
 	}
 }

@@ -3,9 +3,9 @@
 
 #include "Process.h"
 #include "EngineCallback.h"
+#include "Engine.h"
 #include <string>
 #include <unordered_set>
-#include <set>
 #include <luabind\object.hpp>
 
 struct lua_State;
@@ -40,8 +40,8 @@ namespace VE
 		CPlayer* GetPlayer(void) const;
 		inline CPlayerController* GetPlayerController(void) const { return m_playerController; }
 
-		inline CRender* Renderer(void) const { return m_renderer; }
-		inline CPhysics* Physics(void) const { return m_physics; }
+		inline CRender* GetRenderer(void) const { return m_engine->GetRenderer(); }
+		inline CPhysics* GetPhysics(void) const { return m_engine->GetPhysics(); }
 
 		void AddAnimation(IAnimation* anim) { m_animations.insert(anim); }
 		void RemoveAnimation(IAnimation* anim) { m_animations.erase(anim); }
@@ -69,8 +69,7 @@ namespace VE
 		EntitySet m_entities;
 		AnimationSet m_animations;
 
-		CRender* m_renderer;
-		CPhysics* m_physics;
+		CEngine* m_engine;
 		CPlayer* m_player;
 		CPlayerView* m_playerView;
 		CPlayerController* m_playerController;

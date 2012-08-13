@@ -33,7 +33,8 @@ namespace VE
 
 	b2Vec2 GameToScreenPosPix(CCamera* cam, const b2Vec2& posPix)
 	{ 
-		return posPix - cam->TopLeftPosPix();
-		//return posPix - b2Vec2(0,0);
+		if (cam)
+			return posPix - cam->TopLeftPosPix();
+		return posPix;
 	}
 }

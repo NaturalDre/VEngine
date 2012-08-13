@@ -41,20 +41,29 @@ std::vector<char> BufferFile(const std::string& filename)
 	return std::move(buffer);
 }
 
-bool DoBuffer(lua_State* L, const std::vector<char>& buffer)
+void DoBuffer(lua_State* L, const char* buffer, size_t size)
 {
-	// Non-zero from luaL_loadbuffer is error.
-	if(!buffer.empty() && !luaL_loadbuffer(L, buffer.data(), buffer.size(), nullptr))
+	if (!buffer || size == 0)
+		throw(std::exception("Buffer must not be a nullptr and size must be greater than 0."));
+
+	if (luaL_loadbuffer(L, buffer, size, nullptr) == 0)
 	{
-		lua_pcall(L, 0, 0, 0);
-		return true;
+		// STK: --
+		// Zero is success.
+		if(lua_pcall(L, 0, 0, 0) == 0)
+			return;		// STK: --
 	}
-	return false;
+	// STK: -- errstring
+	const std::exception e((std::string("DoBuffer Error - ") + lua_tostring(L, -1)).c_str());
+	lua_pop(L, 1);
+	// STK: --
+	throw(e);
 }
 
-bool DoFile(lua_State* L, const std::string& filename)
+void DoFile(lua_State* L, const std::string& filename)
 {
-	return DoBuffer(L, BufferFile(filename));
+	std::vector<char> buffer = BufferFile(filename);
+	DoBuffer(L, buffer.data(), buffer.size());
 }
 
 int GenerateEventID(char a, char b, char c, char d)

@@ -44,7 +44,7 @@ namespace VE
 		virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) { }
 
 	public:
-		virtual ~IContactCallback(void) { }
+		virtual ~IContactCallback(void) = 0 { }
 	};
 };
 #endif

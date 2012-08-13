@@ -20,27 +20,26 @@ namespace VE
 		: IProcess(engine)
 		, m_player(nullptr)
 		, m_playerController(nullptr)
-		, m_renderer(nullptr)
-		, m_physics(nullptr)
 		, m_playerView(nullptr)
 		, m_gameMap(nullptr)
 		, m_scriptEnv(nullptr)
+		, m_engine(engine)
 		, m_logger(logger)
 	{
 		assert(GAMELEVEL == nullptr);
 		GAMELEVEL = this;
 
-		assert(engine != nullptr);
+		assert(m_engine != nullptr);
 		assert(m_logger != nullptr);
 
-		m_renderer = new CRender;
-		m_physics = new CPhysics(Renderer()->Cam());
+		//m_renderer = new CRender;
+		//m_physics = new CPhysics(Renderer()->Cam());
 		m_gameMap = new CGameMap(this);
 		m_playerController = new CPlayerController(nullptr);
-		m_playerView = new CPlayerView(m_renderer);
+		m_playerView = new CPlayerView(GetRenderer());
 
-		m_renderer->SetMapFile(m_gameMap);
-		m_renderer->SetPhysics(m_physics);
+		GetRenderer()->SetMapFile(m_gameMap);
+		GetRenderer()->SetPhysics(GetPhysics());
 	}
 
 	CGameLevel::~CGameLevel(void)
@@ -53,14 +52,11 @@ namespace VE
 		delete m_playerView;
 		m_playerView = nullptr;
 
-		delete m_physics;
-		m_physics = nullptr;
-
 		delete m_gameMap;
 		m_gameMap = nullptr;
 
-		delete m_renderer;
-		m_renderer = nullptr;
+		//delete m_renderer;
+		//m_renderer = nullptr;
 
 		// No need to close the state. We don't own it.
 		m_scriptEnv = nullptr;
@@ -71,18 +67,21 @@ namespace VE
 
 	void CGameLevel::Think(double dt)
 	{
-		if (m_mainScript.is_valid())
-			luabind::call_member<void>(m_mainScript, "Update", dt);
+		if (!GetEngine()->IsLogicPaused())
+		{
+			if (m_mainScript.is_valid())
+				luabind::call_member<void>(m_mainScript, "Update", dt);
 
-		m_physics->Simulate();
+			if (m_playerController)
+				m_playerController->Update(dt);
 
-		if (m_playerController)
-			m_playerController->Update(dt);
+			for (auto iter = m_animations.begin(); iter != m_animations.end(); ++iter)
+				(*iter)->Logic(dt);
+			for (auto iter = m_entities.begin(); iter != m_entities.end(); ++iter)
+				(*iter)->Update(dt);
+		}
 
-		for (auto iter = m_animations.begin(); iter != m_animations.end(); ++iter)
-			(*iter)->Logic(dt);
-		for (auto iter = m_entities.begin(); iter != m_entities.end(); ++iter)
-			(*iter)->Update(dt);
+		//GetPhysics()->Simulate();
 	}
 
 	void CGameLevel::HandleEvent(const ALLEGRO_EVENT& ev)
@@ -93,8 +92,8 @@ namespace VE
 
 	void CGameLevel::Render(void)
 	{
-		if (Renderer())
-			Renderer()->Render();
+		if (GetRenderer())
+			GetRenderer()->Render();
 	}
 
 	void CGameLevel::AddPlayer(void)
@@ -104,17 +103,16 @@ namespace VE
 		if (m_player)
 			delete m_player;
 
-		//const float x = luabind::object_cast<float>(
 		m_player = CreatePlayer(this, m_gameMap->GetPlayerSpawn());
 
 		m_playerController->SetPlayer(m_player);
 		m_playerView->SetPlayer(m_player);
-		m_renderer->Cam()->Watch(m_player);
+		GetRenderer()->Cam()->Watch(m_player);
 	}
 
 	void CGameLevel::RemovePlayer(void)
 	{
-		m_renderer->Cam()->Watch(nullptr);
+		GetRenderer()->Cam()->Watch(nullptr);
 		m_playerView->SetPlayer(nullptr);
 		m_playerController->SetPlayer(nullptr);
 
@@ -136,10 +134,18 @@ namespace VE
 
 	void CGameLevel::LoadMap(const std::string& filename)
 	{
-		if(!DoFile(m_scriptEnv, filename))
-			return;
+		m_gameMap->Reset();
 
-		m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
+		try { DoFile(m_scriptEnv, filename); }
+		catch(const std::exception& e)
+		{
+			GetLogger()->LogError(e.what());
+			return;
+		}
+
+		bool success = m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
+		GetEngine()->SetPauseLogic(!success);
+		GetEngine()->SetPausePhysics(!success);
 	}
 
 	CGameLevel* GameLevel(void)

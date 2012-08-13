@@ -11,20 +11,19 @@
 namespace VE
 {
 	CWeaponAK47::CWeaponAK47(CGameLevel* level, CPlayer* player)
-		: IWeapon(100, 100, 1, nullptr)
+		: IWeapon(100, 100, 1, level)
 		, m_fireRate(0.1f)
 		, m_fireTimeout(0)
 		, m_reloadTime(1.0f)
-		, m_gameLevel(level)
 		, m_player(player)
 	{
 		assert(m_player != nullptr);
-		assert(m_gameLevel != nullptr);
+		assert(GetGameLevel() != nullptr);
 
-		if (!m_player || !m_gameLevel)
+		if (!m_player || !GetGameLevel())
 			return;
 
-		m_self = luabind::call_function<luabind::object>(m_gameLevel->GetScriptEnv(), "Script_AK", this);
+		m_self = luabind::call_function<luabind::object>(GetGameLevel()->GetScriptEnv(), "Script_AK", this);
 		m_bulletImage = CBitmap("Images/bulletm.png");
 	}
 
@@ -33,12 +32,10 @@ namespace VE
 		FreeFinishedBullets();
 		FreeFiredBullets();
 		m_player = nullptr;
-		m_gameLevel = nullptr;
 	}
 
 	void CWeaponAK47::Update(double dt)
 	{
-		ForceFinishOldBullets();
 		FreeFinishedBullets();
 
 		if (GetState() == e_Reloading && m_reloadTimeout <= 0)
@@ -66,36 +63,19 @@ namespace VE
 		m_firedBullets.clear();
 	}
 
-	void CWeaponAK47::ForceFinishOldBullets(void)
+	void CWeaponAK47::FreeFinishedBullets(void)
 	{
-		const double curTime = al_get_time();
-
 		for (auto iter = m_firedBullets.begin(); iter != m_firedBullets.end(); ++iter)
 		{
-			if (curTime - (*iter)->GetTimeCreated() > 1)
+			CBulletAK47* bullet = *iter;
+			if (bullet->IsDone())
 			{
-				m_finishedBullets.push_back(*iter);
+				delete bullet;
 				iter = m_firedBullets.erase(iter);
 				if (iter == m_firedBullets.end())
 					break;
 			}
-		};
-	}
-
-	void CWeaponAK47::FreeFinishedBullets(void)
-	{
-		std::for_each(m_finishedBullets.begin(), m_finishedBullets.end(), [&](IProjectile* bullet)
-		{
-			delete bullet;
-		});
-		m_finishedBullets.clear();
-	}
-
-	void CWeaponAK47::Done(CBulletAK47* bullet)
-	{
-		/*CBulletAK47* b = static_cast<CBulletAK47*>(bullet);*/
-		m_finishedBullets.push_back(bullet);
-		m_firedBullets.remove(bullet);
+		}
 	}
 
 	void CWeaponAK47::CallScriptFunc(const std::string& function)
@@ -105,8 +85,8 @@ namespace VE
 			try { luabind::call_member<void>(m_self, function.c_str()); }
 			catch(const luabind::error& e)
 			{
-				if (m_gameLevel->GetLogger())
-					m_gameLevel->GetLogger()->LogError("CWeaponAK47::CallScriptFunc() with parameter value " + function + " generated error: " + lua_tostring(e.state(), -1));
+				if (GetGameLevel()->GetLogger())
+					GetGameLevel()->GetLogger()->LogError("CWeaponAK47::CallScriptFunc() with parameter value " + function + " generated error: " + lua_tostring(e.state(), -1));
 				lua_pop(e.state(), 1);
 			}
 		}
@@ -118,7 +98,7 @@ namespace VE
 			return;
 
 		m_fireTimeout = m_fireRate;
-		CBulletAK47* bullet(new CBulletAK47(m_gameLevel->Physics()->World(), this, pos));
+		CBulletAK47* bullet(new CBulletAK47(GetGameLevel()->GetPhysics()->World(), this, pos));
 		m_firedBullets.push_back(bullet);
 		SetAmmo(GetAmmoCount() -1);
 		CallScriptFunc("OnFire");

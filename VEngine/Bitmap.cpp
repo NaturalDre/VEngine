@@ -162,7 +162,7 @@ namespace VE
 		if (!bitmap.IsValid())
 			return false;
 
-		CCamera* cam = GameLevel()->Renderer()->Cam();
+		CCamera* cam = GameLevel()->GetRenderer()->Cam();
 
 		b2Vec2 camTopL = cam->TopLeftPosPix();
 		// Copy the vector then add it's with and height to get its bottom right
@@ -195,7 +195,7 @@ namespace VE
 
 		dpos = MtrToPix(dpos);		// Meters->Pixels
 
-		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Renderer()->Cam(), dpos));
+		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->GetRenderer()->Cam(), dpos));
 		al_draw_bitmap(bitmap.GetRaw(), drawPos.x, drawPos.y, flags);
 	}
 
@@ -214,7 +214,7 @@ namespace VE
 		cpos = MtrToPix(cpos);
 
 		// Where on the user's screen is the position at?
-		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->Renderer()->Cam(), dpos));
+		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->GetRenderer()->Cam(), dpos));
 
 		// Box2D considers the center (0,0), not the top left, so
 		// we need to do some conversating when providing the center position

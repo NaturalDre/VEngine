@@ -19,7 +19,7 @@ namespace VE
 		void Update(double dt);
 		void Render(void);
 
-		void ForceFinishOldBullets(void);
+		//void ForceFinishOldBullets(void);
 
 		void FreeFiredBullets(void);
 		void FreeFinishedBullets(void);
@@ -29,7 +29,7 @@ namespace VE
 		/// when they are 'done'. Being done will usually mean the
 		/// bullet has hit something and now needs to be removed
 		/// from the world.
-		void Done(CBulletAK47* bullet);
+		//void Done(CBulletAK47* bullet);
 		void CallScriptFunc(const std::string& function);
 	public:
 		CWeaponAK47(CGameLevel* level, CPlayer* player);
@@ -42,9 +42,9 @@ namespace VE
 		CPlayer* GetPlayer(void) const { return m_player; }
 	private:
 		std::list<CBulletAK47*> m_firedBullets;
-		std::list<IProjectile*> m_finishedBullets;
+		//std::list<IProjectile*> m_finishedBullets;
 		CBitmap m_bulletImage;
-		CGameLevel* m_gameLevel; /// We do not own what this points to.
+		//CGameLevel* m_gameLevel; /// We do not own what this points to.
 		CPlayer* m_player;	/// We do not own what this points to.
 		luabind::object m_self;
 		const double m_fireRate; /// How long to wait 'til the weapon can be fired again

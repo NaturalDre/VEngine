@@ -22,11 +22,13 @@ namespace VE
 
 		inline b2Body* GetBody(void) const { return m_body; }
 		inline double GetTimeCreated(void) const { return m_timeCreated; }
+		inline bool IsDone(void) { return m_done; }
 	private:
 		b2World* m_world;
 		b2Body* m_body;
 		CWeaponAK47* m_weapon;
 		double m_timeCreated;
+		bool m_done;
 	};
 }
 #endif

@@ -53,15 +53,11 @@ void ExportBindings(lua_State* L)
 			//.def(constructor<>())
 			.def("AddPlayer", &CGameLevel::AddPlayer)
 			.def("RemovePlayer", &CGameLevel::RemovePlayer)
-			.def("GetPlayer", &CGameLevel::GetPlayer)
-			.def("GetRenderer", &CGameLevel::Renderer)
-			.def("GetPhysics", &CGameLevel::Physics)			
-			//.def("AddAnimation", &CGameLevel::AddAnimation)
-			//.def("RemoveAnimation", &CGameLevel::RemoveAnimation)
-			//.def("AddEntity", &CGameLevel::AddEntity)
-			//.def("RemoveEntity", &CGameLevel::RemoveEntity)
+			.property("player", &CGameLevel::GetPlayer)
+			.property("renderer", &CGameLevel::GetRenderer)
+			.property("physics", &CGameLevel::GetPhysics)
+			.property("map", &CGameLevel::GetMap)
 			.def("SetMainScript", &CGameLevel::SetMainScript)
-			.def("GetMap", &CGameLevel::GetMap)
 			.def("LoadMap", &CGameLevel::LoadMap)			
 		];
 
@@ -75,17 +71,15 @@ void ExportBindings(lua_State* L)
 	luabind::module(L)
 		[
 			class_<CPlayer, IEntity>("CPlayer")
-			.def("SetXSpeed", &CPlayer::SetXSpeed)
-			.def("SetYSpeed", &CPlayer::SetYSpeed)
-			.def("GetXSpeed", &CPlayer::GetXSpeed)
-			.def("GetYSpeed", &CPlayer::GetYSpeed)
+			.property("speedX", &CPlayer::GetXSpeed, &CPlayer::SetXSpeed)
+			.property("speedY", &CPlayer::GetYSpeed, &CPlayer::SetYSpeed)
+			.property("speed", &CPlayer::GetSpeed, &CPlayer::SetSpeed)
 		];
 	/// CPlayerController
 	luabind::module(L)
 		[
 			class_<CPlayerController>("CPlayerController")
-			.def("SetPlayer", &CPlayerController::SetPlayer)
-			.def("GetPlayer", &CPlayerController::GetPlayer)
+			.property("player", &CPlayerController::GetPlayer, &CPlayerController::SetPlayer)
 		];
 
 	/// b2Vec2
@@ -95,7 +89,7 @@ void ExportBindings(lua_State* L)
 			.def(constructor<>())
 			.def(constructor<float, float>())
 			.def("SetZero", &b2Vec2::SetZero)
-			.def("Length", &b2Vec2::Length)
+			.property("length", &b2Vec2::Length)
 			.def("LengthSquared", &b2Vec2::LengthSquared)
 			.def("Normalize", &b2Vec2::Normalize)
 			.def("IsValid", &b2Vec2::IsValid)
@@ -108,20 +102,17 @@ void ExportBindings(lua_State* L)
 	luabind::module(L)
 		[
 			class_<Tiled::CMapFile>("CMapFile")
-			//.def(constructor<>())
-			//.def("Read", (bool(Tiled::CMapFile::*)(const std::string&)) &Tiled::CMapFile::Read)
-			//.def("ReadFromTable", (bool(Tiled::CMapFile::*)(const luabind::object&)) &Tiled::CMapFile::Read)
-			.def("GetVersion", &Tiled::CMapFile::GetVersion)
-			.def("GetOrientation", &Tiled::CMapFile::GetOrientation)
-			//.def("GetProperties",
-			.def("GetWidth", &Tiled::CMapFile::GetWidth)
-			.def("GetHeight",&Tiled::CMapFile::GetHeight)
-			.def("GetTileWidth", &Tiled::CMapFile::GetTileWidth)
-			.def("GetTileHeight", &Tiled::CMapFile::GetTileHeight)
-			.def("GetTileLayers",  &Tiled::CMapFile::GetTileLayers)
-			.def("GetObjectLayers", &Tiled::CMapFile::GetObjectLayers)
-			.def("GetTilesets", &Tiled::CMapFile::GetTilesets)
-			.def("IsValid", &Tiled::CMapFile::IsValid)
+			.property("version", &Tiled::CMapFile::GetVersion)
+			.property("orientation", &Tiled::CMapFile::GetOrientation)
+
+			.property("width", &Tiled::CMapFile::GetWidth)
+			.property("height",&Tiled::CMapFile::GetHeight)
+			.property("tileWidth", &Tiled::CMapFile::GetTileWidth)
+			.property("tileHeight", &Tiled::CMapFile::GetTileHeight)
+			//.property("tileLayers",  &Tiled::CMapFile::GetTileLayers)
+			//.property("objectLayers", &Tiled::CMapFile::GetObjectLayers)
+			//.property("tilesets", &Tiled::CMapFile::GetTilesets)
+			.property("IsValid", &Tiled::CMapFile::IsValid)
 		];
 
 	luabind::module(L)
@@ -132,15 +123,15 @@ void ExportBindings(lua_State* L)
 	luabind::module(L)
 		[
 			class_<IWeapon>("IWeapon")
-			.def("GetAmmoCount", &IWeapon::GetAmmoCount)
-			.def("GetMaxAmmo", &IWeapon::GetMaxAmmo)
-			.def("GetRarity", &IWeapon::GetRarity)
+			.property("ammo", &IWeapon::GetAmmoCount)
+			.property("maxAmmo", &IWeapon::GetMaxAmmo)
+			.property("rarity", &IWeapon::GetRarity)
 		];
 
 	/// CWeaponAK47
 	luabind::module(L)
 		[
 			class_<CWeaponAK47, IWeapon>("CWeaponAK47")
-			.def("GetPlayer()", &CWeaponAK47::GetPlayer)
+			.property("player", &CWeaponAK47::GetPlayer)
 		];
 }

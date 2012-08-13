@@ -23,13 +23,13 @@ namespace VE
 
 		shape.SetAsBox(PixToMtr(to.Width()) / 2.0f, PixToMtr(to.Height()) / 2.0f);
 		
-		m_body = GameLevel()->Physics()->World()->CreateBody(&bd);
+		m_body = GameLevel()->GetPhysics()->World()->CreateBody(&bd);
 		m_body->CreateFixture(&fd);
 	}
 
 	void CRigidBody::Free(void)
 	{
-		GameLevel()->Physics()->World()->DestroyBody(m_body);
+		GameLevel()->GetPhysics()->World()->DestroyBody(m_body);
 		m_body = nullptr;
 	}
 

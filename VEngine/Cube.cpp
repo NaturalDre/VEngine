@@ -15,7 +15,7 @@ namespace VE
 		, m_health(100.0f)
 	{
 		assert(gameLevel != nullptr);
-		m_view = new CCubeView(this, GetGameLevel()->Renderer());
+		m_view = new CCubeView(this, GetGameLevel()->GetRenderer());
 
 		m_body = CreateBody(*this, spawnPos);
 		assert(m_body != nullptr);
@@ -26,7 +26,7 @@ namespace VE
 		delete m_view;
 		m_view = nullptr;
 
-		GetGameLevel()->Physics()->World()->DestroyBody(m_body);
+		GetGameLevel()->GetPhysics()->World()->DestroyBody(m_body);
 		m_body = nullptr;
 	}
 
@@ -80,7 +80,7 @@ namespace VE
 			bd.type = b2_dynamicBody;
 			bd.userData = static_cast<IEntity*>(&cube);
 
-			body = cube.GetGameLevel()->Physics()->World()->CreateBody(&bd);
+			body = cube.GetGameLevel()->GetPhysics()->World()->CreateBody(&bd);
 		}
 		if (body)
 		{

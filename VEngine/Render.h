@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Process.h"
 #include <vector>
+#include <Gwen\Controls\Canvas.h>
 
 namespace VE
 {
@@ -12,6 +13,7 @@ namespace VE
 	class CPhysics;
 	class CBitmap;
 	class CGameMap;
+
 	class CRender: public IProcess
 	{
 	protected:
@@ -31,7 +33,7 @@ namespace VE
 		//void SetCam(CCamera* cam) { m_camera = cam; }
 
 		void SetPhysics(CPhysics* physics) { m_physics = physics; }
-
+		void SetUICanvas(GwenCanvas* canvas) { m_uiCanvas = canvas; }
 		void Render(void);
 	private:
 		std::vector<IView*> m_views;
@@ -39,6 +41,7 @@ namespace VE
 		CCamera* m_camera;
 		// I only have a reference to the physics engine to draw the debug data for it.
 		CPhysics* m_physics;
+		GwenCanvas* m_uiCanvas;
 	};
 	// Current width of the screen window.
 	size_t GetDisplayWidth(void);

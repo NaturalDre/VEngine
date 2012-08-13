@@ -23,13 +23,13 @@ namespace VE
 		shape.SetAsBox(PixToMtr(300 / 2.0f), PixToMtr(175 / 2.0f));
 		fd.shape = &shape;
 
-		m_body = GameLevel()->Physics()->World()->CreateBody(&bd);
+		m_body = GameLevel()->GetPhysics()->World()->CreateBody(&bd);
 		m_body->CreateFixture(&fd);
 	}
 
 	CBarrel::~CBarrel(void)
 	{
-		GameLevel()->Physics()->World()->DestroyBody(m_body);
+		GameLevel()->GetPhysics()->World()->DestroyBody(m_body);
 		m_body = nullptr;
 	}
 

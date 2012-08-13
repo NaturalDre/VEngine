@@ -15,8 +15,8 @@ void ShowError(const std::string&);
 #define vError ShowError
 
 std::vector<char> BufferFile(const std::string& filename);
-bool DoBuffer(lua_State* L, const std::vector<char>& buffer);
-bool DoFile(lua_State* L, const std::string& filename);
+void DoBuffer(lua_State* L, const char* buffer, size_t size);
+void DoFile(lua_State* L, const std::string& filename);
 
 struct ColRow 
 { 

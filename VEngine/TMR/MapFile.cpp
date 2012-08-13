@@ -14,7 +14,8 @@ using namespace Tiled;
 
 bool LoadTiledLib(lua_State* L)
 {
-	return DoFile(L, "Scripts/map/TiledLib.lua");
+	try { DoFile(L, "Scripts/map/TiledLib.lua"); return true; }
+	catch (...) { return false; }
 }
 
 CMapFile::CMapFile(void)

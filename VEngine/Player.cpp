@@ -40,7 +40,7 @@ namespace VE
 		, m_vel(5,5)
 		, m_currentWeapon(nullptr)
 	{
-		m_body = new CPlayerBody(this, spawnPos, GameLevel()->Physics()->World());
+		m_body = new CPlayerBody(this, spawnPos, GameLevel()->GetPhysics()->World());
 
 		m_weapons.push_back(new CWeaponAK47(GameLevel(), this));
 

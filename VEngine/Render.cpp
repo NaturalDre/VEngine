@@ -15,6 +15,7 @@ namespace VE
 		, m_gameMap(nullptr)
 		, m_camera(nullptr)
 		, m_physics(nullptr)
+		, m_uiCanvas(nullptr)
 	{
 		m_camera = new CCamera;
 	}
@@ -65,6 +66,8 @@ namespace VE
 		if (m_physics)
 			m_physics->World()->DrawDebugData();
 
+		if (m_uiCanvas)
+			m_uiCanvas->RenderCanvas();
 		al_flip_display();
 		al_clear_to_color(al_map_rgb(0,0,0));
 

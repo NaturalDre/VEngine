@@ -15,7 +15,7 @@ namespace VE
 	protected:
 		void Init(void);
 		void SetupScriptEnv(void);
-
+		
 		void SetupDirectories(void);
 
 	public:
@@ -25,7 +25,7 @@ namespace VE
 		int Run(void);
 	private:
 		CEngine* m_engine;
-		lua_State* m_L;
+		//lua_State* m_L;
 		CGameLevel* m_gameLevel;
 
 		CErrorLogger m_errorLogger;
