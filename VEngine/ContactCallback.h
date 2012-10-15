@@ -3,6 +3,8 @@
 
 #include <Box2D\Dynamics\b2WorldCallbacks.h>
 
+struct lua_State;
+
 namespace VE
 {
 	class IEntity;
@@ -45,6 +47,7 @@ namespace VE
 
 	public:
 		virtual ~IContactCallback(void) = 0 { }
+		static void Export(lua_State* L);
 	};
 };
 #endif

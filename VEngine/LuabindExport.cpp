@@ -14,75 +14,23 @@
 #include "ErrorLogger.h"
 #include "WeaponAK47.h"
 #include "GameMap.h"
+#include "Cube.h"
+#include "Projectile.h"
+
 using namespace luabind;
 using namespace VE;
 
-void ExportBindings(lua_State* L)
+void Export_allegro(lua_State* L)
 {
 	// Allegro
 	luabind::module(L)
 		[
 			def("al_get_time", &al_get_time)
 		];
+}
 
-	// CErrorLogger
-	luabind::module(L)
-		[
-			class_<CErrorLogger>("CErrorLogger")
-			.def("LogError", &CErrorLogger::LogError)
-			.def("LogNote", &CErrorLogger::LogNote)
-		];
-
-	/// CScript
-	luabind::module(L)
-		[
-			class_<CScript>("CScript")
-			.def(constructor<const object&>())
-		];
-	/// CRigidBody
-	luabind::module(L)
-		[
-			class_<CRigidBody>("CRigidBody")
-			.def(constructor<const object&>())
-			.def("Free", &CRigidBody::Free)
-		];
-	/// CGameLevel
-	luabind::module(L)
-		[
-			class_<CGameLevel>("CGameLevel")
-			//.def(constructor<>())
-			.def("AddPlayer", &CGameLevel::AddPlayer)
-			.def("RemovePlayer", &CGameLevel::RemovePlayer)
-			.property("player", &CGameLevel::GetPlayer)
-			.property("renderer", &CGameLevel::GetRenderer)
-			.property("physics", &CGameLevel::GetPhysics)
-			.property("map", &CGameLevel::GetMap)
-			.def("SetMainScript", &CGameLevel::SetMainScript)
-			.def("LoadMap", &CGameLevel::LoadMap)			
-		];
-
-	/// IEntity
-	luabind::module(L)
-		[
-			class_<IEntity>("IEntity")
-		];
-
-	/// CPlayer
-	luabind::module(L)
-		[
-			class_<CPlayer, IEntity>("CPlayer")
-			.property("speedX", &CPlayer::GetXSpeed, &CPlayer::SetXSpeed)
-			.property("speedY", &CPlayer::GetYSpeed, &CPlayer::SetYSpeed)
-			.property("speed", &CPlayer::GetSpeed, &CPlayer::SetSpeed)
-		];
-	/// CPlayerController
-	luabind::module(L)
-		[
-			class_<CPlayerController>("CPlayerController")
-			.property("player", &CPlayerController::GetPlayer, &CPlayerController::SetPlayer)
-		];
-
-	/// b2Vec2
+void Export_b2Vec2(lua_State* L)
+{
 	luabind::module(L)
 		[
 			class_<b2Vec2>("b2Vec2")
@@ -97,41 +45,35 @@ void ExportBindings(lua_State* L)
 			.def_readwrite("x", &b2Vec2::x)
 			.def_readwrite("y", &b2Vec2::y)
 		];
+}
 
-	/// Tiled::CMapFile
-	luabind::module(L)
-		[
-			class_<Tiled::CMapFile>("CMapFile")
-			.property("version", &Tiled::CMapFile::GetVersion)
-			.property("orientation", &Tiled::CMapFile::GetOrientation)
+void ExportBindings(lua_State* L)
+{
 
-			.property("width", &Tiled::CMapFile::GetWidth)
-			.property("height",&Tiled::CMapFile::GetHeight)
-			.property("tileWidth", &Tiled::CMapFile::GetTileWidth)
-			.property("tileHeight", &Tiled::CMapFile::GetTileHeight)
-			//.property("tileLayers",  &Tiled::CMapFile::GetTileLayers)
-			//.property("objectLayers", &Tiled::CMapFile::GetObjectLayers)
-			//.property("tilesets", &Tiled::CMapFile::GetTilesets)
-			.property("IsValid", &Tiled::CMapFile::IsValid)
-		];
+	Export_allegro(L);
+	CPhysics::Export(L);
 
-	luabind::module(L)
-		[
-			class_<CGameMap, Tiled::CMapFile>("CGameMap")
-		];
+	IContactCallback::Export(L);
+	IEntity::Export(L);
+	IPhysicsEntity::Export(L);
+	IEnemy::Export(L);
 
-	luabind::module(L)
-		[
-			class_<IWeapon>("IWeapon")
-			.property("ammo", &IWeapon::GetAmmoCount)
-			.property("maxAmmo", &IWeapon::GetMaxAmmo)
-			.property("rarity", &IWeapon::GetRarity)
-		];
+	CErrorLogger::Export(L);
+	CScript::Export(L);
+	CRigidBody::Export(L);
+	CGameLevel::Export(L);
 
-	/// CWeaponAK47
-	luabind::module(L)
-		[
-			class_<CWeaponAK47, IWeapon>("CWeaponAK47")
-			.property("player", &CWeaponAK47::GetPlayer)
-		];
+	CPlayer::Export(L);
+	CPlayerController::Export(L);
+
+	Export_b2Vec2(L);
+
+
+	Tiled::CMapFile::Export(L);
+	CGameMap::Export(L);
+	IWeapon::Export(L);
+	IProjectile::Export(L);
+	CWeaponAK47::Export(L);
+
+	CCube::Export(L);
 }

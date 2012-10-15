@@ -69,6 +69,14 @@ namespace VE
 
 	void CBulletAK47::BeginContact(b2Contact* contact)
 	{
+		IEntity* entity(nullptr);
+		if (contact->GetFixtureA()->GetBody() == m_body)
+			entity = static_cast<IEntity*>(contact->GetFixtureB()->GetBody()->GetUserData());
+		else
+			entity = static_cast<IEntity*>(contact->GetFixtureA()->GetBody()->GetUserData());
+
+		if (entity)
+			entity->OnContact(this);
 		m_done = true;
 	}
 }

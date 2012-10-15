@@ -1,10 +1,12 @@
 #include "Bitmap.h"
+#include "GameLevel.h"
+#include "Render.h"
+#include <luabind\luabind.hpp>
 #include <allegro5\allegro5.h>
 #include <list>
 #include <algorithm>
 
-#include "GameLevel.h"
-#include "Render.h"
+
 
 using namespace VE;
 
@@ -142,6 +144,24 @@ const CBitmap& CBitmap::operator=(CBitmap&& rhs)
 		*this;
 	(*d) = std::move(*rhs.d);
 	return *this;
+}
+
+void CBitmap::Export(lua_State* L)
+{
+	using namespace luabind;
+	module(L)
+		[
+			class_<CBitmap>("CBitmap")
+			.def(constructor<const CBitmap&, size_t, size_t, size_t, size_t>())
+			.def(constructor<const std::string&>())
+			.def("Reset", &CBitmap::Reset)
+			.property("isSubBitmap", &CBitmap::IsSubBitmap)
+			.property("isValid", &CBitmap::IsValid)
+			.property("isLocked", &CBitmap::IsLocked)
+			.property("flags", &CBitmap::GetFlags)
+			.property("width", &CBitmap::GetWidth)
+			.property("height", &CBitmap::GetHeight)
+		];
 }
 
 void CBitmap::Reset(void) { d->Reset(); }

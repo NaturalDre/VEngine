@@ -6,6 +6,9 @@
 #include "Projectile.h"
 #include "Script.h"
 #include <luabind\luabind.hpp>
+
+const char* OnDamageTaken = "OnDamageTaken";
+
 namespace VE
 {
 	CCube::CCube(CGameLevel* gameLevel, const b2Vec2& spawnPos)
@@ -13,12 +16,16 @@ namespace VE
 		, m_view(nullptr)
 		, m_body(nullptr)
 		, m_health(100.0f)
+		, m_deleteOnDeath(true)
 	{
 		assert(gameLevel != nullptr);
 		m_view = new CCubeView(this, GetGameLevel()->GetRenderer());
 
 		m_body = CreateBody(*this, spawnPos);
 		assert(m_body != nullptr);
+
+		SetScript(new CScript(GetGameLevel()->GetScriptEnv(), "CubeScript"));
+		GetScript()->GetSelf()["cube"] = this;
 	}
 
 	CCube::~CCube(void)
@@ -47,22 +54,31 @@ namespace VE
 			m_health -= projectile->GetDamage();
 			if(GetScript() && GetScript()->IsValid())
 			{
-				const luabind::object onDamageTaken = GetScript()->GetSelf()["OnDamageTaken"];
-				if (luabind::type(onDamageTaken) == LUA_TFUNCTION)
-					luabind::call_function<void>(onDamageTaken);
+				try
+				{
+					if (luabind::gettable(GetScript()->GetSelf(), OnDamageTaken))
+						luabind::call_member<void>(GetScript()->GetSelf(), OnDamageTaken);
+				}
+				catch(const luabind::error& e)
+				{
+					const std::string str = lua_tostring(e.state(), -1);
+					lua_pop(e.state(), 1);
+				}
 			}
 			if (m_health <= 0)
 			{
 				m_health = 0;
-				if (GetScript() && GetScript()->IsValid())
-				{
-					const luabind::object onDeath = GetScript()->GetSelf()["OnDeath"];
-					if (luabind::type(onDeath) == LUA_TFUNCTION)
-						luabind::call_function<void>(onDeath);
-				}
+				GetGameLevel()->MarkForDeletion(this);
 			}
+			return true;
 		}
-		return true;
+	}
+
+	void CCube::OnDeath(void)
+	{
+		m_health = 0;
+		if (GetDeleteOnDeath())
+			GetGameLevel()->MarkForDeletion(this);
 	}
 
 	b2Body* CCube::CreateBody(CCube& cube, const b2Vec2& spawnPos)
@@ -101,11 +117,16 @@ namespace VE
 	{
 		if (!GetGameLevel() || !m_body)
 			return;
+	}
 
-		//const b2Vec2 difference = m_body->GetPosition() - GetGameLevel()->GetPlayer()->GetPosition();
-		//const float angleOfDifference = GetAngle(m_body->GetPosition(), GetGameLevel()->GetPlayer()->GetPosition());
-		//b2Vec2 vel = Rotate(b2Vec2(5, 0), angleOfDifference);
-		//m_body->SetLinearVelocity(vel);
-		
+	void CCube::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CCube, IEnemy>("CCube")
+				.property("body", &CCube::GetBody)
+				.property("health", &CCube::GetHealth)
+			];
 	}
 }

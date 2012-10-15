@@ -30,7 +30,10 @@ namespace VE
 		bool IsValid(void) const { return m_self.is_valid(); }
 		
 		void Update(double dt);
-		//void Render(void);
+
+		luabind::adl::index_proxy<luabind::object> operator[](const std::string& member);
+
+		static void Export(lua_State* L);
 	private:
 		std::vector<char> m_buffer;
 		luabind::object m_self;

@@ -92,7 +92,7 @@ namespace VE
 		DoFile(L, "Scripts/game/playerscript.lua");
 		DoFile(L, "Maps/Adventure/Adventure.lua");
 		DoFile(L, "Scripts/game/weapons/ak_47.lua");
-
+		DoFile(L, "Scripts/enemies/cube.lua");
 
 
 

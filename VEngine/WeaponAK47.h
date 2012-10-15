@@ -40,6 +40,7 @@ namespace VE
 
 		/// \return The player that is using this weapon.
 		CPlayer* GetPlayer(void) const { return m_player; }
+		static void Export(lua_State* L);
 	private:
 		std::list<CBulletAK47*> m_firedBullets;
 		//std::list<IProjectile*> m_finishedBullets;

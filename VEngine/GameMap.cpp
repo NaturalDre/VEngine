@@ -1,6 +1,7 @@
 #include "GameMap.h"
 #include "Render.h"
 #include "Utility.h"
+#include <luabind\luabind.hpp>
 namespace VE
 {
 	CGameMap::CGameMap(CGameLevel* gameLevel)
@@ -130,5 +131,14 @@ namespace VE
 
 		for(;iter != endIter; ++iter)
 			RenderLayer(renderer, *iter);
+	}
+
+	void CGameMap::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CGameMap, Tiled::CMapFile>("CGameMap")
+			];
 	}
 }

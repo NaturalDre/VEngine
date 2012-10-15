@@ -67,6 +67,7 @@ namespace VE
 
 	void CGameLevel::Think(double dt)
 	{
+		FreeMarkedEntities();
 		if (!GetEngine()->IsLogicPaused())
 		{
 			if (m_mainScript.is_valid())
@@ -94,6 +95,17 @@ namespace VE
 	{
 		if (GetRenderer())
 			GetRenderer()->Render();
+	
+	}
+
+	void CGameLevel::FreeMarkedEntities(void)
+	{
+		for (auto iter = m_entitiesToDelete.begin(); iter != m_entitiesToDelete.end(); ++iter)
+		{
+			IEntity* entity = *iter;
+			delete entity;
+		}
+		m_entitiesToDelete.clear();
 	}
 
 	void CGameLevel::AddPlayer(void)
@@ -146,6 +158,24 @@ namespace VE
 		bool success = m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
 		GetEngine()->SetPauseLogic(!success);
 		GetEngine()->SetPausePhysics(!success);
+	}
+
+	void CGameLevel::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CGameLevel>("CGameLevel")
+				.property("renderer", &CGameLevel::GetRenderer)
+				.property("physics", &CGameLevel::GetPhysics)
+				.property("map", &CGameLevel::GetMap)
+				.property("logger", &CGameLevel::GetLogger)
+				.property("player", &CGameLevel::GetPlayer)
+				.def("LoadMap", &CGameLevel::LoadMap)
+				.def("AddPlayer", &CGameLevel::AddPlayer)
+				.def("RemovePlayer", &CGameLevel::RemovePlayer)
+				.def("SetMainScript", &CGameLevel::SetMainScript)
+			];
 	}
 
 	CGameLevel* GameLevel(void)

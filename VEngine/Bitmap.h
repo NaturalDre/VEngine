@@ -6,6 +6,7 @@
 #include "Physics.h"
 
 struct ALLEGRO_BITMAP;
+struct lua_State;
 
 namespace VE
 {
@@ -67,6 +68,8 @@ namespace VE
 		int GetFormat(void) const;
 		//
 		void ConvertMaskToAlpha(size_t r, size_t g, size_t b);
+
+		static void Export(lua_State* L);
 	private:
 		class Bitmap;
 		Bitmap* d; // Implementation of the bitmap.

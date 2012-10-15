@@ -168,3 +168,19 @@ void CMapFile::Reset(void)
 
 	m_valid = false;
 }
+
+void CMapFile::Export(lua_State* L)
+{
+	using namespace luabind;
+	module(L)
+		[
+			class_<Tiled::CMapFile>("CMapFile")
+			.property("version", &Tiled::CMapFile::GetVersion)
+			.property("orientation", &Tiled::CMapFile::GetOrientation)
+			.property("width", &Tiled::CMapFile::GetWidth)
+			.property("height",&Tiled::CMapFile::GetHeight)
+			.property("tileWidth", &Tiled::CMapFile::GetTileWidth)
+			.property("tileHeight", &Tiled::CMapFile::GetTileHeight)
+			.property("isValid", &Tiled::CMapFile::IsValid)
+		];
+}

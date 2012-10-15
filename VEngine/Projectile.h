@@ -3,6 +3,8 @@
 
 #include <Box2D\Common\b2Math.h>
 
+struct lua_State;
+
 namespace VE
 {
 	class IProjectile
@@ -16,6 +18,7 @@ namespace VE
 		inline float GetDamage(void) { return m_damage; }
 		virtual b2Vec2 GetLinearVelocity(void) const { return b2Vec2(0,0); }
 
+		static void Export(lua_State* L);
 	private:
 		float m_damage;
 	};

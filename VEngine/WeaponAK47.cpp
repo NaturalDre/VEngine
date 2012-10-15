@@ -3,6 +3,7 @@
 #include "Physics.h"
 #include "GameLevel.h"
 #include "ErrorLogger.h"
+#include "Player.h"
 #include <luabind\luabind.hpp>
 #include <iostream>
 #include <algorithm>
@@ -112,5 +113,15 @@ namespace VE
 		else 
 			SetState(e_Reloading);
 		CallScriptFunc("OnReload");
+	}
+
+	void CWeaponAK47::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CWeaponAK47, IWeapon>("CWeaponAK47")
+				.property("player", &CWeaponAK47::GetPlayer)
+			];
 	}
 }

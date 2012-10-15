@@ -64,6 +64,7 @@ namespace VE
 		/// @param observer The object that no longer wants to listen to events from this object.
 		void SubscribeFromAll(IObserver* observer);
 
+		static void Export(lua_State* L);
 	private:
 		CObservable m_publisher;
 		CPlayerBody* m_body;

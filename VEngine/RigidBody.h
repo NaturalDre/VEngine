@@ -21,6 +21,7 @@ namespace VE
 
 		void Free(void);
 
+		static void Export(lua_State* L);
 	private:
 		b2Body* m_body;
 	};

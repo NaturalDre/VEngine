@@ -30,6 +30,7 @@ namespace VE
 		void Think(double dt);
 		void HandleEvent(const ALLEGRO_EVENT& ev);
 		void Render(void);
+		void FreeMarkedEntities(void);
 	public:
 		CGameLevel(CErrorLogger* logger, CEngine* engine);
 		~CGameLevel(void);
@@ -41,13 +42,15 @@ namespace VE
 		inline CPlayerController* GetPlayerController(void) const { return m_playerController; }
 
 		inline CRender* GetRenderer(void) const { return m_engine->GetRenderer(); }
-		inline CPhysics* GetPhysics(void) const { return m_engine->GetPhysics(); }
+		CPhysics* GetPhysics(void) const { return m_engine->GetPhysics(); }
 
 		void AddAnimation(IAnimation* anim) { m_animations.insert(anim); }
 		void RemoveAnimation(IAnimation* anim) { m_animations.erase(anim); }
 
 		void AddEntity(IEntity* entity) { m_entities.insert(entity); }
 		void RemoveEntity(IEntity* entity) { m_entities.erase(entity); }
+
+		void MarkForDeletion(IEntity* entity) { if (entity) m_entitiesToDelete.insert(entity); }
 
 		lua_State* GetScriptEnv(void) const { return m_scriptEnv; }
 		void SetScriptEnv(lua_State* L);
@@ -60,6 +63,7 @@ namespace VE
 
 		inline CErrorLogger* GetLogger(void) const { return m_logger; }
 
+		static void Export(lua_State* L);
 	private:
 		typedef std::unordered_set<IEntity*> EntitySet;
 		typedef std::unordered_set<IAnimation*> AnimationSet;
@@ -67,6 +71,7 @@ namespace VE
 		luabind::object m_mainScript;
 
 		EntitySet m_entities;
+		EntitySet m_entitiesToDelete;
 		AnimationSet m_animations;
 
 		CEngine* m_engine;

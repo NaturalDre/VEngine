@@ -5,10 +5,10 @@
 #include <set>
 #include <luabind\object.hpp>
 
-#ifndef CALLSCRIPTFUNCTION
-#define CALLSCRIPTFUNCTION
-#define L_CallFunction luabind::call_function<luabind::object>
-#endif
+//#ifndef CALLSCRIPTFUNCTION
+//#define CALLSCRIPTFUNCTION
+//#define L_CallFunction luabind::call_function<luabind::object>
+//#endif
 
 class b2Contact;
 
@@ -46,12 +46,13 @@ namespace VE
 
 
 		luabind::object operator[](const std::string& property);
+
+		static void Export(lua_State* L);
 	private:
 		static size_t m_count;
 
 		CGameLevel* m_gameLevel; // Game level this entity is a part of.
 		CScript* m_script;
-
 		std::string m_groupName;
 		const size_t m_entityID;
 		EntityGroups m_entityGroups;

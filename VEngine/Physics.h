@@ -15,16 +15,6 @@ namespace Tiled
 	class TiledObject;
 }
 
-enum
-{
-	e_Friendly = 0x0001
-	, e_Player
-	, e_Enemy
-	, e_FriendlyBullet
-	, e_EnemyBullet
-	, e_Static
-};
-
 namespace VE
 {
 	class CContactListener;
@@ -36,13 +26,16 @@ namespace VE
 		~CPhysics(void);
 
 		inline void Simulate(void) const { m_world->Step(m_timeStep, m_velocityIters, m_positionIters); }
+		inline void DrawDebugData(void) const { if (IsDebugDrawEnabled() && World()) World()->DrawDebugData(); }
 		inline b2World* World(void) const { return m_world; }
 		inline CContactListener* ContactListener(void) const { return m_contactListener; }
-
+		inline bool IsDebugDrawEnabled(void) const { return m_drawDebugData; }
+		inline void EnableDebugDraw(bool shouldDraw) { m_drawDebugData = shouldDraw; }
+		static void Export(lua_State* L);
 	private:
 		float m_timeStep;
 		size_t m_velocityIters, m_positionIters;
-
+		bool m_drawDebugData;
 		b2World* m_world;
 		DebugDraw* m_debugDrawer;
 		CContactListener* m_contactListener;

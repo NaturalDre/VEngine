@@ -1,7 +1,7 @@
 #include "ErrorLogger.h"
 #include "Engine.h"
 #include "UIConsole.h"
-
+#include <luabind\luabind.hpp>
 #include <boost\lexical_cast.hpp>
 #include <iostream>
 #include <allegro5\altime.h>
@@ -30,4 +30,15 @@ namespace VE
 
 	void CErrorLogger::LogError(const std::string& error) { LogType(al_get_time(), error, "Error"); }
 	void CErrorLogger::LogNote(const std::string& error) { LogType(al_get_time(), error, "Note"); }
+
+	void CErrorLogger::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CErrorLogger>("CErrorLogger")
+				.def("LogError", &CErrorLogger::LogError)
+				.def("LogNote", &CErrorLogger::LogNote)
+			];
+	}
 }

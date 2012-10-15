@@ -3,6 +3,7 @@
 #include "PlayerView.h"
 #include <assert.h>
 #include <allegro5\allegro5.h>
+#include <luabind\luabind.hpp>
 #include "Weapon.h"
 #include "GameLevel.h"
 #include "Render.h"
@@ -128,5 +129,15 @@ namespace VE
 		//if (m_player)
 		//	m_player->SubscribeFromAll(this);
 		m_player = player;
+	}
+
+	void CPlayerController::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CPlayerController>("CPlayerController")
+				.property("player", &CPlayerController::GetPlayer, &CPlayerController::SetPlayer)
+			];
 	}
 }

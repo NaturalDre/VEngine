@@ -89,6 +89,7 @@ namespace Tiled
 		/// Discard all data that is loaded.
 		void Reset(void);
 
+		static void Export(lua_State* L);
 	private:
 		std::string m_version;
 		std::string m_orientation;

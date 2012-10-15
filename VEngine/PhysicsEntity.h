@@ -19,6 +19,9 @@ namespace VE
 		virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) { };
 		/// @see ContactCallback.h
 		virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) { };
+
+	public:
+		static void Export(lua_State* L);
 	};
 }
 #endif

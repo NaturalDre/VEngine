@@ -38,6 +38,9 @@
     <Filter Include="Source Files\Enemies">
       <UniqueIdentifier>{78c9ba3d-401a-4f60-b55f-dd4a695d3803}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spawners">
+      <UniqueIdentifier>{75bd3bac-ea9e-4281-84c7-64ab2d124576}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -176,6 +179,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\ProjectDependencies\gwen\Renderers\Allegro\Allegro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Source Files\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeSpawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -347,6 +368,12 @@
     </ClInclude>
     <ClInclude Include="UIConsole.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeSpawn.h">
+      <Filter>Header Files\Spawners</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Header Files\Spawners</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

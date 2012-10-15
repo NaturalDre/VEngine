@@ -2,6 +2,7 @@
 #include "ContactListener.h"
 #include "DebugDraw.h"
 #include "Camera.h"
+#include <luabind\luabind.hpp>
 
 namespace VE
 {
@@ -10,6 +11,7 @@ namespace VE
 		, m_timeStep(1.0f / 60.0f)
 		, m_velocityIters(6)
 		, m_positionIters(6)
+		, m_drawDebugData(false)
 	{
 		m_world = new b2World(b2Vec2(0, 0));
 		m_debugDrawer = new DebugDraw(cam);
@@ -29,6 +31,16 @@ namespace VE
 
 		delete m_contactListener;
 		m_contactListener = nullptr;
+	}
+
+	void CPhysics::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CPhysics>("CPhysics")
+				.property("enableDebugDraw", &CPhysics::IsDebugDrawEnabled, &CPhysics::EnableDebugDraw)
+			];
 	}
 
 	b2Vec2 GameToScreenPosPix(CCamera* cam, const b2Vec2& posPix)

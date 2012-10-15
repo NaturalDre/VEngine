@@ -21,7 +21,7 @@ namespace VE
 		if (m_gameLevel)
 			m_gameLevel->RemoveEntity(this);
 
-		SetScript(nullptr);
+		//SetScript(nullptr);
 	}
 
 	void IEntity::SetScript(CScript* script)
@@ -42,5 +42,16 @@ namespace VE
 		
 		auto obj = m_script->GetSelf();
 		return obj[property];
+	}
+
+	void IEntity::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<IEntity>("IEntity")
+				.property("groupName", &IEntity::GetGroupName)
+				.property("entityID", &IEntity::GetEntityID)
+			];
 	}
 }

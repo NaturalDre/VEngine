@@ -61,6 +61,7 @@ namespace VE
 		/// Icon of the weapon to be used with the GUI.
 		virtual ALLEGRO_BITMAP* GetIcon(void) const { return nullptr; }
 
+		static void Export(lua_State* L);
 
 	private:
 		size_t m_ammo;

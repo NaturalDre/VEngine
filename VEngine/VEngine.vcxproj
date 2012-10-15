@@ -21,11 +21,14 @@
     <ClCompile Include="BasicAnimation.cpp" />
     <ClCompile Include="BulletAK47.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ContactCallback.cpp" />
     <ClCompile Include="ContactListener.cpp" />
+    <ClCompile Include="CubeSpawn.cpp" />
     <ClCompile Include="CubeView.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
@@ -38,11 +41,13 @@
     <ClCompile Include="MultiAnimation.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="PhysicsEntity.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="PlayerView.cpp" />
     <ClCompile Include="Process.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Script.cpp" />
@@ -56,6 +61,7 @@
     <ClCompile Include="UIConsole.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="View.cpp" />
+    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponAK47.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -64,9 +70,11 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Barrel.h" />
     <ClInclude Include="BasicAnimation.h" />
+    <ClInclude Include="CubeSpawn.h" />
     <ClInclude Include="CubeView.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Spawner.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="BulletAK47.h" />
@@ -149,7 +157,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\Program Files %28x86%29\boost\boost_1_50;.\luabind-0.9.1;.\Lua;C:\ProjectDependencies\gwen\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\allegro\include;C:\Box2D_v2.2.1;C:\Program Files %28x86%29\boost\boost_1_51;.\luabind-0.9.1;.\Lua;C:\ProjectDependencies\gwen\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>

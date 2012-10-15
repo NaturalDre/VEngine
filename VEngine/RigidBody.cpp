@@ -1,5 +1,5 @@
 #include "RigidBody.h"
-#include <luabind\object.hpp>
+#include <luabind\luabind.hpp>
 #include "TMR\Object.h"
 #include "GameLevel.h"
 
@@ -27,14 +27,26 @@ namespace VE
 		m_body->CreateFixture(&fd);
 	}
 
+	CRigidBody::~CRigidBody(void)
+	{
+		Free();
+	}
+
 	void CRigidBody::Free(void)
 	{
 		GameLevel()->GetPhysics()->World()->DestroyBody(m_body);
 		m_body = nullptr;
 	}
 
-	CRigidBody::~CRigidBody(void)
+
+
+	void CRigidBody::Export(lua_State* L)
 	{
-		Free();
+		using namespace luabind;
+		module(L)
+			[
+				class_<CRigidBody>("CRigidBody")
+				.def("Free", &CRigidBody::Free)
+			];
 	}
 }

@@ -28,9 +28,18 @@ namespace VE
 
 	CScript::CScript(lua_State* state, const std::string& scriptName)
 	{
-		// Load the script. Inside the lua_State should be different functions
-		// for creating a script. This line will call that function with no parameters.
-		m_self = luabind::call_function<luabind::object>(state, scriptName.c_str());
+		try
+		{
+			// Load the script. Inside the lua_State should be different functions
+			// for creating a script. This line will call that function with no parameters.
+			m_self = luabind::call_function<luabind::object>(state, scriptName.c_str());
+		}
+		catch(const luabind::error& e)
+		{
+			const std::string str = lua_tostring(e.state(), -1);
+			lua_pop(e.state(), 1);
+			// TO DO: Send the error to the error logger.
+		}
 	}
 
 	CScript::CScript(const luabind::adl::object& scriptObject)
@@ -48,8 +57,8 @@ namespace VE
 
 	void CScript::Update(double dt)
 	{
-		if (GetSelf().is_valid())
-			luabind::call_member<void>(GetSelf(), "OnUpdate", dt);
+		//if (GetSelf().is_valid())
+		//	luabind::call_member<void>(GetSelf(), "OnUpdate", dt);
 	}
 
 	void ProvideGlobal(lua_State* L, const char* key)
@@ -62,5 +71,23 @@ namespace VE
 		// STK: table value
 		lua_setfield(L, -2, key);
 		// STK: table
+	}
+
+	luabind::adl::index_proxy<luabind::object>  CScript::operator[](const std::string& member)
+	{
+		if (m_self.is_valid())
+			m_self[member.c_str()];
+		else
+			return m_self[""];
+	}
+
+	void CScript::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CScript>("CScript")
+				.def(constructor<const object&>())
+			];
 	}
 }

@@ -4,6 +4,9 @@
 #include <sstream>
 #include <string>
 #include <queue>
+
+struct lua_State;
+
 namespace VE
 {
 	class CEngine;
@@ -19,6 +22,8 @@ namespace VE
 		void LogNote(const std::string& error);
 
 		inline void SetEngine(CEngine* engine) { m_engine = engine; }
+
+		static void Export(lua_State* L);
 	private:
 		CEngine* m_engine;
 		std::queue<const std::string> m_errors;

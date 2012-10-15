@@ -5,7 +5,7 @@
 #include "WeaponAK47.h"
 #include "PlayerEvents.h"
 #include "Script.h"
-
+#include <luabind\luabind.hpp>
 using namespace VE;
 
 // Calculate impulse needed to simulate moving the desiredVel over one second.
@@ -49,7 +49,7 @@ namespace VE
 		SetDirection(RIGHT);
 		// The script that will set the player's actions.
 		// TO DO: Add the ability to change what script is used.
-		SetScript(new CScript(GetGameLevel()->GetScriptEnv(), "PlayerScript"));
+		//SetScript(new CScript(GetGameLevel()->GetScriptEnv(), "PlayerScript"));
 	}
 
 	CPlayer::~CPlayer(void)
@@ -57,7 +57,7 @@ namespace VE
 		delete m_body;
 		m_body = nullptr;
 
-		SetScript(nullptr);
+		//SetScript(nullptr);
 		m_currentWeapon = nullptr;
 	}
 
@@ -126,6 +126,19 @@ namespace VE
 			m_dir = dir;
 			m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('D', 'I', 'R', 'C'));
 		}
+	}
+
+	void CPlayer::Export(lua_State* L)
+	{
+		using namespace luabind;
+		module(L)
+			[
+				class_<CPlayer, IEntity>("CPlayer")
+				.property("speedX", &CPlayer::GetXSpeed, &CPlayer::SetXSpeed)
+				.property("speedY", &CPlayer::GetYSpeed, &CPlayer::SetYSpeed)
+				.property("speed", &CPlayer::GetSpeed, &CPlayer::SetSpeed)
+				.property("position", &CPlayer::GetPosition)
+			];
 	}
 
 	CPlayer* VE::CreatePlayer(CGameLevel* level, const b2Vec2& spawnPos)

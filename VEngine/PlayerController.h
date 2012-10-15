@@ -33,6 +33,7 @@ namespace VE
 
 		void SetPlayer(CPlayer* player);
 		inline CPlayer* GetPlayer(void) const { return m_player; }
+		static void Export(lua_State* L);
 	private:
 		CPlayer* m_player;
 		std::vector<bool> m_keys;

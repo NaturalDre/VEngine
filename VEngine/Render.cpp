@@ -17,7 +17,7 @@ namespace VE
 		, m_physics(nullptr)
 		, m_uiCanvas(nullptr)
 	{
-		m_camera = new CCamera;
+		m_camera = new CCamera(nullptr, GetDisplayWidth(), GetDisplayHeight());
 	}
 
 	CRender::~CRender(void)
@@ -64,7 +64,7 @@ namespace VE
 			m_gameMap->Render(this, m_gameMap->GetPlayerLayer() + 1, m_gameMap->GetTileLayers().size());
 		
 		if (m_physics)
-			m_physics->World()->DrawDebugData();
+			m_physics->DrawDebugData();
 
 		if (m_uiCanvas)
 			m_uiCanvas->RenderCanvas();

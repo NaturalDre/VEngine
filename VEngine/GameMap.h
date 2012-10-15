@@ -45,9 +45,7 @@ namespace VE
 		inline void SetPlayerLayer(const std::string& layerName) { m_playerLayer = FindTileLayerIndex(layerName); }
 		inline void SetPlayerLayer(size_t layerIndex) { m_playerLayer = layerIndex; }
 
-
-
-
+		static void Export(lua_State* L);
 	private:
 		std::map<std::string, CBitmap> m_tilesetImages;
 		CMapParser m_parser;
