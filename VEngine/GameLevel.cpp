@@ -5,7 +5,6 @@
 #include "GameLevel.h"
 #include "GameMap.h"
 #include "Render.h"
-#include "Barrel.h"
 #include <lua.hpp>
 #include <lauxlib.h>
 #include <luabind\luabind.hpp>
@@ -32,11 +31,9 @@ namespace VE
 		assert(m_engine != nullptr);
 		assert(m_logger != nullptr);
 
-		//m_renderer = new CRender;
-		//m_physics = new CPhysics(Renderer()->Cam());
 		m_gameMap = new CGameMap(this);
-		m_playerController = new CPlayerController(nullptr);
-		m_playerView = new CPlayerView(GetRenderer());
+		//m_playerController = new CPlayerController(nullptr);
+		//m_playerView = new CPlayerView(GetRenderer());
 
 		GetRenderer()->SetMapFile(m_gameMap);
 		GetRenderer()->SetPhysics(GetPhysics());
@@ -113,20 +110,39 @@ namespace VE
 		if (!m_gameMap->IsValid())
 			return;
 		if (m_player)
+		{
 			delete m_player;
+			m_player = nullptr;
+		}
+
+		if (m_playerController)
+		{
+			delete m_playerController;
+			m_playerController = nullptr;
+		}
+
+		if (m_playerView)
+		{
+			delete m_playerView;
+			m_playerView = nullptr;
+		}
 
 		m_player = CreatePlayer(this, m_gameMap->GetPlayerSpawn());
-
-		m_playerController->SetPlayer(m_player);
+		m_playerController = new CPlayerController(m_player);
+		m_playerView = new CPlayerView(GetRenderer());
 		m_playerView->SetPlayer(m_player);
+		//m_playerController->SetPlayer(m_player);
+		//m_playerView->SetPlayer(m_player);
 		GetRenderer()->Cam()->Watch(m_player);
 	}
 
 	void CGameLevel::RemovePlayer(void)
 	{
 		GetRenderer()->Cam()->Watch(nullptr);
-		m_playerView->SetPlayer(nullptr);
-		m_playerController->SetPlayer(nullptr);
+		if (m_playerView)
+			m_playerView->SetPlayer(nullptr);
+		if (m_playerController)
+			m_playerController->SetPlayer(nullptr);
 
 		delete m_player;
 		m_player = nullptr;	
@@ -146,16 +162,21 @@ namespace VE
 
 	void CGameLevel::LoadMap(const std::string& filename)
 	{
+		//m_gameMap->Reset();
+
+		//try { DoFile(m_scriptEnv, filename); }
+		//catch(const std::exception& e)
+		//{
+		//	GetLogger()->LogError(e.what());
+		//	return;
+		//}
+		//bool success = m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
+
 		m_gameMap->Reset();
+		bool success = m_gameMap->Read(filename);
 
-		try { DoFile(m_scriptEnv, filename); }
-		catch(const std::exception& e)
-		{
-			GetLogger()->LogError(e.what());
-			return;
-		}
 
-		bool success = m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
+		// Don't run any game logic or physics if the map does not load.
 		GetEngine()->SetPauseLogic(!success);
 		GetEngine()->SetPausePhysics(!success);
 	}

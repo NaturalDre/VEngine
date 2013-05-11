@@ -18,6 +18,7 @@ namespace luabind
 		class object;
 	}
 }
+struct lua_State;
 
 namespace Tiled
 {
@@ -50,9 +51,12 @@ namespace Tiled
 		static std::list<Tile> ReadTiles(lua_State* L, size_t index);
 		static void LoadTilesetProperties(CTileset& ts, const luabind::adl::object& data);
 		static std::list<Tile> LoadTilesetTiles(CTileset& ts, const luabind::adl::object& data);
+		static void LoadTilesetProperties(CTileset& ts, lua_State* L);
+		void LoadDefaults(void);
 
 	public:
 		CTileset(const luabind::adl::object& tileset);
+		CTileset(lua_State* L);
 		~CTileset(void);
 
 		inline std::string Name(void) const { return m_name; }

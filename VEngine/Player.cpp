@@ -2,7 +2,6 @@
 #include <iostream>
 #include "PlayerBody.h"
 #include "GameLevel.h"
-#include "WeaponAK47.h"
 #include "PlayerEvents.h"
 #include "Script.h"
 #include <luabind\luabind.hpp>
@@ -38,13 +37,8 @@ namespace VE
 		, m_body(nullptr)
 		, m_speed(0,0)
 		, m_vel(5,5)
-		, m_currentWeapon(nullptr)
 	{
 		m_body = new CPlayerBody(this, spawnPos, GameLevel()->GetPhysics()->World());
-
-		m_weapons.push_back(new CWeaponAK47(GameLevel(), this));
-
-		m_currentWeapon = m_weapons.front();
 		// Set the initial direction of the player.
 		SetDirection(RIGHT);
 		// The script that will set the player's actions.
@@ -58,7 +52,6 @@ namespace VE
 		m_body = nullptr;
 
 		//SetScript(nullptr);
-		m_currentWeapon = nullptr;
 	}
 
 	/////////////////////////////////////
@@ -111,10 +104,7 @@ namespace VE
 
 	void CPlayer::Update(double deltaTime)
 	{
-		if (GetCurrentWeapon())
-			GetCurrentWeapon()->Update(deltaTime);
 		b2Body* body = m_body->Raw();
-
 		body->ApplyLinearImpulse(b2Vec2(ImpulseForDistance(m_speed, body)), body->GetWorldCenter()); 
 	}
 

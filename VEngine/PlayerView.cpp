@@ -3,7 +3,6 @@
 #include <iostream>
 #include <allegro5\allegro5.h>
 #include "PlayerEvents.h"
-#include "Weapon.h"
 
 namespace VE
 {
@@ -36,7 +35,6 @@ namespace VE
 			return;
 
 		VE::DrawBitmap(m_anims.GetCurrentAnim().GetFrame(), m_player->GetPosition(), b2Vec2(0,0));
-		m_player->GetCurrentWeapon()->Render();
 	}
 
 	void CPlayerView::Notify(int eventType)

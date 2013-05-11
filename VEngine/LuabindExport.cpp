@@ -12,10 +12,9 @@
 #include "Physics.h"
 #include "TMR\MapFile.h"
 #include "ErrorLogger.h"
-#include "WeaponAK47.h"
+#include "ContactCallback.h"
+#include "PhysicsEntity.h"
 #include "GameMap.h"
-#include "Cube.h"
-#include "Projectile.h"
 
 using namespace luabind;
 using namespace VE;
@@ -56,7 +55,6 @@ void ExportBindings(lua_State* L)
 	IContactCallback::Export(L);
 	IEntity::Export(L);
 	IPhysicsEntity::Export(L);
-	IEnemy::Export(L);
 
 	CErrorLogger::Export(L);
 	CScript::Export(L);
@@ -71,9 +69,4 @@ void ExportBindings(lua_State* L)
 
 	Tiled::CMapFile::Export(L);
 	CGameMap::Export(L);
-	IWeapon::Export(L);
-	IProjectile::Export(L);
-	CWeaponAK47::Export(L);
-
-	CCube::Export(L);
 }

@@ -2,6 +2,8 @@
 #include "GameMap.h"
 #include "GameLevel.h"
 #include <boost\lexical_cast.hpp>
+#include "Utility.h"
+
 namespace VE
 {
 
@@ -35,9 +37,18 @@ namespace VE
 				m_gameMap->SetPlayerLayer(index);
 		}
 		{
-			float x = boost::lexical_cast<float>(m_gameMap->GetProperty("SpawnX"));
-			float y = boost::lexical_cast<float>(m_gameMap->GetProperty("SpawnY"));
-			m_gameMap->SetPlayerSpawn(x * m_gameMap->GetTileWidth(), y * m_gameMap->GetTileHeight());
+			try
+			{
+				float x = boost::lexical_cast<float>(m_gameMap->GetProperty("SpawnX"));
+				float y = boost::lexical_cast<float>(m_gameMap->GetProperty("SpawnY"));
+				m_gameMap->SetPlayerSpawn(x * m_gameMap->GetTileWidth(), y * m_gameMap->GetTileHeight());
+			}
+			catch(const std::exception& e)
+			{
+				// TODO: Handle exception.
+				//VASSERT(false, "SpawnX and SpawnY are not variables in the map properties.");
+			}
+
 		}
 	}
 

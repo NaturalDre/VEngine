@@ -5,6 +5,7 @@
 #include <string>
 #include <allegro5\allegro5.h>
 #include "Bitmap.h"
+#include <memory>
 
 namespace VE
 {
@@ -20,8 +21,8 @@ namespace VE
 
 	public:
 		CBasicAnimation(void);
-		CBasicAnimation(const std::string& filename, size_t rows, size_t cols, double fps);
-		CBasicAnimation(ALLEGRO_BITMAP* sheet, size_t rows, size_t cols, double fps);
+		//CBasicAnimation(const std::string& filename, size_t rows, size_t cols, double fps);
+		CBasicAnimation(const std::shared_ptr<CBitmap>& sheet, size_t rows, size_t cols, double fps);
 		CBasicAnimation(const CBasicAnimation& rhs);
 		CBasicAnimation(CBasicAnimation&& rhs);
 
@@ -33,15 +34,17 @@ namespace VE
 		const CBitmap& GetFrame(void);
 		void SetAlpha(size_t r, size_t g, size_t b);
 
-		inline const CBitmap& GetAnimationSheet(void) const { return m_animationSheet; }
+		inline const std::shared_ptr<CBitmap>& GetAnimationSheet(void) const { return m_animationSheet; }
 		inline const CBitmap& GetFrame(void) const { return m_frame; }
 
 		inline size_t GetFrameW(void) const { return m_frameW; }
 		inline size_t GetFrameH(void) const { return m_frameH; }
 
 	private:
-		CBitmap m_animationSheet;
+		std::shared_ptr<CBitmap> m_animationSheet; /// The spritesheet. Owned by AssetManager.
 		CBitmap m_frame;
+		size_t m_framePosX;
+		size_t m_framePosY;
 		size_t m_frameW;
 		size_t m_frameH;
 	};

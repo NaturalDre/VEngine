@@ -13,36 +13,42 @@ namespace VE
 		, m_frame()
 		, m_frameW(DEFAULTFRAMEW)
 		, m_frameH(DEFAULTFRAMEH)
+		, m_framePosX(0)
+		, m_framePosY(0)
 	{
 
 	}
 
-	CBasicAnimation::CBasicAnimation(const std::string& filename, size_t rows, size_t cols, double fps)
-		: IAnimationBase(rows, cols, fps)
-		, m_animationSheet()
-		, m_frame()
-		, m_frameW(DEFAULTFRAMEW)
-		, m_frameH(DEFAULTFRAMEH)
-	{
-		m_animationSheet = CBitmap(al_load_bitmap(filename.c_str()));
+	//CBasicAnimation::CBasicAnimation(const std::string& filename, size_t rows, size_t cols, double fps)
+	//	: IAnimationBase(rows, cols, fps)
+	//	, m_animationSheet()
+	//	, m_frame()
+	//	, m_frameW(DEFAULTFRAMEW)
+	//	, m_frameH(DEFAULTFRAMEH)
+	//	, m_framePosX(0)
+	//	, m_framePosY(0)
+	//{
+	//	m_animationSheet = CBitmap(al_load_bitmap(filename.c_str()));
 
-		if (m_animationSheet)
-		{
-			m_frameW = m_animationSheet.GetWidth() / GetCols();
-			m_frameH = m_animationSheet.GetHeight() / GetRows();
-			// Create the bitmap for the initial frame
-			FrameChanged();
-		}
-	}
+	//	if (m_animationSheet)
+	//	{
+	//		m_frameW = m_animationSheet.GetWidth() / GetCols();
+	//		m_frameH = m_animationSheet.GetHeight() / GetRows();
+	//		// Create the bitmap for the initial frame
+	//		FrameChanged();
+	//	}
+	//}
 
-	CBasicAnimation::CBasicAnimation(ALLEGRO_BITMAP* sheet, size_t rows, size_t cols, double fps)
+	CBasicAnimation::CBasicAnimation(const std::shared_ptr<CBitmap>& sheet, size_t rows, size_t cols, double fps)
 		: IAnimationBase(rows, cols, fps)
 		, m_animationSheet(sheet)
 		, m_frame()
 		, m_frameW(DEFAULTFRAMEW)
 		, m_frameH(DEFAULTFRAMEH)
+		, m_framePosX(0)
+		, m_framePosY(0)
 	{
-		assert(m_animationSheet.IsValid() == true);
+		assert(m_animationSheet.get() != nullptr);
 		assert(rows > 0);
 		assert(cols > 0);
 		assert(fps > 0.0);
@@ -52,11 +58,36 @@ namespace VE
 
 		if (m_animationSheet)
 		{
-			m_frameW = m_animationSheet.GetWidth() / GetCols();
-			m_frameH = m_animationSheet.GetHeight() / GetRows();
+			m_frameW = m_animationSheet->GetWidth() / GetCols();
+			m_frameH = m_animationSheet->GetHeight() / GetRows();
 			FrameChanged();
 		}
 	}
+
+	//CBasicAnimation::CBasicAnimation(ALLEGRO_BITMAP* sheet, size_t rows, size_t cols, double fps)
+	//	: IAnimationBase(rows, cols, fps)
+	//	, m_animationSheet(sheet)
+	//	, m_frame()
+	//	, m_frameW(DEFAULTFRAMEW)
+	//	, m_frameH(DEFAULTFRAMEH)
+	//	, m_framePosX(0)
+	//	, m_framePosY(0)
+	//{
+	//	assert(m_animationSheet.IsValid() == true);
+	//	assert(rows > 0);
+	//	assert(cols > 0);
+	//	assert(fps > 0.0);
+
+	//	if (!m_animationSheet || !GetRows() || !GetCols() || (GetFPS() <= 0))
+	//		abort();
+
+	//	if (m_animationSheet)
+	//	{
+	//		m_frameW = m_animationSheet.GetWidth() / GetCols();
+	//		m_frameH = m_animationSheet.GetHeight() / GetRows();
+	//		FrameChanged();
+	//	}
+	//}
 
 	CBasicAnimation::CBasicAnimation(const CBasicAnimation& rhs)
 		: IAnimationBase(rhs)
@@ -64,6 +95,8 @@ namespace VE
 		, m_animationSheet(nullptr)
 		, m_frameW(0)
 		, m_frameH(0)
+		, m_framePosX(0)
+		, m_framePosY(0)
 	{
 		*this = rhs;
 	}
@@ -74,6 +107,8 @@ namespace VE
 		, m_animationSheet(nullptr)
 		, m_frameW(1)
 		, m_frameH(1)
+		, m_framePosX(0)
+		, m_framePosY(0)
 	{
 		*this = std::move(rhs);
 	}
@@ -86,23 +121,22 @@ namespace VE
 		IAnimationBase::operator=(rhs);
 
 		if (m_frame)
-		{
-			m_frame.Reset();
-			//al_destroy_bitmap(m_frame);
-			//m_frame = nullptr;
-		}
-	
-		if (m_animationSheet)
-		{
-			m_animationSheet.Reset();
-			//al_destroy_bitmap(m_animationSheet);
-			//m_animationSheet = nullptr;
-		}
-		m_animationSheet = rhs.m_animationSheet;
+			m_frame.Unload();
 
+		if (m_animationSheet)
+			m_animationSheet.reset(); // .reset because it's a smart pointer. We don't want to call ->Unload() incase something needs it.
+		
+		m_animationSheet = rhs.m_animationSheet;
 		m_frameW = rhs.m_frameW;
 		m_frameH = rhs.m_frameH;
+		m_framePosX = rhs.m_framePosX;
+		m_framePosY = rhs.m_framePosY;
 
+		// Force a call to FrameChanged() to generate the image for the current frame.
+		FrameChanged();
+		// Note:	I did this 'cause I don't know if a clone of the sub-bitmap(rhs.m_frame) is 
+		//			still a sub-bitmap of the original bitmap(rhs.m_animationSheet), a 
+		//			sub-bitmap of the sub-bitmap(rhs.m_frame), or is now its own bitmap.
 		return *this;
 	}
 
@@ -114,46 +148,35 @@ namespace VE
 		IAnimationBase::operator=(std::move(rhs));
 
 		if (m_frame)
-		{
-			m_frame.Reset();
-			//al_destroy_bitmap(m_frame);
-			//m_frame = nullptr;
-		}
-		m_frame = rhs.m_frame;
-		rhs.Reset();
+			m_frame.Unload(); // We created it, so we can Unload it.
+		//rhs.Reset();
 		//rhs.m_frame = nullptr;
 
-		if (m_animationSheet)
-		{
-			m_animationSheet.Reset();
-			//al_destroy_bitmap(m_animationSheet);
-			//m_animationSheet = nullptr;
-		}
-		m_animationSheet = std::move(rhs.m_animationSheet);
-		rhs.m_animationSheet.Reset();
-		//rhs.m_animationSheet = nullptr;
+		if (m_animationSheet.get())
+			m_animationSheet.reset();
+		// If rhs.m_animation isn't empty, move it here.
+		if (rhs.m_animationSheet.get())
+			m_animationSheet = std::move(rhs.m_animationSheet);
 
 		m_frameW = rhs.m_frameW;
 		m_frameH = rhs.m_frameH;
+		m_framePosX = rhs.m_framePosX;
+		m_framePosY = rhs.m_framePosY;
 
+		// Force a call to FrameChanged() to generate the image for the current frame.
+		FrameChanged();
+		// Note:	I did this 'cause I don't know if a clone of the sub-bitmap(rhs.m_frame) is 
+		//			still a sub-bitmap of the original bitmap(rhs.m_animationSheet), a 
+		//			sub-bitmap of the sub-bitmap(rhs.m_frame), or is now its own bitmap.
 		return *this;
 	}
 
 	CBasicAnimation::~CBasicAnimation()
 	{
+		// We need to free this before m_animationSheet because it's a subbitmap of m_animationSheet.
 		if (m_frame)
-		{
-			m_frame.Reset();
-			//al_destroy_bitmap(m_frame);
-			//m_frame = nullptr;
-		}
-
-		if (m_animationSheet)
-		{
-			m_animationSheet.Reset();
-			//al_destroy_bitmap(m_animationSheet);
-			//m_animationSheet = nullptr;
-		}
+			m_frame.Unload();
+		m_animationSheet.reset();
 	}
 
 	const CBitmap& CBasicAnimation::GetFrame(void)
@@ -166,24 +189,23 @@ namespace VE
 		if (!m_animationSheet)
 			return;
 
-		ColRow cr = GetColRow(GetCols(), GetCurrentFrame());
-		size_t x((cr.col - 1) * m_frameW);
-		size_t y((cr.row - 1) * m_frameH);
+		const ColRow cr = GetColRow(GetCols(), GetCurrentFrame());
+		const size_t x((cr.col - 1) * m_frameW);
+		const size_t y((cr.row - 1) * m_frameH);
 
 		if (m_frame)
-		{
-			m_frame.Reset();
-			//al_destroy_bitmap(m_frame);
-			//m_frame = nullptr;
-		}
+			m_frame.Unload();
 
-		m_frame = CBitmap(m_animationSheet, x, y, m_frameW, m_frameH);
+		m_frame = CBitmap(m_animationSheet.get(), x, y, m_frameW, m_frameH);
+		
+		m_framePosX = x;
+		m_framePosY = y;
 		//m_frame = al_create_sub_bitmap(m_animationSheet, x, y, m_frameW, m_frameH);
 	}
 
 	void CBasicAnimation::SetAlpha(size_t r, size_t g, size_t b)
 	{
-		m_animationSheet.ConvertMaskToAlpha(r, g, b);
+		m_animationSheet->ConvertMaskToAlpha(r, g, b);
 		//al_convert_mask_to_alpha(m_animationSheet, al_map_rgb(r,g,b));
 	}
 }

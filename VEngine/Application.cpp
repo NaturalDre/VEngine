@@ -8,6 +8,7 @@
 #include "Utility.h"
 #include <lua.hpp>
 #include <luabind\luabind.hpp>
+#include "AssetManager.h"
 
 namespace VE
 {
@@ -90,9 +91,9 @@ namespace VE
 		//DoFile(L, "Scripts/game/common.lua");
 		DoFile(L, "Scripts/game/main.lua");
 		DoFile(L, "Scripts/game/playerscript.lua");
-		DoFile(L, "Maps/Adventure/Adventure.lua");
-		DoFile(L, "Scripts/game/weapons/ak_47.lua");
-		DoFile(L, "Scripts/enemies/cube.lua");
+		//DoFile(L, "Maps/Adventure/Adventure.lua");
+		//DoFile(L, "Scripts/game/weapons/ak_47.lua");
+		//DoFile(L, "Scripts/enemies/cube.lua");
 
 
 
@@ -101,6 +102,8 @@ namespace VE
 	int CApplication::Run(void)
 	{
 		Init();
+		CAssetManager::Instance()->LoadAssetsFromXML("Assets.xml");
+		CAssetManager::Instance()->SetCurScene(1);
 		try 
 		{ 
 			luabind::call_function<void>(m_engine->GetScriptEnv(), "OnAppStartup");

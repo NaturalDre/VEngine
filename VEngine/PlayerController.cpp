@@ -4,10 +4,8 @@
 #include <assert.h>
 #include <allegro5\allegro5.h>
 #include <luabind\luabind.hpp>
-#include "Weapon.h"
 #include "GameLevel.h"
 #include "Render.h"
-#include "Cube.h"
 
 namespace VE
 {
@@ -82,26 +80,9 @@ namespace VE
 			speed.y += 5;
 			tDir = DOWN;
 		}
-		else if (IsKeyDown(ALLEGRO_KEY_C))
-		{
-			// Yeah, memory leak, I know. Just testing.
-			if (GetPlayer())
-			{
-				static	CCube* cube = nullptr;
-				delete cube;
-				cube = nullptr;
-				cube = new CCube(GetPlayer()->GetGameLevel(), m_mousePos);
-			}
-		}
 
 		m_player->SetSpeed(speed);
 		m_player->SetDirection(tDir);
-
-		//if (IsKeyDown(ALLEGRO_KEY_F))
-		//	m_player->GetCurrentWeapon()->Fire(m_player->GetDirection());
-		b2Vec2 fuck = (m_player->GetPosition() + b2Vec2(10, 10));
-		if (IsKeyDown(ALLEGRO_KEY_F))
-			m_player->GetCurrentWeapon()->Fire(m_mousePos);
 	}
 
 	void CPlayerController::HandleMouseMove(const ALLEGRO_EVENT& ev)

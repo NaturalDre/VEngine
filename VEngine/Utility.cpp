@@ -3,6 +3,7 @@
 #include <physfs.h>
 #include <lua.hpp>
 #include <lauxlib.h>
+#include <iostream>
 void vWarning(const std::string& msg)
 {
 	al_show_native_message_box(al_get_current_display(), "Warning", "An error has occurred.", msg.c_str(), NULL, ALLEGRO_MESSAGEBOX_WARN);
@@ -49,7 +50,8 @@ void DoBuffer(lua_State* L, const char* buffer, size_t size)
 	if (luaL_loadbuffer(L, buffer, size, nullptr) == 0)
 	{
 		// STK: --
-		// Zero is success.
+		// Zero is success. We return on success because the rest
+		// of this function is error handling.
 		if(lua_pcall(L, 0, 0, 0) == 0)
 			return;		// STK: --
 	}
@@ -69,4 +71,9 @@ void DoFile(lua_State* L, const std::string& filename)
 int GenerateEventID(char a, char b, char c, char d)
 {
 	return ALLEGRO_GET_EVENT_TYPE(a,b,c,d);
+}
+
+void ShowError(const std::string& err)
+{
+	std::cout << std::endl << err;
 }

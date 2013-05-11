@@ -20,26 +20,20 @@
     <Filter Include="Source Files\Box2DUtil">
       <UniqueIdentifier>{05ae2577-a5f3-430a-a553-70cf2d443e74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Weapons">
-      <UniqueIdentifier>{16e3d1d5-7710-4340-bc59-66f513975a30}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Bullets">
       <UniqueIdentifier>{c2a5dc97-5b62-4bb3-ac7f-24955222913b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Bullets">
-      <UniqueIdentifier>{c435e8ff-62c0-4975-b4b4-534e6e1d5cf6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Weapons">
-      <UniqueIdentifier>{0540bec7-31e0-4fac-9396-4e9984b3b6de}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Enemies">
       <UniqueIdentifier>{31c4462b-9ac1-4c53-8b38-6283bb9b2d22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Enemies">
-      <UniqueIdentifier>{78c9ba3d-401a-4f60-b55f-dd4a695d3803}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Spawners">
       <UniqueIdentifier>{75bd3bac-ea9e-4281-84c7-64ab2d124576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TinyXML">
+      <UniqueIdentifier>{f1792197-1235-4566-b510-bf32b988402d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TinyXML">
+      <UniqueIdentifier>{1afefdef-2c49-454e-8b18-e02dbe47f8ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +118,6 @@
     <ClCompile Include="Bitmap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Barrel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -163,18 +154,6 @@
     <ClCompile Include="MapParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CubeView.cpp">
-      <Filter>Source Files\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Source Files\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletAK47.cpp">
-      <Filter>Source Files\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="WeaponAK47.cpp">
-      <Filter>Source Files\Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="UIConsole.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -184,20 +163,23 @@
     <ClCompile Include="PhysicsEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Source Files\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="ContactCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Source Files\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeSpawn.cpp">
+    <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinystr.cpp">
+      <Filter>Source Files\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinyxml.cpp">
+      <Filter>Source Files\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinyxmlerror.cpp">
+      <Filter>Source Files\TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinyxmlparser.cpp">
+      <Filter>Source Files\TinyXML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,12 +276,6 @@
     <ClInclude Include="Bitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Header Files\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Barrel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -316,9 +292,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LuabindExport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ServiceLocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RigidBody.h">
@@ -345,35 +318,23 @@
     <ClInclude Include="MapParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Header Files\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeView.h">
-      <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsEntity.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletAK47.h">
-      <Filter>Header Files\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="WeaponAK47.h">
-      <Filter>Header Files\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="UIConsole.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CubeSpawn.h">
-      <Filter>Header Files\Spawners</Filter>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Spawner.h">
-      <Filter>Header Files\Spawners</Filter>
+    <ClInclude Include="Asset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\tinyxml\tinystr.h">
+      <Filter>Header Files\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\tinyxml\tinyxml.h">
+      <Filter>Header Files\TinyXML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

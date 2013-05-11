@@ -9,7 +9,6 @@
 namespace VE
 {
 	class IView;
-	class CCamera;
 	class CPhysics;
 	class CBitmap;
 	class CGameMap;

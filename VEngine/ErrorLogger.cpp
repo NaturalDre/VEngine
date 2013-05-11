@@ -25,6 +25,7 @@ namespace VE
 		m_errors.push(type +": [" + vTOSTRING(time) + "] " + error);
 		if (m_engine && m_engine->GetConsole())
 			m_engine->GetConsole()->AddToList(m_errors.back());
+		std::cout << std::endl << m_errors.back();
 		//std::cerr << m_errors.back();
 	}
 

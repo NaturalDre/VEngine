@@ -7,6 +7,8 @@
 #include <map>
 #include "Physics.h"
 
+struct lua_State;
+
 namespace VE
 {
 	class CRender;
@@ -23,6 +25,8 @@ namespace VE
 		int FindTileLayerIndex(const std::string& name);
 
 		void RenderLayer(VE::CRender* renderer, Tiled::CTileLayer* tilelayer);
+		void RenderOrthogonal(VE::CRender* renderer, Tiled::CTileLayer* tilelayer);
+		void RenderIsometric(VE::CRender* renderer, Tiled::CTileLayer* tilelayer);
 		/// @param pos Position on the map to spawn the player in pixels.
 		void SetPlayerSpawn(float x, float y) { m_playerSpawn = PixToMtr(b2Vec2(x,y)); }
 		void SetPlayerSpawn(const b2Vec2& pos) { m_playerSpawn = pos; };
@@ -32,6 +36,7 @@ namespace VE
 		~CGameMap(void) { }
 
 		bool Read(const luabind::object& data);
+		bool Read(const std::string& filename);
 		void Render(VE::CRender* renderer, size_t begin, size_t end);
 		void Render(VE::CRender* renderer, const std::string& begin, const std::string& end);
 

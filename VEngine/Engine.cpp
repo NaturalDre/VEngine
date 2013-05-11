@@ -18,6 +18,7 @@
 #include "UIConsole.h"
 #include "Render.h"
 
+#include "Utility.h"
 namespace VE
 {
 	CEngine::CEngine(void)
@@ -94,6 +95,7 @@ namespace VE
 
 		DoFile(GetScriptEnv(), "Scripts/core.lua");
 		luabind::settable(luabind::globals(GetScriptEnv()), "gEngine", this);
+		int test = 4;
 	}
 
 	int CEngine::Init(void)

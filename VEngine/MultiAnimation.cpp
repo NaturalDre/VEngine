@@ -1,4 +1,5 @@
 #include "MultiAnimation.h"
+#include "AssetManager.h"
 
 namespace VE
 {
@@ -35,11 +36,15 @@ namespace VE
 
 	bool CMultiAnimation::SetSpriteSheet(const std::string& sheet, size_t rows, size_t cols, double fps)
 	{
-		return SetSpriteSheet(al_load_bitmap(sheet.c_str()), rows, cols, fps);	
+		return SetSpriteSheet(
+			std::static_pointer_cast<CBitmap>(CAssetManager::Instance()->GetAsset(sheet))
+			, rows, cols, fps);	
 	}
 
-	bool CMultiAnimation::SetSpriteSheet(ALLEGRO_BITMAP* sheet, size_t rows, size_t cols, double fps)
+	bool CMultiAnimation::SetSpriteSheet(const std::shared_ptr<CBitmap>& sheet, size_t rows, size_t cols, double fps)
 	{
+		if (!sheet->IsLoaded())
+			sheet->Load();
 		m_animation = CBasicAnimation(sheet, rows, cols, fps);
 		return (m_animation.GetAnimationSheet() ? true : false);
 		//if (m_animation.GetAnimationSheet())

@@ -27,7 +27,7 @@ namespace VE
 		~CMultiAnimation(void);
 
 		bool SetSpriteSheet(const std::string& sheet, size_t rows, size_t cols, double fps);
-		bool SetSpriteSheet(ALLEGRO_BITMAP* sheet, size_t rows, size_t cols, double fps);
+		bool SetSpriteSheet(const std::shared_ptr<CBitmap>& sheet, size_t rows, size_t cols, double fps);
 
 		bool AddFrameSequence(const FrameSequence& fs, const std::string ident);
 
@@ -38,7 +38,7 @@ namespace VE
 		void SetCurrentAnim(const std::string& name);
 		void SetAlpha(size_t r, size_t g, size_t b);
 
-		inline const CBitmap& GetSpriteSheet(void) const { return m_animation.GetAnimationSheet(); }
+		inline const std::shared_ptr<CBitmap>& GetSpriteSheet(void) const { return m_animation.GetAnimationSheet(); }
 
 		const CBitmap& GetFrame(void);
 	private:

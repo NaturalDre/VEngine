@@ -3,9 +3,10 @@
 
 #include <string>
 #include <vector>
+#include <assert.h>
 
+#define VASSERT(exp, msg) assert(exp && msg); 
 struct lua_State;
-
 
 #define vMin(a,b) ((a < b) ? a : b )
 #define vMax(a,b) ((a > b) ? a : b )

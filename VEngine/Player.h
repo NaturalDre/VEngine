@@ -39,10 +39,6 @@ namespace VE
 		float GetYSpeed(void) const { return m_speed.y; }
 		b2Vec2 GetSpeed(void) const { return m_speed; }
 
-		IWeapon* GetCurrentWeapon(void) const { return m_currentWeapon; }
-		size_t GetWeaponCount(void) const;
-
-		void SelectWeapon(size_t index);
 
 		DIRECTION GetDirection(void) const{ return m_dir; }
 		void SetDirection(DIRECTION dir);
@@ -71,8 +67,6 @@ namespace VE
 		b2Vec2 m_speed;
 		b2Vec2 m_vel;
 		DIRECTION m_dir;
-		IWeapon* m_currentWeapon;
-		std::list<IWeapon*> m_weapons;
 	};
 
 	CPlayer* CreatePlayer(CGameLevel* level, const b2Vec2& spawnPos);

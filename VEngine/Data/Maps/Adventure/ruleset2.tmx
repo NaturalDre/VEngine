@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Tileset1" tilewidth="32" tileheight="32">
+  <image source="Tileset1.png" trans="ffffff" width="1024" height="2016"/>
+ </tileset>
+ <tileset firstgid="2017" name="rules" tilewidth="32" tileheight="32">
+  <image source="rules.png" trans="ffffff" width="640" height="640"/>
+ </tileset>
+ <layer name="regions" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJx7yM7A8BCIQeAhEpua4CEd7BgFo2AUjIJRMApGwSgYSQAANhcHQQ==
+  </data>
+ </layer>
+ <layer name="input_PrimaryDetail" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxzZ2VAAR5o/FEwCkbBKBgFo2AUjIJRMPgAANtZAJo=
+  </data>
+ </layer>
+ <layer name="output_Ground" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA9SGdlYMhgxWSPglEwCkbBKBgFo2AUjALyAADhvQGz
+  </data>
+ </layer>
+ <layer name="output_PrimaryDetail" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxjYGBg8GBlAAN3KD0KRsEoGAWjYBSMglEwCgY3AADbZQCa
+  </data>
+ </layer>
+</map>

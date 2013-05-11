@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<Assets>
+	<Asset filename="Images/Enemies/cube1.png" type="GRAPHICAL" scene="1"/>
+	<Asset filename="Images/player.png" type="GRAPHICAL" scene="1"/>
+</Assets>

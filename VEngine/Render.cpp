@@ -49,7 +49,7 @@ namespace VE
 			return;
 
 		// Draw map
-		if (m_gameMap)
+		if (m_gameMap && m_gameMap->IsValid())
 			m_gameMap->Render(this, 0, m_gameMap->GetPlayerLayer());
 
 		std::sort(m_views.begin(), m_views.end(), [](IView* lhs, IView* rhs)

@@ -5,12 +5,15 @@
 #include <map>
 #include <lua.hpp>
 
+struct lua_State;
 namespace Tiled
 {
 	// table.properties; NOTE: Table must be at top of stack before call.
 	std::map<const std::string, const std::string> GetProperties(lua_State* L);
-	// map.layers[layer].data[index]
-	size_t DataValue(lua_State* L, size_t layer, size_t index);
+	// \note The table is expected to be at the top of the stack.
+	std::string GetTableValueStr(lua_State* L, const std::string& key);
+	float GetTableValueF(lua_State* L, const std::string& key);
+
 }
 
 #endif
