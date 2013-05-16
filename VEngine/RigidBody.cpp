@@ -1,18 +1,16 @@
 #include "RigidBody.h"
 #include <luabind\luabind.hpp>
-#include "TMR\Object.h"
+#include "TMR\TiledObject.h"
 #include "GameLevel.h"
 
 namespace VE
 {
-	CRigidBody::CRigidBody(const luabind::adl::object& obj)
+	CRigidBody::CRigidBody(lua_State* L)
 		: m_body(nullptr)
 	{
-		if (luabind::type(obj) != LUA_TTABLE)
+		if (lua_istable(L, -1))
 			return;
-
-		Tiled::Object to(obj);
-
+		Tiled::Object to(L);
 		b2BodyDef bd;
 		bd.type = b2_staticBody;
 		bd.position = TiledToBoxCoords(to);

@@ -13,6 +13,52 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Polygon.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\Box2D_v2.2.1\Box2D\Util\b2Triangle.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lapi.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lauxlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lbaselib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lcode.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldblib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldebug.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldump.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lfunc.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lgc.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\linit.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\liolib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\llex.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lmathlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lmem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\loadlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lobject.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lopcodes.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\loslib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lparser.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lstate.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lstring.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lstrlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ltable.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ltablib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ltm.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lundump.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lvm.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lzio.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class_info.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class_registry.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class_rep.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\create_class.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\error.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\exception_handler.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\function.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\inheritance.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\link_compatibility.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\object_rep.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\open.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\pcall.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\scope.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\stack_content_by_name.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\weak_ref.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\wrapper_base.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\ProjectDependencies\gwen\Renderers\Allegro\Allegro.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinystr.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinyxml.cpp" />
@@ -105,7 +151,7 @@
     <ClInclude Include="TMR\MapFile.h" />
     <ClInclude Include="TMR\ObjectLayer.h" />
     <ClInclude Include="TMR\TiledLua.h" />
-    <ClInclude Include="TMR\Object.h" />
+    <ClInclude Include="TMR\TiledObject.h" />
     <ClInclude Include="TMR\Tilelayer.h" />
     <ClInclude Include="TMR\Tileset.h" />
     <ClInclude Include="UIConsole.h" />
@@ -146,17 +192,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\tinyxml;C:\allegro\include;C:\Box2D_v2.2.1;C:\boost_1_53_0;.\luabind-0.9.1;.\Lua;C:\ProjectDependencies\gwen\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\tinyxml;C:\allegro\include;C:\Box2D_v2.2.1;C:\boost_1_53_0;C:\Libraries\lua-5.1.5\src;C:\Libraries\gwen\include;C:\Libraries\luabind-0.9.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CompileAs>Default</CompileAs>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\allegro\lib;C:\Box2D_v2.2.1\Build\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;.\Lua\lib\debug;.\luabind-0.9.1\lib\debug;C:\ProjectDependencies\gwen\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;lua51.lib;luabind.lib;gwend_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\allegro\lib;C:\Box2D_v2.2.1\Build\Debug;C:\PhysFS\physfs-2.0.2\bin\Debug;C:\Libraries\gwen\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>allegro-5.0.4-monolith-md-debug.lib;Box2D.lib;physfs.lib;gwend_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference />
   </ItemDefinitionGroup>

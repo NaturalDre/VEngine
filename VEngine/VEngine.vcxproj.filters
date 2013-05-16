@@ -20,20 +20,23 @@
     <Filter Include="Source Files\Box2DUtil">
       <UniqueIdentifier>{05ae2577-a5f3-430a-a553-70cf2d443e74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Bullets">
-      <UniqueIdentifier>{c2a5dc97-5b62-4bb3-ac7f-24955222913b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Enemies">
-      <UniqueIdentifier>{31c4462b-9ac1-4c53-8b38-6283bb9b2d22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Spawners">
-      <UniqueIdentifier>{75bd3bac-ea9e-4281-84c7-64ab2d124576}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\TinyXML">
       <UniqueIdentifier>{f1792197-1235-4566-b510-bf32b988402d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\TinyXML">
       <UniqueIdentifier>{1afefdef-2c49-454e-8b18-e02dbe47f8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lua">
+      <UniqueIdentifier>{93027458-0d56-4aa8-955e-2d60d529cadf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lua">
+      <UniqueIdentifier>{80e5c0f7-279f-4e70-932b-9003d8ec61d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LuaBind">
+      <UniqueIdentifier>{f699cc3c-4ee1-4b16-a3ba-44c037bc6895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gwen">
+      <UniqueIdentifier>{4662be5b-b15e-42b4-aa49-1a52a849c8b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -50,9 +53,6 @@
       <Filter>Source Files\TMR</Filter>
     </ClCompile>
     <ClCompile Include="TMR\TiledLua.cpp">
-      <Filter>Source Files\TMR</Filter>
-    </ClCompile>
-    <ClCompile Include="TMR\TiledObject.cpp">
       <Filter>Source Files\TMR</Filter>
     </ClCompile>
     <ClCompile Include="TMR\Tilelayer.cpp">
@@ -181,6 +181,147 @@
     <ClCompile Include="..\..\..\..\..\..\..\tinyxml\tinyxmlparser.cpp">
       <Filter>Source Files\TinyXML</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lapi.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lauxlib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lbaselib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lcode.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldblib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldebug.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldo.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ldump.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lfunc.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lgc.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\linit.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\liolib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\llex.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lmathlib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lmem.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\loadlib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lobject.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lopcodes.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\loslib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lparser.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lstate.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lstring.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lstrlib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ltable.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ltablib.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\ltm.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lundump.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lvm.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\lua-5.1.5\src\lzio.c">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\wrapper_base.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\weak_ref.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\stack_content_by_name.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\scope.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\pcall.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\open.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\object_rep.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\link_compatibility.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\inheritance.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\function.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\exception_handler.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\error.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\create_class.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class_rep.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class_registry.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class_info.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Libraries\luabind-0.9.1\src\class.cpp">
+      <Filter>Source Files\LuaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="TMR\TiledObject.cpp">
+      <Filter>Source Files\TMR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -205,9 +346,6 @@
       <Filter>Header Files\TMR</Filter>
     </ClInclude>
     <ClInclude Include="TMR\MapFile.h">
-      <Filter>Header Files\TMR</Filter>
-    </ClInclude>
-    <ClInclude Include="TMR\ObjectLayer.h">
       <Filter>Header Files\TMR</Filter>
     </ClInclude>
     <ClInclude Include="TMR\TiledLua.h">
@@ -300,9 +438,6 @@
     <ClInclude Include="ErrorLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TMR\Object.h">
-      <Filter>Header Files\TMR</Filter>
-    </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -335,6 +470,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\tinyxml\tinyxml.h">
       <Filter>Header Files\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="TMR\TiledObject.h">
+      <Filter>Header Files\TMR</Filter>
+    </ClInclude>
+    <ClInclude Include="TMR\ObjectLayer.h">
+      <Filter>Header Files\TMR</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

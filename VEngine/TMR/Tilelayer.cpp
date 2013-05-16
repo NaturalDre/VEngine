@@ -3,44 +3,46 @@
 #include <lua.hpp>
 #include <assert.h>
 #include "TiledLua.h"
-#include <luabind\luabind.hpp>
 
 using namespace Tiled;
 
-CTileLayer::CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile)
+CTileLayer::CTileLayer(lua_State* L, const CMapFile& mapFile)
 {
-	if (!tilelayer.is_valid() || luabind::type(tilelayer) != LUA_TTABLE)
+	// STK: -- map.layers[i] // i = any positive integer.
+	if (!L || !lua_istable(L, -1))
 		return;
 
 	SetWidth(mapFile.GetWidth());
 	SetHeight(mapFile.GetHeight());
 
-	this->SetName(luabind::object_cast<std::string>(tilelayer["name"]));
-	// For some stupid reason the following 2 lines of code are not equivilent to
-	// this one line: tilelayer["properties"].push(tilelayer.interpreter())
-	// and ends up with ReadProperties not getting a table at the top of the stack.
-	const luabind::object properties(tilelayer["properties"]);
-	// STK: --
-	properties.push(tilelayer.interpreter());
-	// STK: -- table
+	SetName(GetTableValueStr(L, "name"));
+	ReadProperties(L, this);
 
-	ReadProperties(tilelayer.interpreter(), this);
-	lua_pop(tilelayer.interpreter(), 1);
-	// STK: --
-
-	const luabind::object data = tilelayer["data"];
-	if (!data.is_valid())
-		return;
-
+	// STK: -- map.layers[]
+	lua_pushstring(L, "data");
+	// STK: -- map.layers[] pushedString
+	lua_gettable(L, -2);
+	// STK: -- map.layers[] map.layers[].data
+	lua_insert(L, 1);
+	// STK: map.layers[].data -- map.layers[]
 	m_data.resize(GetHeight(), std::vector<size_t>(GetWidth(), 0));
-
-	// Store the value of each key from Lua, which are in a 1D array, into a C++ 2D vector.
-	size_t row = 0;
-	for (luabind::iterator iter = luabind::iterator(tilelayer["data"]), end; iter != end; ++row)
+	lua_pushnil(L);
+	// STK: map.layers[].data -- map.layers[] nil(key)
+	for (int index = 0, row = 0, col = 0; lua_next(L, 1) != 0; ++index)
 	{
-		for (size_t col = 0;col < GetWidth(); ++col)
-			m_data[row][col] = luabind::object_cast<size_t>(*iter++);
+		// STK: map.layers[].data -- map.layers[] key value
+		if (col >= GetWidth())
+		{
+			++row;
+			col = 0;
+		}
+		m_data[row][col++] = lua_tointeger(L, -1);
+		lua_pop(L, 1);
+		// STK: map.layers[].data -- map.layers[] key
 	}
+	// STK: map.layers[].data -- map.layers[]
+	lua_remove(L, 1);
+	// STK: -- map.layers[]
 }
 
 void CTileLayer::SetDataVal(size_t row, size_t col, size_t value)

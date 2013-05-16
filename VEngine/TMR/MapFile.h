@@ -33,17 +33,11 @@ namespace Tiled
 		static void LoadMapData(CMapFile& map, lua_State* L);
 		static void LoadLayers(CMapFile& map, lua_State* L);
 
-		//MapProperties& GetProperties(void) { return m_properties; }
-		//TileLayersVector& TileLayers(void) { return m_tileLayers; }
-		//ObjectLayersVector& ObjectLayers(void) { return m_objectLayers; }
-		//TilesetsVector& Tilesets(void) { return m_tilesets; }
-
 	public:
 		CMapFile(void);
 		virtual ~CMapFile(void);
 
 		virtual bool Read(const std::string& mapFile);
-		virtual bool Read(const luabind::object& data);
 		/// Version of the map exporter used to export this map.
 		inline std::string GetVersion(void) const { return m_version; }
 		inline std::string GetOrientation(void) const { return m_orientation; }

@@ -3,28 +3,35 @@
 #include <lua.hpp>
 #include <assert.h>
 #include <algorithm>
-#include <luabind\luabind.hpp>
 
 using namespace Tiled;
 
-CObjectLayer::CObjectLayer(const luabind::object& objectlayer)
+CObjectLayer::CObjectLayer(lua_State* L)
 {
-	if (!objectlayer.is_valid() || luabind::type(objectlayer) != LUA_TTABLE)
+	// STK: -- map.layers[i]
+	if (!L || !lua_istable(L, -1))
 		return;
+	SetName(Tiled::GetTableValueStr(L, "name"));
+	ReadProperties(L, this);
 
-	SetName(luabind::object_cast<std::string>(objectlayer["name"]));
-	// For some stupid reason the following 2 lines are not equivilent to
-	// this one line: objectlayer["properties"].push(objectlayer.interpreter())
-	// and ends up with ReadProperties not getting a table at the top of the stack.
-	const luabind::object properties(objectlayer["properties"]);
-	// STK: --
-	properties.push(objectlayer.interpreter());
-	// STK: -- table
-	ReadProperties(objectlayer.interpreter(), this);
-	lua_pop(objectlayer.interpreter(), 1);
-	// STK: --
-	for (luabind::iterator iter = luabind::iterator(objectlayer["objects"]), end; iter != end; ++iter)
-		m_objects.push_back(Tiled::Object(*iter));
+	lua_pushstring(L, "objects");
+	// STK: -- map.layers[i] pushedString
+	lua_gettable(L, -2);
+	// STK: -- map.layers[i] map.layers[i].objects
+	lua_insert(L, 1);
+	// STK: map.layers[i].objects -- map.layers[i]
+	lua_pushnil(L);
+	// STK: map.layers[i].objects -- map.layers[i] nil
+	for (size_t i = 0; lua_next(L, 1); ++i)
+	{
+	// STK: map.layers[i].objects -- map.layers[i] key val
+		m_objects.push_back(Tiled::Object(L));
+		lua_pop(L, 1);
+	// STK: map.layers[i].objects -- map.layers[i] key
+	}
+	// STK: map.layers[i].objects -- map.layers[i]
+	lua_remove(L, 1);
+	// STK: -- map.layers[i]
 }
 
 const Object* CObjectLayer::FindObject(const std::string& name) const

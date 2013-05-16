@@ -2,7 +2,7 @@
 #define PHYSICS_H
 
 #include <Box2D\Box2D.h>
-#include "TMR\Object.h"
+#include "TMR\TiledObject.h"
 
 const float SCALE(32.0f);
 //const float PIXELSPERMETER(32.0f);

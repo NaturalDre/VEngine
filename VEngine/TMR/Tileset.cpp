@@ -5,14 +5,26 @@
 #include <allegro5\allegro5.h>
 #include "..\Utility.h"
 #include <luabind\luabind.hpp>
-
+#include <luabind\lua_include.hpp>
 using namespace Tiled;
 using namespace luabind;
 
-namespace Tiled
-{
-	std::string GetTilesetName(lua_State* L);
-};
+//namespace Tiled
+//{
+//	std::string GetTilesetName(lua_State* L);
+//	namespace Tileset
+//	{
+//		const std::string NAME = "name";
+//		const std::string FIRSTGID = "firstgid";
+//		const std::string TILEWIDTH = "tilewidth";
+//		const std::string TILEHEIGHT = "tileheight";
+//		const std::string SPACING = "spacing";
+//		const std::string IMAGE = "image";
+//		const std::string IMAGEWIDTH = "imagewidth";
+//		const std::string IMAGEHEIGHT = "imageheight";
+//		const std::string TRANSPARENTCOLOR = "transparentcolor";
+//	}
+//};
 
 static Tile::Properties ConvertTableToProperties(const luabind::object& table)
 {
@@ -89,15 +101,23 @@ void CTileset::LoadTilesetProperties(CTileset& ts, lua_State* L)
 {
 	if (!L || !lua_istable(L, -1))
 		return;
-	// STK: table(map.tilesets[x]
-	lua_pushstring(L, "name");
-	// STK: table(map.tilesets[x]) pushedString(key)
-	lua_gettable(L, -2);
-	// STK: table(map.tilesets[x]) receivedString(value)
-	ts.m_name = lua_tostring(L, -1);
-	// STK: table(map.tilesets[x]) receivedString(value)
-	lua_pop(L, 1);
-	// STK: table(map.tilesets[x])
+
+	ts.m_name = GetTableValueStr(L, Tiled::Key::TileSet::NAME);
+	ts.m_firstGid = GetTableValueN<size_t>(L, Tiled::Key::TileSet::FIRSTGID);
+	ts.m_tileWidth = GetTableValueN<size_t>(L, Tiled::Key::TileSet::TILEWIDTH);
+	ts.m_tileHeight = GetTableValueN<size_t>(L, Tiled::Key::TileSet::TILEHEIGHT);
+	ts.m_spacing = GetTableValueN<size_t>(L, Tiled::Key::TileSet::SPACING);
+	
+	ts.m_source = GetTableValueStr(L, Tiled::Key::TileSet::IMAGE);
+	ts.m_imageWidth = GetTableValueN<size_t>(L, Tiled::Key::TileSet::IMAGEWIDTH);
+	ts.m_imageHeight = GetTableValueN<size_t>(L, Tiled::Key::TileSet::IMAGEHEIGHT);
+	ts.m_trans = GetTableValueStr(L, Tiled::Key::TileSet::TRANSPARENTCOLOR);
+
+	ts.m_tilesAcross = ts.m_imageWidth / (ts.m_tileWidth + ts.m_spacing);
+	// I can not remember why I put this assert here...
+	assert((ts.m_tileHeight + ts.m_spacing));
+	ts.m_tilesDown = ts.m_imageHeight / (ts.m_tileHeight + ts.m_spacing);
+	ts.m_lastGid = ts.m_firstGid + (((ts.m_imageWidth / (ts.m_tileWidth + ts.m_spacing)) * (ts.m_imageHeight / (ts.m_tileHeight + ts.m_spacing)))-1);
 }
 
 void CTileset::LoadDefaults()
@@ -745,34 +765,6 @@ namespace Tiled
 		lua_pop(L, 1);
 		// STK: table
 		return value;
-
-		//// STK:
-		//lua_getglobal(L, "GetTilesetName");
-		//// STK: func?
-		//if (!lua_isfunction(L, -1))
-		//{
-		//	lua_pop(L, 1);
-		//	return 0;
-		//}
-		//// STK: func
-		//lua_pushinteger(L, index);
-		//// STK: func int
-		//if (lua_pcall(L, 1, 1,0))
-		//{
-		//	const char* error = lua_tostring(L, -1);
-		//	lua_pop(L, 1);
-		//	throw(std::exception(error));
-		//}
-		//// STK: string?
-		//if (!lua_isstring(L, -1))
-		//{
-		//	lua_pop(L, 1);
-		//	return 0;
-		//}
-		//// STK: string
-		//std::string val = lua_tostring(L, -1);
-		//lua_pop(L, 1);
-		//return val;
 	}
 
 	size_t GetTilesetFirstGid(size_t index, lua_State* L)

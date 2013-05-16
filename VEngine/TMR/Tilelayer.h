@@ -4,7 +4,7 @@
 #include "Layer.h"
 #include <vector>
 #include <map>
-#include <luabind\object.hpp>
+//#include <luabind\object.hpp>
 
 struct lua_State;
 
@@ -16,7 +16,9 @@ namespace Tiled
 	protected:
 		void SetDataVal(size_t row, size_t col, size_t value);
 	public:
-		CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile);
+		//CTileLayer(const luabind::object& tilelayer, const CMapFile& mapFile);
+		// \note A tilelayer table should be at the top of the stack
+		CTileLayer(lua_State* L, const CMapFile& mapFile);
 
 		inline int GetType(void) const { return e_TileLayer; }
 		inline const std::vector<std::vector<size_t>>& GetData(void) const { return m_data; }

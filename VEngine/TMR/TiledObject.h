@@ -29,6 +29,8 @@ namespace Tiled
 	public:
 		Object(void): m_x(0), m_y(0), m_width(0), m_height(0), m_isValid(false) {}
 		Object(const luabind::adl::object& data);
+		Object(lua_State* L);
+		
 		Object(Object&& rhs);
 
 	public:
@@ -45,13 +47,31 @@ namespace Tiled
 	private:
 		std::string m_name;
 		std::string m_type;
+		std::string m_shape;
 		float m_x;
 		float m_y;
 		float m_width;
 		float m_height;
+		bool m_visible;
 		TiledObjectProperties m_properties;
 
 		bool m_isValid; 
+	};
+
+	namespace Key
+	{
+		namespace TiledObject
+		{
+			static const std::string NAME = "name";
+			static const std::string TYPE = "type";
+			static const std::string SHAPE = "shape";
+			static const std::string X = "x";
+			static const std::string Y = "y";
+			static const std::string WIDTH = "width";
+			static const std::string HEIGHT = "height";
+			static const std::string VISIBLE = "visible";
+			static const std::string PROPERTIES = "properties";
+		}
 	};
 }
 #endif

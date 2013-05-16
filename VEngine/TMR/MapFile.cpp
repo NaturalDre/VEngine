@@ -7,7 +7,6 @@
 #include "..\Bitmap.h"
 #include "..\Render.h"
 #include <luabind\luabind.hpp>
-
 #include <boost\foreach.hpp>
 #include "lualib.h"
 using namespace Tiled;
@@ -29,9 +28,6 @@ CMapFile::CMapFile(void)
 	m_height = 0;
 	m_tileHeight = 0;
 	m_tileWidth = 0;
-	//m_playerLayer = 1;
-
-	//m_physicsLayer = nullptr;
 	m_valid = false;
 }
 
@@ -91,24 +87,47 @@ void CMapFile::LoadLayers(CMapFile& map, lua_State* L)
 		lua_pop(L, 1);
 		// STK: table(map)
 	}
-
-	for (size_t i = 1, max = luabind::call_function<size_t>(L, "GetNumberOfLayers"); i <= max; ++i)
+	// STK: table(map)
+	lua_pushstring(L, "layers");
+	// STK: table(map) pushedString(key)
+	lua_gettable(L, -2);
+	// STK: table(map) table(map.layers)
+	for (size_t i = 1, max = luaL_getn(L, -1); i < max; ++i)
 	{
-		luabind::object data = luabind::call_function<luabind::object>(L, "GetLayer", i);
-
-		if (!data.is_valid())
-			break;
-
-		const std::string type = luabind::object_cast<std::string>(data["type"]);
-
-		if (type == "tilelayer")
-			map.m_tileLayers.push_back( new CTileLayer(data, map));
-		else if (type == "objectgroup")
+		lua_pushinteger(L, i);
+		// STK: table(map) table(map.layers) int(key)
+		lua_gettable(L, -2);
+		// STK: table(map) table(map.layers) table(map.layers[i])?
+		if (!lua_istable(L, -1))
 		{
-			CObjectLayer* layer = new CObjectLayer(data);
-			map.m_objectLayers.push_back(layer);
+			lua_pop(L, 1);
+			// STK: table(map) table(map.layers)
+			continue;
 		}
+		// STK: table(map) table(map.layers) table(map.layers[i])
+		lua_pushstring(L, "type");
+		// STK: table(map) table(map.layers) table(map.layers[i]) pushedString
+		lua_gettable(L, -2);
+		// STK: table(map) table(map.layers) table(map.layers[i]) receivedString?
+		if (!lua_isstring(L, -1))
+		{
+			lua_pop(L, 2);
+		// STK: table(map) table(map.layers)
+			continue;
+		}
+		// STK: table(map) table(map.layers) table(map.layers[i]) receivedString
+		const std::string type = lua_tostring(L, -1);
+		lua_pop(L, 1);
+		// STK: table(map) table(map.layers) table(map.layers[i])
+		if (type == "tilelayer")
+			map.m_tileLayers.push_back(new CTileLayer(L, map));
+		else if (type == "objectgroup")
+			map.m_objectLayers.push_back(new CObjectLayer(L));
+		lua_pop(L, 1);
+		// STK: table(map) table(map.layers)
 	}
+	lua_pop(L, 1);
+	// STK: table(map)
 }
 
 bool CMapFile::Read(const std::string& mapFile)
@@ -137,35 +156,9 @@ bool CMapFile::Read(const std::string& mapFile)
 		//STK:
 		return false;
 	}
-
 	LoadMapData(*this, L);
 	LoadLayers(*this, L);
 	lua_close(L);
-	//// Attempt to load the file and load the script which 
-	//// contains Lua functions for operating on Tiled's 
-	//// Lua map files.
-	//// NOTE: Non-zero is error.
-	//if (luaL_dofile(L, mapFile.c_str()) || !LoadTiledLib(L))
-	//{
-	//	lua_close(L);
-	//	return false;
-	//}
-
-	//LoadMapData(*this, L);
-	//LoadLayers(*this, L);
-
-	//lua_close(L);
-	return m_valid = true;
-}
-
-bool CMapFile::Read(const luabind::object& data)
-{
-	if (!data.is_valid() || !LoadTiledLib(data.interpreter()))
-		return false;
-
-	LoadMapData(*this, data.interpreter());
-	LoadLayers(*this, data.interpreter());
-
 	return m_valid = true;
 }
 

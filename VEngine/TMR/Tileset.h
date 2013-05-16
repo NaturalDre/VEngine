@@ -132,6 +132,22 @@ namespace Tiled
 
 		std::list<Tile> m_tiles;
 	};
+
+	namespace Key
+	{
+		namespace TileSet
+		{
+			const std::string NAME = "name";
+			const std::string FIRSTGID = "firstgid";
+			const std::string TILEWIDTH = "tilewidth";
+			const std::string TILEHEIGHT = "tileheight";
+			const std::string SPACING = "spacing";
+			const std::string IMAGE = "image";
+			const std::string IMAGEWIDTH = "imagewidth";
+			const std::string IMAGEHEIGHT = "imageheight";
+			const std::string TRANSPARENTCOLOR = "transparentcolor";
+		}
+	}
 }
 
 #endif

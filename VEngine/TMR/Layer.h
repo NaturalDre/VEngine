@@ -13,7 +13,8 @@ namespace Tiled
 	{
 	protected:
 		typedef std::map<const std::string, const std::string> Properties;
-		/// \note Table MUST be at top of stack and all values MUST be strings
+		/// \note Table MUST be at top of stack, it MUST have a 'properties' key, 
+		/// and all values MUST be strings 
 		static void ReadProperties(lua_State* L, ILayer* layer);
 	public:
 		ILayer(void):m_width(0), m_height(0), m_opacity(1.0f), m_visible(true) { }

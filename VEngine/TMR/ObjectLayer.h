@@ -2,9 +2,9 @@
 #define OBJECTLAYER_H
 
 #include "Layer.h"
-#include "Object.h"
+#include "TiledObject.h"
 #include <list>
-#include <luabind\object.hpp>
+//#include <luabind\object.hpp>
 
 struct lua_State;
 
@@ -15,8 +15,8 @@ namespace Tiled
 	class CObjectLayer: public ILayer
 	{
 	public:
-		CObjectLayer(const luabind::object& objectlayer);
-
+		//CObjectLayer(const luabind::object& objectlayer);
+		CObjectLayer(lua_State* L);
 		int GetType(void) const { return e_ObjectLayer; }
 		const Object* FindObject(const std::string& name) const;
 		std::list<const Object*> FindObjects(const std::string& name) const;

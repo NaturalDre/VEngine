@@ -16,7 +16,8 @@ namespace VE
 	class CRigidBody
 	{
 	public:
-		CRigidBody(const luabind::adl::object& obj);
+		//CRigidBody(const luabind::adl::object& obj);
+		CRigidBody(lua_State* L);
 		~CRigidBody(void);
 
 		void Free(void);

@@ -1,8 +1,6 @@
-#include "Object.h"
+#include "TiledObject.h"
 #include <lua.hpp>
 #include "TiledLua.h"
-#include <luabind\luabind.hpp>
-
 
 Tiled::Object::Object(Object&& rhs)
 	: m_name(rhs.m_name)
@@ -11,68 +9,25 @@ Tiled::Object::Object(Object&& rhs)
 	, m_y(rhs.m_y)
 	, m_width(rhs.m_width)
 	, m_height(rhs.m_height)
+	, m_visible(rhs.m_visible)
 	, m_properties(std::move(rhs.m_properties))
 	, m_isValid(rhs.IsValid()) { }
 
-Tiled::Object::Object(const luabind::adl::object& data)
+Tiled::Object::Object(lua_State* L)
 	: m_x(0)
 	, m_y(0)
 	, m_width(0)
 	, m_height(0)
+	, m_visible(false)
 	, m_isValid(false)
 {
-	if (luabind::type(data) != LUA_TTABLE)
-		return;
-
-	try
-	{
-		m_name = luabind::object_cast<std::string>(data["name"]);
-		m_type = luabind::object_cast<std::string>(data["type"]);
-		m_x = luabind::object_cast<float>(data["x"]);
-		m_y = luabind::object_cast<float>(data["y"]);
-		m_width = luabind::object_cast<float>(data["width"]);
-		m_height = luabind::object_cast<float>(data["height"]);	
-
-		// STK: --
-		data.push(data.interpreter());
-		// STK: -- table
-		auto t = data.interpreter();
-		m_properties = GetProperties(data.interpreter());
-		// STK: -- table
-		lua_pop(data.interpreter(), 1);
-		// STK: --
-		m_isValid = true;
-	}
-	catch(...)
-	{
-
-	}
-}
-
-Tiled::Object Tiled::Object::CreateFromLua(lua_State* L)
-{
-	try
-	{
-		luabind::object data(luabind::from_stack(L, -1));
-		if (luabind::type(data) != LUA_TTABLE)
-			throw(std::exception("Variable passed to TiledObject::CreateFromLua is not a table."));
-
-		Tiled::Object obj;
-		obj.m_name = luabind::object_cast<std::string>(data["name"]);
-		obj.m_type = luabind::object_cast<std::string>(data["type"]);
-		obj.m_x = luabind::object_cast<float>(data["x"]);
-		obj.m_y = luabind::object_cast<float>(data["y"]);
-		obj.m_width = luabind::object_cast<float>(data["width"]);
-		obj.m_height = luabind::object_cast<float>(data["height"]);
-
-		for(luabind::iterator iter = luabind::iterator(data["properties"]), end; iter != end; ++iter)
-		{
-			obj.m_properties.insert(std::pair<const std::string, const std::string>
-				(luabind::object_cast<const std::string>(iter.key())
-				, luabind::object_cast<std::string>(*iter)));
-		}
-
-		return obj;
-	}
-	catch (...) { return Tiled::Object(); }
+	m_name = GetTableValueStr(L, Tiled::Key::TiledObject::NAME);
+	m_type = GetTableValueStr(L, Tiled::Key::TiledObject::TYPE);
+	m_shape = GetTableValueStr(L, Tiled::Key::TiledObject::SHAPE);
+	m_x = GetTableValueN<float>(L, Tiled::Key::TiledObject::X);
+	m_y = GetTableValueN<float>(L, Tiled::Key::TiledObject::Y);
+	m_width = GetTableValueN<float>(L, Tiled::Key::TiledObject::WIDTH);
+	m_height = GetTableValueN<float>(L, Tiled::Key::TiledObject::HEIGHT);
+	m_visible = GetTableValueB(L, Tiled::Key::TiledObject::VISIBLE);
+	m_properties = std::move(GetProperties(L));
 }

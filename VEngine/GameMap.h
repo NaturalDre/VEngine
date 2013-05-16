@@ -35,7 +35,6 @@ namespace VE
 		CGameMap(CGameLevel* gameLevel);
 		~CGameMap(void) { }
 
-		bool Read(const luabind::object& data);
 		bool Read(const std::string& filename);
 		void Render(VE::CRender* renderer, size_t begin, size_t end);
 		void Render(VE::CRender* renderer, const std::string& begin, const std::string& end);
