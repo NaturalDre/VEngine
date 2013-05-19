@@ -6,6 +6,7 @@
   <property name="DeleteTiles" value="yes"/>
   <property name="PlayerLayer" value="Player"/>
   <property name="PlayerObjectName" value="PlayerSpawn"/>
+  <property name="Scene" value="10"/>
   <property name="SpawnX" value="34"/>
   <property name="SpawnY" value="12"/>
  </properties>

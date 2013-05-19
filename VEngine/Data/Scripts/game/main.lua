@@ -10,7 +10,7 @@ end
 function Main:StartUp()
 	LogNote("Main:StartUp has begun executing.");
 	
-	gGame:LoadMap("Data/Maps/Adventure/adventure.lua");
+	gGame:LoadMap("Maps/Adventure/Nature.lua");
 
 	--map = run("Data/Maps/Adventure/Adventure.lua");
 	--self.LoadObjects();

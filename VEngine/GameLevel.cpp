@@ -162,16 +162,6 @@ namespace VE
 
 	void CGameLevel::LoadMap(const std::string& filename)
 	{
-		//m_gameMap->Reset();
-
-		//try { DoFile(m_scriptEnv, filename); }
-		//catch(const std::exception& e)
-		//{
-		//	GetLogger()->LogError(e.what());
-		//	return;
-		//}
-		//bool success = m_gameMap->Read(luabind::globals(m_scriptEnv)["map"]);
-
 		m_gameMap->Reset();
 		bool success = m_gameMap->Read(filename);
 

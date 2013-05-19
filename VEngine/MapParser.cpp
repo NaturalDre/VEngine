@@ -43,7 +43,7 @@ namespace VE
 				float y = boost::lexical_cast<float>(m_gameMap->GetProperty("SpawnY"));
 				m_gameMap->SetPlayerSpawn(x * m_gameMap->GetTileWidth(), y * m_gameMap->GetTileHeight());
 			}
-			catch(const std::exception& e)
+			catch(const std::exception&)
 			{
 				// TODO: Handle exception.
 				//VASSERT(false, "SpawnX and SpawnY are not variables in the map properties.");

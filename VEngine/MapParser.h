@@ -5,7 +5,7 @@ namespace VE
 {
 	class CGameMap;
 	class CGameLevel;
-	class CMapParser
+	class CMapParser               
 	{
 	protected:
 		void DoMapProperties(void);

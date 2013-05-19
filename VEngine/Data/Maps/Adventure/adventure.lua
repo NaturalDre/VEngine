@@ -12,6 +12,7 @@ Map = {
     ["DeleteTiles"] = "yes",
     ["PlayerLayer"] = "Player",
     ["PlayerObjectName"] = "PlayerSpawn",
+    ["Scene"] = "10",
     ["SpawnX"] = "34",
     ["SpawnY"] = "12"
   },

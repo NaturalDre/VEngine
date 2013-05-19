@@ -9,6 +9,8 @@
 #include <luabind\luabind.hpp>
 #include <boost\foreach.hpp>
 #include "lualib.h"
+#include <algorithm>
+
 using namespace Tiled;
 
 namespace Tiled
@@ -92,7 +94,7 @@ void CMapFile::LoadLayers(CMapFile& map, lua_State* L)
 	// STK: table(map) pushedString(key)
 	lua_gettable(L, -2);
 	// STK: table(map) table(map.layers)
-	for (size_t i = 1, max = luaL_getn(L, -1); i < max; ++i)
+	for (size_t i = 1, max = luaL_getn(L, -1); i <= max; ++i)
 	{
 		lua_pushinteger(L, i);
 		// STK: table(map) table(map.layers) int(key)
@@ -141,12 +143,32 @@ bool CMapFile::Read(const std::string& mapFile)
 	luaL_openlibs(L);
 	luabind::open(L);
 
-	// Non-zero is error.
-	if (luaL_dofile(L, mapFile.c_str()))
+	//// Non-zero is error.
+	//if (luaL_dofile(L, mapFile.c_str()))
+	//{
+	//	lua_close(L);
+	//	return false;
+	//}
+
+	//
+
+	// Tiled exports map files beginning with "return {" for whatever reason, so
+	// I need to correct that here so each map file does not need to be edited by 
+	// hand to be read.
 	{
-		lua_close(L);
-		return false;
+		std::vector<char> bufferedFile = BufferFile(mapFile);
+		bufferedFile.erase(bufferedFile.begin(), bufferedFile.begin() + 6);
+		std::string map = "Map =";
+		bufferedFile.insert(bufferedFile.begin(), map.begin(), map.end());
+		//if (begin != std::string::npos)
+		//	bufferedFile.replace(begin, begin + ret.size(), map.c_str(), map.size());
+		try { DoBuffer(L, bufferedFile.data(), bufferedFile.size()); }
+		catch (const std::exception& e)
+		{
+			// TO DO: Add error handling code.
+		}
 	}
+
 	// At this point a global named 'Map' should exist. It is the exported Tiled Lua map file.
 	lua_getglobal(L, "Map");
 	// STK: table?
