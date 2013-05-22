@@ -14,19 +14,12 @@ namespace VE
 {
 	CApplication::CApplication(void)
 		: m_engine(nullptr)
-		//, m_L(nullptr)
 		, m_gameLevel(nullptr)
 	{
 		srand(time(nullptr));
 
 		m_engine = new CEngine;
 		m_engine->Init();
-
-		m_errorLogger.SetEngine(m_engine);
-		//m_L = lua_open();
-		//luaL_openlibs(m_L);
-		//luabind::open(m_L);
-
 	}
 
 	CApplication::~CApplication(void)
@@ -61,9 +54,7 @@ namespace VE
 		// set up before it's created, otherwise it will 
 		// crash the program. Make sure SetupDirectories() has
 		// been called.
-		m_gameLevel = new CGameLevel(&m_errorLogger, m_engine);	
-		
-
+		m_gameLevel = new CGameLevel(m_engine);	
 		SetupScriptEnv();
 		m_gameLevel->SetScriptEnv(m_engine->GetScriptEnv());
 
@@ -73,27 +64,18 @@ namespace VE
 	void CApplication::SetupDirectories(void)
 	{
 		PHYSFS_addToSearchPath("Data", 1);
-		//PHYSFS_addToSearchPath("Data.zip", 1);
 	}
 
 	void CApplication::SetupScriptEnv(void)
 	{
 		lua_State* L = m_engine->GetScriptEnv();
-		//ExportBindings(L);
-		//luabind::settable(luabind::globals(m_engine->GetScriptEnv()), "Logger", &m_errorLogger);
 		luabind::settable(luabind::globals(L), "gGame", m_gameLevel);
-
 
 		DoFile(L, "Scripts/game/app.lua");
 		DoFile(L, "Scripts/map/TiledLib.lua");
 		DoFile(L, "Scripts/game/vars.lua");
-		//DoFile(L, "Scripts/game/common.lua");
 		DoFile(L, "Scripts/game/main.lua");
 		DoFile(L, "Scripts/game/playerscript.lua");
-		//DoFile(L, "Maps/Adventure/Adventure.lua");
-		//DoFile(L, "Scripts/game/weapons/ak_47.lua");
-		//DoFile(L, "Scripts/enemies/cube.lua");
-
 
 
 	}
@@ -111,7 +93,6 @@ namespace VE
 		}
 		catch(const luabind::error& e)
 		{
-//			m_errorLogger.LogError(std::string("Attempt to call OnAppStartup generated error: ") + lua_tostring(m_engine->GetScriptEnv(), -1));
 			vShowMessage(std::string("Attempt to call OnAppStartup generated error: ") + lua_tostring(m_engine->GetScriptEnv(), -1), __FILE__, __LINE__);
 			lua_pop(e.state(), 1);
 		}

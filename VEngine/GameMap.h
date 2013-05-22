@@ -20,7 +20,7 @@ namespace VE
 		typedef std::vector<Tiled::CTileLayer*>::const_iterator ConstTileLayerIter;
 
 	protected:
-		CBitmap LoadTile(const size_t id);
+		std::shared_ptr<CBitmap> LoadTile(const size_t id);
 		ConstTileLayerIter FindTileLayer(const std::string& name);
 		int FindTileLayerIndex(const std::string& name);
 
@@ -42,7 +42,7 @@ namespace VE
 		inline size_t GetPlayerLayer(void) const { return m_playerLayer; }
 		/// @param name The name of the tileset you want.
 		/// \return A pointer to the tileset. nullptr if none found.
-		const CBitmap* GetTilesetImage(const std::string& name) const;
+		const std::shared_ptr<CBitmap> GetTilesetImage(const std::string& name) const;
 		/// \return Position in meters.
 		b2Vec2 GetPlayerSpawn(void) const { return m_playerSpawn; }
 
@@ -51,7 +51,7 @@ namespace VE
 
 		static void Export(lua_State* L);
 	private:
-		std::map<std::string, CBitmap> m_tilesetImages;
+		std::map<std::string, std::shared_ptr<CBitmap>> m_tilesetImages;
 		CMapParser m_parser;
 		CGameLevel* m_gameLevel;
 

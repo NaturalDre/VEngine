@@ -41,7 +41,7 @@ void CAssetManager::LoadAssetsFromXML(const std::string& filename)
 				if (element)
 				{
 					std::cout << "Found an element.\n";
-					IAsset* asset = nullptr;
+					std::shared_ptr<IAsset> asset = nullptr;
 
 					const std::string filename = element->Attribute("filename");
 					const std::string type = element->Attribute("type");
@@ -49,7 +49,7 @@ void CAssetManager::LoadAssetsFromXML(const std::string& filename)
 
 					if (type == "GRAPHICAL")
 					{
-						asset = new VE::CBitmap(filename, scene);
+						asset = VE::CreateBitmap(filename, scene);
 					}
 					else if (type == "AUDIO")
 					{

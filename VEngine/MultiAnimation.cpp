@@ -47,9 +47,6 @@ namespace VE
 			sheet->Load();
 		m_animation = CBasicAnimation(sheet, rows, cols, fps);
 		return (m_animation.GetAnimationSheet() ? true : false);
-		//if (m_animation.GetAnimationSheet())
-		//	return true;
-		//return false;
 	}
 
 	bool CMultiAnimation::AddFrameSequence(const FrameSequence& fs, const std::string ident)
@@ -75,12 +72,5 @@ namespace VE
 		m_animation.SetCurrentFrame(m_sequences[m_currentAnim].begin);
 		m_animation.Reset();
 
-	}
-
-	const CBitmap& CMultiAnimation::GetFrame(void)
-	{
-		//if (!m_currentAnim.empty())
-		return m_animation.GetFrame();
-		//return nullptr;
 	}
 }

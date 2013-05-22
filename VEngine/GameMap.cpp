@@ -16,20 +16,20 @@ namespace VE
 		m_parser = CMapParser(gameLevel, this);
 	}
 
-	CBitmap CGameMap::LoadTile(const size_t id)
+	std::shared_ptr<CBitmap> CGameMap::LoadTile(const size_t id)
 	{
 		Tiled::CTileset* ts = Tiled::CTileset::ContainsGid(GetTilesets(), id);
 		if (!ts)
-			return CBitmap();
+			return VE::CreateBitmap();
 
-		const CBitmap const* image = GetTilesetImage(ts->Name());
+		const std::shared_ptr<CBitmap> image = GetTilesetImage(ts->Name());
 
 		if (!image)
-			return CBitmap();
+			return VE::CreateBitmap();
 
 		const ColRow  cr = GetColRow(ts->TilesAcross(), (id - ts->FirstGid()) + 1);
 
-		VE::CBitmap bitmap(image, 
+		std::shared_ptr<CBitmap> bitmap = CreateBitmap(image, 
 			(cr.col - 1) * (ts->ImageWidth() + ts->Spacing()),
 			(cr.row - 1) * (ts->ImageHeight() + ts->Spacing()),
 			ts->TileWidth(),
@@ -79,7 +79,7 @@ namespace VE
 		const float tlx = renderer->Cam()->TopLeftPosPix().x;
 		const float tly = renderer->Cam()->TopLeftPosPix().y;	
 
-		VE::CBitmap tile;
+		std::shared_ptr<CBitmap> tile = CreateBitmap();
 		size_t prevID(0);
 
 		const int startCol(static_cast<int>(tlx / GetTileWidth()));
@@ -108,7 +108,7 @@ namespace VE
 				int dy = row * GetTileHeight();
 
 				if (tile)
-					DrawBitmap(tile, VE::PixToMtr(b2Vec2(static_cast<float>(dx), static_cast<float>(dy))));
+					DrawBitmap(*tile, VE::PixToMtr(b2Vec2(static_cast<float>(dx), static_cast<float>(dy))));
 			}
 		}
 	}
@@ -127,8 +127,8 @@ namespace VE
 		{
 			if (!tileset->Name().empty() && !tileset->Source().empty())
 			{
-				m_tilesetImages[tileset->Name()] = CBitmap("Images/Tilesets/" + tileset->Source());
-				m_tilesetImages[tileset->Name()].Load();
+				m_tilesetImages[tileset->Name()] = CreateBitmap("Images/Tilesets/" + tileset->Source());
+				m_tilesetImages[tileset->Name()]->Load();
 			}
 		});
 
@@ -136,11 +136,11 @@ namespace VE
 		return true;
 	}
 
-	const CBitmap* CGameMap::GetTilesetImage(const std::string& name) const
+	const std::shared_ptr<CBitmap> CGameMap::GetTilesetImage(const std::string& name) const
 	{
 		auto iter = m_tilesetImages.find(name);
 		if (iter != m_tilesetImages.end())
-			return &iter->second;
+			return iter->second;
 		return nullptr;
 	}
 

@@ -31,18 +31,18 @@ namespace VE
 		CBasicAnimation& operator=(const CBasicAnimation& rhs);
 		CBasicAnimation& operator=(CBasicAnimation&& rhs);
 
-		const CBitmap& GetFrame(void);
+		const std::shared_ptr<CBitmap>& GetFrame(void);
 		void SetAlpha(size_t r, size_t g, size_t b);
 
 		inline const std::shared_ptr<CBitmap>& GetAnimationSheet(void) const { return m_animationSheet; }
-		inline const CBitmap& GetFrame(void) const { return m_frame; }
+		inline const std::shared_ptr<CBitmap>& GetFrame(void) const { return m_frame; }
 
 		inline size_t GetFrameW(void) const { return m_frameW; }
 		inline size_t GetFrameH(void) const { return m_frameH; }
 
 	private:
 		std::shared_ptr<CBitmap> m_animationSheet; /// The spritesheet. Owned by AssetManager.
-		CBitmap m_frame;
+		std::shared_ptr<CBitmap> m_frame;
 		size_t m_framePosX;
 		size_t m_framePosY;
 		size_t m_frameW;

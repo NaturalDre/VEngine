@@ -34,7 +34,7 @@ namespace VE
 		if (!m_player)
 			return;
 
-		VE::DrawBitmap(m_anims.GetCurrentAnim().GetFrame(), m_player->GetPosition(), b2Vec2(0,0));
+		VE::DrawBitmap(*m_anims.GetCurrentAnim().GetFrame(), m_player->GetPosition(), b2Vec2(0,0));
 	}
 
 	void CPlayerView::Notify(int eventType)

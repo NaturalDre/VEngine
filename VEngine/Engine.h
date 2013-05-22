@@ -63,8 +63,6 @@ namespace VE
 		inline lua_State* GetScriptEnv(void) const { return m_scriptEnv; }
 		inline CUIConsole* GetConsole(void) const { return m_console; }
 
-		inline CErrorLogger& GetLogger(void) { return m_logger; }
-
 		inline void SetPausePhysics(bool shouldPause) { m_pausePhysics = shouldPause; }
 		inline void SetPauseLogic(bool shouldPause) { m_pauseLogic = shouldPause; }
 		inline bool IsPhysicsPaused(void) const { return m_pausePhysics; }
@@ -84,14 +82,12 @@ namespace VE
 		GwenAllegroRenderer* m_gwenRenderer;
 		GwenAllegroInput m_gwenInput;
 		GwenTexturedBaseSkin m_gwenSkin;
-		CErrorLogger m_logger;
 		Processes m_processes;
 		bool m_done;
 		bool m_needRedraw;
 		bool m_isInit;
 		bool m_pauseLogic;
 		bool m_pausePhysics;
-
 		double m_timeLastUpdated;
 		double m_gameTime;
 	};

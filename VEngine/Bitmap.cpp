@@ -17,7 +17,7 @@ CBitmap::CBitmap(const std::string& filename, size_t scene)
 
 }
 
-CBitmap::CBitmap(CBitmap const* parent, size_t x, size_t y, size_t w, size_t h)
+CBitmap::CBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h)
 	: IAsset(parent->GetFilename(), IAsset::GRAPHICAL, -1)
 	, m_data(nullptr)
 {
@@ -35,52 +35,11 @@ CBitmap::CBitmap(ALLEGRO_BITMAP* bitmap)
 	assert(bitmap != nullptr);
 }
 
-CBitmap::CBitmap(const CBitmap& rhs)
-	: IAsset(rhs.GetFilename(), IAsset::GRAPHICAL, -1) 
-	, m_data(nullptr)
-{
-	*this = rhs;
-}
-
-CBitmap::CBitmap(CBitmap&& rhs)
-	: IAsset(rhs.GetFilename(), IAsset::GRAPHICAL, -1) 
-	, m_data(nullptr)
-{
-	*this = std::move(rhs);
-}
-
 CBitmap::~CBitmap(void)
 {
 	Unload();
-	//al_destroy_bitmap(m_data);
-	//m_data = nullptr;
 }
 
-const CBitmap& CBitmap::operator=(const CBitmap& rhs)
-{
-	if (this == &rhs)
-		return *this;
-	Unload();
-	if (rhs.m_data)
-		m_data = al_clone_bitmap(rhs.m_data);
-	SetFilename(rhs.GetFilename());
-	SetLoaded(rhs.IsLoaded());
-	return *this;
-}
-
-const CBitmap& CBitmap::operator=(CBitmap&& rhs)
-{
-	if (this == &rhs)
-		return *this;
-	Unload();
-	m_data = rhs.m_data;
-	rhs.m_data = nullptr;
-	SetFilename(rhs.GetFilename());
-	SetLoaded(rhs.IsLoaded());
-	return *this;
-}
-
-//bool CBitmap::IsValid(void) const { return (m_data ? true : false); }
 ALLEGRO_BITMAP* CBitmap::GetRaw(void) const { return m_data; }
 
 size_t CBitmap::GetWidth(void) const { if (IsLoaded()) return al_get_bitmap_width(m_data); return 0; }
@@ -90,11 +49,6 @@ bool CBitmap::IsLocked(void) const { if (IsLoaded()) return al_is_bitmap_locked(
 int CBitmap::GetFlags(void) const { if (IsLoaded()) return al_get_bitmap_flags(m_data); return false; }
 int CBitmap::GetFormat(void) const { if (IsLoaded()) return al_get_bitmap_format(m_data); return false; }
 void CBitmap::ConvertMaskToAlpha(size_t r, size_t g, size_t b) { if (IsLoaded()) al_convert_mask_to_alpha(m_data, al_map_rgb(r,g,b));}
-
-//void CBitmap::Reset(void)
-//{
-//	Unload();
-//}
 
 void CBitmap::OnLoad(void)
 {
@@ -184,4 +138,6 @@ namespace VE
 			(bitmap.GetWidth() / 2.0f) + cpos.x,
 			(bitmap.GetHeight() / 2.0f) + cpos.y, drawPos.x, drawPos.y, angle, flags);
 	}
+
+
 }

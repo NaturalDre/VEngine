@@ -121,7 +121,7 @@ namespace VE
 		IAnimationBase::operator=(rhs);
 
 		if (m_frame)
-			m_frame.Unload();
+			m_frame->Unload();
 
 		if (m_animationSheet)
 			m_animationSheet.reset(); // .reset because it's a smart pointer. We don't want to call ->Unload() incase something needs it.
@@ -148,7 +148,7 @@ namespace VE
 		IAnimationBase::operator=(std::move(rhs));
 
 		if (m_frame)
-			m_frame.Unload(); // We created it, so we can Unload it.
+			m_frame->Unload(); // We created it, so we can Unload it.
 		//rhs.Reset();
 		//rhs.m_frame = nullptr;
 
@@ -175,13 +175,8 @@ namespace VE
 	{
 		// We need to free this before m_animationSheet because it's a subbitmap of m_animationSheet.
 		if (m_frame)
-			m_frame.Unload();
+			m_frame->Unload();
 		m_animationSheet.reset();
-	}
-
-	const CBitmap& CBasicAnimation::GetFrame(void)
-	{
-		return m_frame;
 	}
 
 	void CBasicAnimation::FrameChanged(void)
@@ -194,9 +189,9 @@ namespace VE
 		const size_t y((cr.row - 1) * m_frameH);
 
 		if (m_frame)
-			m_frame.Unload();
+			m_frame->Unload();
 
-		m_frame = CBitmap(m_animationSheet.get(), x, y, m_frameW, m_frameH);
+		m_frame = CreateBitmap(m_animationSheet, x, y, m_frameW, m_frameH);
 		
 		m_framePosX = x;
 		m_framePosY = y;

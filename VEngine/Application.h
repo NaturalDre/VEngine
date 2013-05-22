@@ -25,10 +25,7 @@ namespace VE
 		int Run(void);
 	private:
 		CEngine* m_engine;
-		//lua_State* m_L;
 		CGameLevel* m_gameLevel;
-
-		CErrorLogger m_errorLogger;
 	};
 }
 

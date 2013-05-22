@@ -13,31 +13,15 @@ namespace VE
 {
 	class CBitmap: public IAsset
 	{
+		friend std::shared_ptr<CBitmap> CreateBitmap(void);
+		friend std::shared_ptr<CBitmap> CreateBitmap(const std::string&, size_t);
+		friend std::shared_ptr<CBitmap> CreateBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h);
+		friend std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* bitmap);
 	public:
-		CBitmap(void): IAsset("", IAsset::GRAPHICAL, -1), m_data(nullptr) { }
-		/// Load a bitmap from a file.
-		explicit CBitmap(const std::string& filename, size_t scene = -1);
-		/// Create a sub bitmap. Note: You must free the parent before this is deleted. 
-		/// The subbitmap is automatically loaded.
-		/// @note Calling Load on a subbitmap will not re-load the subbitmap.
-		/// I will consider created a derived class named CSubBitmap that can reload itself.
-		CBitmap(CBitmap const* parent, size_t x, size_t y, size_t w, size_t h);
-		/// Take ownership of this ALLEGRO_BITMAP
-		explicit CBitmap(ALLEGRO_BITMAP* bitmap);
-		// Copy
-		CBitmap(const CBitmap& rhs); 
-		// Move Copy
-		CBitmap(CBitmap&& rhs);
-		// Assignment
-		const CBitmap& operator=(const CBitmap& rhs);
-		// Move Assignment
-		const CBitmap& operator=(CBitmap&& rhs);
 		//
 		operator bool() const { return IsLoaded(); }
 
 		~CBitmap(void);
-
-		//void Reset(void);
 
 		/// \return Width in pixels.
 		size_t GetWidth(void) const;
@@ -59,10 +43,33 @@ namespace VE
 		void ConvertMaskToAlpha(size_t r, size_t g, size_t b);
 
 		static void Export(lua_State* L);
-
+		
 	protected:
+
+		CBitmap(void): IAsset("", IAsset::GRAPHICAL, -1), m_data(nullptr) { }
+		/// Load a bitmap information from a file.
+		/// \note The bitmap isn't loaded into memory.
+		CBitmap(const std::string& filename, size_t scene);
+		/// Create a sub bitmap. Note: You must free the parent before this is deleted. 
+		/// The subbitmap is automatically loaded.
+		/// @note Calling Load on a subbitmap will not re-load the subbitmap.
+		/// I will consider created a derived class named CSubBitmap that can reload itself.
+		CBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h);
+		/// Take ownership of this ALLEGRO_BITMAP
+		explicit CBitmap(ALLEGRO_BITMAP* bitmap);
+
 		void OnLoad(void);
 		void OnUnload(void);
+
+	private:
+		// Copy
+		CBitmap(const CBitmap& rhs); 
+		// Move Copy
+		CBitmap(CBitmap&& rhs);
+		// Assignment
+		const CBitmap& operator=(const CBitmap& rhs);
+		// Move Assignment
+		const CBitmap& operator=(CBitmap&& rhs);
 
 	private:
 		ALLEGRO_BITMAP* m_data;
@@ -94,6 +101,11 @@ namespace VE
 	*	ALLEGRO_FLIP_HORIZONTAL, ALLEGRO_FLIP_VERTICAL.
 	*/
 	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, b2Vec2 cpos, float angle = 0.0f, int flags = 0);
+
+	inline std::shared_ptr<CBitmap> CreateBitmap(void) { return std::shared_ptr<CBitmap>(new CBitmap); }
+	inline std::shared_ptr<CBitmap> CreateBitmap(const std::string& filename, size_t scene = -1) { return std::shared_ptr<CBitmap>(new CBitmap(filename, scene)); }
+	inline std::shared_ptr<CBitmap> CreateBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h) { return std::shared_ptr<CBitmap>(new CBitmap(parent, x, y, w, h)); }
+	inline std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* bitmap) { return std::shared_ptr<CBitmap>(new CBitmap(bitmap)); }
 }
 
 

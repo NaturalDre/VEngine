@@ -76,7 +76,7 @@ namespace VE
 	luabind::adl::index_proxy<luabind::object>  CScript::operator[](const std::string& member)
 	{
 		if (m_self.is_valid())
-			m_self[member.c_str()];
+			return m_self[member.c_str()];
 		else
 			return m_self[""];
 	}

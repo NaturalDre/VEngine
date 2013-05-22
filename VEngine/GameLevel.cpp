@@ -15,7 +15,7 @@ namespace VE
 {
 	CGameLevel* GAMELEVEL(nullptr);
 
-	CGameLevel::CGameLevel(CErrorLogger* logger, CEngine* engine)
+	CGameLevel::CGameLevel(CEngine* engine)
 		: IProcess(engine)
 		, m_player(nullptr)
 		, m_playerController(nullptr)
@@ -23,7 +23,6 @@ namespace VE
 		, m_gameMap(nullptr)
 		, m_scriptEnv(nullptr)
 		, m_engine(engine)
-		, m_logger(logger)
 	{
 		assert(GAMELEVEL == nullptr);
 		GAMELEVEL = this;

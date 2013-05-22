@@ -21,7 +21,6 @@ namespace VE
 	class CPlayer;
 	class CPlayerView;
 	class CPlayerController;
-	class CErrorLogger;
 	class CEngine;
 	class CGameMap;
 	class CGameLevel: public IEngineCallback, public IProcess
@@ -32,7 +31,7 @@ namespace VE
 		void Render(void);
 		void FreeMarkedEntities(void);
 	public:
-		CGameLevel(CErrorLogger* logger, CEngine* engine);
+		CGameLevel(CEngine* engine);
 		~CGameLevel(void);
 
 		void AddPlayer(void);

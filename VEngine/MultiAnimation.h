@@ -40,7 +40,6 @@ namespace VE
 
 		inline const std::shared_ptr<CBitmap>& GetSpriteSheet(void) const { return m_animation.GetAnimationSheet(); }
 
-		const CBitmap& GetFrame(void);
 	private:
 		std::map<const std::string, const FrameSequence> m_sequences;
 		std::string m_currentAnim;
