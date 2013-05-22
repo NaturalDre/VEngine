@@ -26,20 +26,29 @@ namespace VE
 		if (m_engine && m_engine->GetConsole())
 			m_engine->GetConsole()->AddToList(m_errors.back());
 		std::cout << std::endl << m_errors.back();
-		//std::cerr << m_errors.back();
 	}
 
-	void CErrorLogger::LogError(const std::string& error) { LogType(al_get_time(), error, "Error"); }
-	void CErrorLogger::LogNote(const std::string& error) { LogType(al_get_time(), error, "Note"); }
+	//void CErrorLogger::LogError(const std::string& error) { LogType(al_get_time(), error, "Error"); }
+	//void CErrorLogger::LogNote(const std::string& error) { LogType(al_get_time(), error, "Note"); }
+
+	void vShowMessage(const std::string& message, const std::string& file, int line)
+	{
+		std::cout << std::endl << "[" << al_current_time() << "]" <<
+		 " MSG: " << message << " FILE: " << file << " LINE: " << line;
+	}
 
 	void CErrorLogger::Export(lua_State* L)
 	{
 		using namespace luabind;
+		//module(L)
+		//	[
+		//		class_<CErrorLogger>("CErrorLogger")
+		//		.def("LogError", &CErrorLogger::LogError)
+		//		.def("LogNote", &CErrorLogger::LogNote)
+		//	];
 		module(L)
 			[
-				class_<CErrorLogger>("CErrorLogger")
-				.def("LogError", &CErrorLogger::LogError)
-				.def("LogNote", &CErrorLogger::LogNote)
+				def("vShowMessage", &vShowMessage)
 			];
 	}
 }

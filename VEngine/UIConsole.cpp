@@ -59,11 +59,13 @@ namespace VE
 
 			const std::string str = lua_tostring(e.state(), -1);
 			lua_pop(e.state(), 1);
-			m_engine->GetLogger().LogError(str);
+			vShowMessage(str, __FILE__, __LINE__);
+			//m_engine->GetLogger().LogError(str);
 		}
 		catch(const std::exception& e)
 		{
-			m_engine->GetLogger().LogError(e.what());
+			vShowMessage(e.what(), __FILE__, __LINE__);
+			//m_engine->GetLogger().LogError(e.what());
 		}
 	}
 }

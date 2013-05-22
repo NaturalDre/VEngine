@@ -18,8 +18,8 @@ namespace VE
 		CErrorLogger(CEngine* engine = nullptr);
 		~CErrorLogger(void);
 
-		void LogError(const std::string& error);
-		void LogNote(const std::string& error);
+		//void LogError(const std::string& error);
+		//void LogNote(const std::string& error);
 
 		inline void SetEngine(CEngine* engine) { m_engine = engine; }
 
@@ -28,6 +28,9 @@ namespace VE
 		CEngine* m_engine;
 		std::queue<const std::string> m_errors;
 	};
+
+	void vShowMessage(const std::string& message, const std::string& file = "N/A", int line = 0);
+//#define vSHOWMESSAGE(message, file, line);
 }
 
 #endif

@@ -7,6 +7,8 @@ function GetFactory(name)
 	end
 end
 
-function LogNote(str)
-	gLogger:LogNote(str .. "");
+function LogNote(msg, file, line)
+	file = file or "N/A";
+	line = line or 0;
+	vShowMessage(msg, file, line);
 end

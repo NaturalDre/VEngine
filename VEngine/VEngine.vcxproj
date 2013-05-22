@@ -192,12 +192,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\tinyxml;C:\allegro\include;C:\Box2D_v2.2.1;C:\boost_1_53_0;C:\Libraries\lua-5.1.5\src;C:\Libraries\gwen\include;C:\Libraries\luabind-0.9.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\tinyxml;C:\allegro\include;C:\Box2D_v2.2.1;C:\boost_1_50;C:\Libraries\lua-5.1.5\src;C:\Libraries\gwen\include;C:\Libraries\luabind-0.9.1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <CompileAs>Default</CompileAs>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

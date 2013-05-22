@@ -14,8 +14,8 @@ CAssetManager::CAssetManager(void)
 
 void CAssetManager::LoadAssetsFromLua(const std::string& filename)
 {
-	std::cout << "Attempting to load assets from lua file '" << filename << "'.\n";
-	std::cout << "Finished loading assets from lua file '" << filename << "'.\n";
+	std::cout << "\nAttempting to load assets from lua file '" << filename << "'.\n";
+	std::cout << "\nFinished loading assets from lua file '" << filename << "'.\n";
 }
 
 void CAssetManager::LoadAssetsFromXML(const std::string& filename)

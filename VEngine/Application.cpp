@@ -56,8 +56,7 @@ namespace VE
 
 		SetupDirectories();
 		ExportBindings(m_engine->GetScriptEnv());
-		// Logger needs to be the first thing to be setup because things will use it to show errors.
-		luabind::settable(luabind::globals(m_engine->GetScriptEnv()), "gLogger", &m_errorLogger);
+
 		// CGameLevel needs certain directories 
 		// set up before it's created, otherwise it will 
 		// crash the program. Make sure SetupDirectories() has
@@ -112,7 +111,8 @@ namespace VE
 		}
 		catch(const luabind::error& e)
 		{
-			m_errorLogger.LogError(std::string("Attempt to call OnAppStartup generated error: ") + lua_tostring(m_engine->GetScriptEnv(), -1));
+//			m_errorLogger.LogError(std::string("Attempt to call OnAppStartup generated error: ") + lua_tostring(m_engine->GetScriptEnv(), -1));
+			vShowMessage(std::string("Attempt to call OnAppStartup generated error: ") + lua_tostring(m_engine->GetScriptEnv(), -1), __FILE__, __LINE__);
 			lua_pop(e.state(), 1);
 		}
 
