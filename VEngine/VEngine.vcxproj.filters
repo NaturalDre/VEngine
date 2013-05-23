@@ -322,6 +322,9 @@
     <ClCompile Include="TMR\TiledObject.cpp">
       <Filter>Source Files\TMR</Filter>
     </ClCompile>
+    <ClCompile Include="BitmapAsset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -476,6 +479,9 @@
     </ClInclude>
     <ClInclude Include="TMR\ObjectLayer.h">
       <Filter>Header Files\TMR</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapAsset.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

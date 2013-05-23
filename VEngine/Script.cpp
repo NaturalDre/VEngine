@@ -73,7 +73,7 @@ namespace VE
 		// STK: table
 	}
 
-	luabind::adl::index_proxy<luabind::object>  CScript::operator[](const std::string& member)
+	luabind::object  CScript::operator[](const std::string& member)
 	{
 		if (m_self.is_valid())
 			return m_self[member.c_str()];

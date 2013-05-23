@@ -3,6 +3,7 @@
 #include <iostream>
 #include "tinyxml.h"
 #include "Bitmap.h"
+#include "BitmapAsset.h"
 
 CAssetManager* CAssetManager::instance = nullptr;
 
@@ -49,7 +50,7 @@ void CAssetManager::LoadAssetsFromXML(const std::string& filename)
 
 					if (type == "GRAPHICAL")
 					{
-						asset = VE::CreateBitmap(filename, scene);
+						asset = std::shared_ptr<IAsset>(new VE::CBitmapAsset(filename));
 					}
 					else if (type == "AUDIO")
 					{

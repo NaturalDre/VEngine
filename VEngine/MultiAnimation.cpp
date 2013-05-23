@@ -1,5 +1,6 @@
 #include "MultiAnimation.h"
 #include "AssetManager.h"
+#include "BitmapAsset.h"
 
 namespace VE
 {
@@ -36,15 +37,18 @@ namespace VE
 
 	bool CMultiAnimation::SetSpriteSheet(const std::string& sheet, size_t rows, size_t cols, double fps)
 	{
-		return SetSpriteSheet(
-			std::static_pointer_cast<CBitmap>(CAssetManager::Instance()->GetAsset(sheet))
-			, rows, cols, fps);	
+		auto bitmap = std::static_pointer_cast<CBitmapAsset>(CAssetManager::Instance()->GetAsset(sheet));
+		return SetSpriteSheet(bitmap->GetBitmap(), rows, cols, fps);
+		
+		//return SetSpriteSheet(
+		//	std::static_pointer_cast<CBitmap>(std::shared_ptr<CBitmapAsset>(CAssetManager::Instance()->GetAsset(sheet)))
+		//	, rows, cols, fps);	
 	}
 
 	bool CMultiAnimation::SetSpriteSheet(const std::shared_ptr<CBitmap>& sheet, size_t rows, size_t cols, double fps)
 	{
-		if (!sheet->IsLoaded())
-			sheet->Load();
+		//if (!sheet->IsValid())
+		//	sheet->Load();
 		m_animation = CBasicAnimation(sheet, rows, cols, fps);
 		return (m_animation.GetAnimationSheet() ? true : false);
 	}

@@ -4,18 +4,14 @@
 #include <string>
 #include <vector>
 #include <luabind\object.hpp>
+#include "Asset.h"
 
 struct lua_State;
-
-//#ifndef CALLSCRIPTFUNCTION
-//#define CALLSCRIPTFUNCTION
-//#define CallFunction luabind::call_function<luabind::object>
-//#endif
 
 namespace VE
 {
 	luabind::object GetFactory(lua_State* L, const std::string& factory);
-	class CScript
+	class CScript//: public IAsset
 	{
 	protected:
 
@@ -31,7 +27,7 @@ namespace VE
 		
 		void Update(double dt);
 
-		luabind::adl::index_proxy<luabind::object> operator[](const std::string& member);
+		luabind::object operator[](const std::string& member);
 
 		static void Export(lua_State* L);
 	private:

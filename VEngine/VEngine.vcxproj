@@ -69,6 +69,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BasicAnimation.cpp" />
+    <ClCompile Include="BitmapAsset.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ContactCallback.cpp" />
     <ClCompile Include="ContactListener.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Asset.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BasicAnimation.h" />
+    <ClInclude Include="BitmapAsset.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />

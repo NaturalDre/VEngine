@@ -20,12 +20,12 @@ namespace VE
 	{
 		Tiled::CTileset* ts = Tiled::CTileset::ContainsGid(GetTilesets(), id);
 		if (!ts)
-			return VE::CreateBitmap();
+			return nullptr;
 
 		const std::shared_ptr<CBitmap> image = GetTilesetImage(ts->Name());
 
 		if (!image)
-			return VE::CreateBitmap();
+			return nullptr;
 
 		const ColRow  cr = GetColRow(ts->TilesAcross(), (id - ts->FirstGid()) + 1);
 
@@ -79,7 +79,7 @@ namespace VE
 		const float tlx = renderer->Cam()->TopLeftPosPix().x;
 		const float tly = renderer->Cam()->TopLeftPosPix().y;	
 
-		std::shared_ptr<CBitmap> tile = CreateBitmap();
+		std::shared_ptr<CBitmap> tile = nullptr;
 		size_t prevID(0);
 
 		const int startCol(static_cast<int>(tlx / GetTileWidth()));
@@ -126,10 +126,7 @@ namespace VE
 		std::for_each(GetTilesets().begin(), GetTilesets().end(), [&](Tiled::CTileset* tileset)
 		{
 			if (!tileset->Name().empty() && !tileset->Source().empty())
-			{
 				m_tilesetImages[tileset->Name()] = CreateBitmap("Images/Tilesets/" + tileset->Source());
-				m_tilesetImages[tileset->Name()]->Load();
-			}
 		});
 
 		m_parser.Parse();
