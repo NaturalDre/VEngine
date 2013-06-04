@@ -2,12 +2,12 @@
 #define ABSTRACTLEVELMODEL_H
 
 #include "Process.h"
-#include "EngineCallback.h"
+//#include "EngineCallback.h"
 #include "Engine.h"
 #include <string>
 #include <unordered_set>
 #include <luabind\object.hpp>
-
+#include "Locator.h"
 struct lua_State;
 
 namespace VE
@@ -23,12 +23,10 @@ namespace VE
 	class CPlayerController;
 	class CEngine;
 	class CGameMap;
-	class CGameLevel: public IEngineCallback, public IProcess
+	class CGameLevel:/* public IEngineCallback, */public IProcess
 	{
 	protected:
 		void Think(double dt);
-		void HandleEvent(const ALLEGRO_EVENT& ev);
-		void Render(void);
 		void FreeMarkedEntities(void);
 	public:
 		CGameLevel(CEngine* engine);
@@ -40,7 +38,6 @@ namespace VE
 		CPlayer* GetPlayer(void) const;
 		inline CPlayerController* GetPlayerController(void) const { return m_playerController; }
 
-		inline CRender* GetRenderer(void) const { return m_engine->GetRenderer(); }
 		CPhysics* GetPhysics(void) const { return m_engine->GetPhysics(); }
 
 		void AddAnimation(IAnimation* anim) { m_animations.insert(anim); }

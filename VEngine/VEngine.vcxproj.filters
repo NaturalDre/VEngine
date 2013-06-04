@@ -29,14 +29,17 @@
     <Filter Include="Source Files\Lua">
       <UniqueIdentifier>{93027458-0d56-4aa8-955e-2d60d529cadf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Lua">
-      <UniqueIdentifier>{80e5c0f7-279f-4e70-932b-9003d8ec61d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\LuaBind">
       <UniqueIdentifier>{f699cc3c-4ee1-4b16-a3ba-44c037bc6895}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Gwen">
       <UniqueIdentifier>{4662be5b-b15e-42b4-aa49-1a52a849c8b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IServices">
+      <UniqueIdentifier>{dace67e4-322d-4cac-80eb-9ac868925a6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lua">
+      <UniqueIdentifier>{80e5c0f7-279f-4e70-932b-9003d8ec61d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +161,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\ProjectDependencies\gwen\Renderers\Allegro\Allegro.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ContactCallback.cpp">
@@ -325,6 +325,15 @@
     <ClCompile Include="BitmapAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Locator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMapView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -456,9 +465,6 @@
     <ClInclude Include="MapParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UIConsole.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -481,6 +487,18 @@
       <Filter>Header Files\TMR</Filter>
     </ClInclude>
     <ClInclude Include="BitmapAsset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Locator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderService.h">
+      <Filter>Header Files\IServices</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMapView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

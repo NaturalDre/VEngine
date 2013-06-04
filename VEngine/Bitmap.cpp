@@ -5,6 +5,7 @@
 #include <allegro5\allegro5.h>
 #include <list>
 #include <algorithm>
+#include "Locator.h"
 
 using namespace VE;
 
@@ -100,7 +101,7 @@ std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* pParentBitmap)
 		if (!bitmap.IsValid())
 			return false;
 
-		CCamera* cam = GameLevel()->GetRenderer()->Cam();
+		CCamera* cam = CLocator::GetRenderer()->GetCamera();
 
 		b2Vec2 camTopL = cam->TopLeftPosPix();
 		// Copy the vector then add it's with and height to get its bottom right
@@ -133,7 +134,7 @@ std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* pParentBitmap)
 
 		dpos = MtrToPix(dpos);		// Meters->Pixels
 
-		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->GetRenderer()->Cam(), dpos));
+		b2Vec2 drawPos(GameToScreenPosPix(CLocator::GetRenderer()->GetCamera(), dpos));
 		al_draw_bitmap(bitmap.GetData(), drawPos.x, drawPos.y, flags);
 	}
 
@@ -152,7 +153,7 @@ std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* pParentBitmap)
 		cpos = MtrToPix(cpos);
 
 		// Where on the user's screen is the position at?
-		b2Vec2 drawPos(GameToScreenPosPix(GameLevel()->GetRenderer()->Cam(), dpos));
+		b2Vec2 drawPos(GameToScreenPosPix(CLocator::GetRenderer()->GetCamera(), dpos));
 
 		// Box2D considers the center (0,0), not the top left, so
 		// we need to do some conversating when providing the center position

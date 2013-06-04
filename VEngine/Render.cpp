@@ -2,6 +2,7 @@
 #include "View.h"
 #include "GameMap.h"
 #include "Bitmap.h"
+#include "GameLevel.h"
 #include <algorithm>
 #include <allegro5\allegro5.h>
 
@@ -9,9 +10,8 @@ namespace VE
 {
 	CRender::CRender(void)
 		: IProcess(nullptr)
-		, m_gameMap(nullptr)
+		, m_gameLevel(nullptr)
 		, m_camera(nullptr)
-		, m_physics(nullptr)
 		, m_uiCanvas(nullptr)
 	{
 		m_camera = new CCamera(nullptr, GetDisplayWidth(), GetDisplayHeight());
@@ -20,7 +20,7 @@ namespace VE
 	CRender::~CRender(void)
 	{
 		delete m_camera;
-		m_camera = nullptr;
+		SetCamera(nullptr);
 	}
 
 	void CRender::AddView(IView* view)
@@ -45,10 +45,6 @@ namespace VE
 		if (!m_camera)
 			return;
 
-		// Draw map
-		if (m_gameMap && m_gameMap->IsValid())
-			m_gameMap->Render(this, 0, m_gameMap->GetPlayerLayer());
-
 		std::sort(m_views.begin(), m_views.end(), [](IView* lhs, IView* rhs)
 		{
 			return lhs->DrawOrder() < rhs->DrawOrder();
@@ -56,12 +52,6 @@ namespace VE
 
 		for (auto iter = m_views.begin(); iter != m_views.end(); ++iter)
 			(*iter)->Draw();
-
-		if (m_gameMap)
-			m_gameMap->Render(this, m_gameMap->GetPlayerLayer() + 1, m_gameMap->GetTileLayers().size());
-		
-		if (m_physics)
-			m_physics->DrawDebugData();
 
 		if (m_uiCanvas)
 			m_uiCanvas->RenderCanvas();

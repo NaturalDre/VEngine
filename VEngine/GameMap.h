@@ -1,5 +1,4 @@
-#ifndef GAMEMAP_H
-#define GAMEMAP_H
+#pragma once
 
 #include "TMR\MapFile.h"
 #include "Bitmap.h"
@@ -13,6 +12,7 @@ namespace VE
 {
 	class CRender;
 	class CGameLevel;
+	class IView;
 	class CGameMap: public Tiled::CMapFile
 	{
 		friend CMapParser;
@@ -20,15 +20,14 @@ namespace VE
 		typedef std::vector<Tiled::CTileLayer*>::const_iterator ConstTileLayerIter;
 
 	protected:
-		std::shared_ptr<CBitmap> LoadTile(const size_t id);
 		ConstTileLayerIter FindTileLayer(const std::string& name);
+		/// Finds the tilelayer with the name @name and returns its index.
+		/// \note Returns -1 on failure to find layer with @name.
 		int FindTileLayerIndex(const std::string& name);
 
-		void RenderLayer(VE::CRender* renderer, Tiled::CTileLayer* tilelayer);
-		void RenderOrthogonal(VE::CRender* renderer, Tiled::CTileLayer* tilelayer);
-		void RenderIsometric(VE::CRender* renderer, Tiled::CTileLayer* tilelayer);
-		/// @param pos Position on the map to spawn the player in pixels.
+
 		void SetPlayerSpawn(float x, float y) { m_playerSpawn = PixToMtr(b2Vec2(x,y)); }
+		/// @param pos Position on the map to spawn the player in pixels.
 		void SetPlayerSpawn(const b2Vec2& pos) { m_playerSpawn = pos; };
 	public:
 
@@ -36,8 +35,6 @@ namespace VE
 		~CGameMap(void) { }
 
 		bool Read(const std::string& filename);
-		void Render(VE::CRender* renderer, size_t begin, size_t end);
-		void Render(VE::CRender* renderer, const std::string& begin, const std::string& end);
 
 		inline size_t GetPlayerLayer(void) const { return m_playerLayer; }
 		/// @param name The name of the tileset you want.
@@ -54,11 +51,12 @@ namespace VE
 		std::map<std::string, std::shared_ptr<CBitmap>> m_tilesetImages;
 		CMapParser m_parser;
 		CGameLevel* m_gameLevel;
-
 		size_t m_playerLayer;
 		b2Vec2 m_playerSpawn;
 		Tiled::Object m_playerData;
+		/// For drawing layers on/below the layer the player is on.
+		IView* m_lowerView;
+		/// For drawing layers above the layer the player is on.
+		IView* m_upperView;
 	};
 }
-
-#endif

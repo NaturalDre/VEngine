@@ -59,7 +59,7 @@ namespace VE
 		void CloseScriptEnv(void);
 
 		inline CPhysics* GetPhysics(void) const { return m_physics; }
-		inline CRender* GetRenderer(void) const { return m_renderer; }
+
 		inline lua_State* GetScriptEnv(void) const { return m_scriptEnv; }
 		inline CUIConsole* GetConsole(void) const { return m_console; }
 
@@ -67,7 +67,6 @@ namespace VE
 		inline void SetPauseLogic(bool shouldPause) { m_pauseLogic = shouldPause; }
 		inline bool IsPhysicsPaused(void) const { return m_pausePhysics; }
 		inline bool IsLogicPaused(void) const { return m_pauseLogic; }
-
 
 	private:
 		ALLEGRO_EVENT_QUEUE* m_evQ;

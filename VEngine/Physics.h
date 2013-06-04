@@ -5,10 +5,6 @@
 #include "TMR\TiledObject.h"
 
 const float SCALE(32.0f);
-//const float PIXELSPERMETER(32.0f);
-
-
-class DebugDraw;
 
 namespace Tiled
 {
@@ -19,10 +15,11 @@ namespace VE
 {
 	class CContactListener;
 	class CCamera;
+	class CPhysicsView;
 	class CPhysics
 	{
 	public:
-		CPhysics(CCamera* cam);
+		CPhysics(void);
 		~CPhysics(void);
 
 		inline void Simulate(void) const { m_world->Step(m_timeStep, m_velocityIters, m_positionIters); }
@@ -37,7 +34,7 @@ namespace VE
 		size_t m_velocityIters, m_positionIters;
 		bool m_drawDebugData;
 		b2World* m_world;
-		DebugDraw* m_debugDrawer;
+		CPhysicsView* m_physicsView;
 		CContactListener* m_contactListener;
 	};
 

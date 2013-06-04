@@ -6,14 +6,16 @@
 #include <vector>
 #include <Gwen\Controls\Canvas.h>
 
+#include "RenderService.h"
+
 namespace VE
 {
 	class IView;
 	class CPhysics;
 	class CBitmap;
-	class CGameMap;
+	class CGameLevel;
 
-	class CRender: public IProcess
+	class CRender: public IProcess, public IRenderService
 	{
 	protected:
 		void Think(double dt) { }
@@ -25,21 +27,20 @@ namespace VE
 		void AddView(IView* view);
 		void RemoveView(IView* view);
 
-		CGameMap* MapFile(void) const { return m_gameMap; }
-		void SetMapFile(CGameMap* gameMap) { m_gameMap = gameMap; }
-
 		CCamera* Cam(void) const { return m_camera; }
-		//void SetCam(CCamera* cam) { m_camera = cam; }
 
-		void SetPhysics(CPhysics* physics) { m_physics = physics; }
 		void SetUICanvas(GwenCanvas* canvas) { m_uiCanvas = canvas; }
 		void Render(void);
+
+		void SetCamera(CCamera* cam) { m_camera = cam; }
+		CCamera* GetCamera(void) const { return m_camera; }
 	private:
 		std::vector<IView*> m_views;
-		CGameMap* m_gameMap;
+		CGameLevel* m_gameLevel;
+		//CGameMap* m_gameMap;
 		CCamera* m_camera;
 		// I only have a reference to the physics engine to draw the debug data for it.
-		CPhysics* m_physics;
+		//CPhysics* m_physics;
 		GwenCanvas* m_uiCanvas;
 	};
 	// Current width of the screen window.

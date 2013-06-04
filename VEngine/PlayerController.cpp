@@ -87,7 +87,7 @@ namespace VE
 
 	void CPlayerController::HandleMouseMove(const ALLEGRO_EVENT& ev)
 	{
-		m_mousePos = GameLevel()->GetRenderer()->Cam()->TopLeftPosPix() + b2Vec2(ev.mouse.x, ev.mouse.y);
+		m_mousePos = CLocator::GetRenderer()->GetCamera()->TopLeftPosPix() + b2Vec2(ev.mouse.x, ev.mouse.y);
 		m_mousePos = PixToMtr(m_mousePos);
 	}
 

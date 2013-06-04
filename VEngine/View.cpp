@@ -1,19 +1,17 @@
 #include "View.h"
 #include "Render.h"
+#include "Locator.h"
 
 namespace VE
 {
-	IView::IView(CRender* renderer, int drawOrder)
+	IView::IView(int drawOrder)
 		: m_drawOrder(drawOrder)
-		, m_renderer(renderer)
 	{
-		if (m_renderer)
-			m_renderer->AddView(this);
+		CLocator::GetRenderer()->AddView(this);
 	}
 
 	IView::~IView(void)
 	{
-		if (m_renderer)
-			m_renderer->RemoveView(this);
+		CLocator::GetRenderer()->RemoveView(this);
 	}
 }

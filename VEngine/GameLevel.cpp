@@ -10,6 +10,7 @@
 #include <luabind\luabind.hpp>
 #include "Script.h"
 #include "Utility.h"
+#include "Locator.h"
 
 namespace VE
 {
@@ -31,11 +32,6 @@ namespace VE
 		assert(m_logger != nullptr);
 
 		m_gameMap = new CGameMap(this);
-		//m_playerController = new CPlayerController(nullptr);
-		//m_playerView = new CPlayerView(GetRenderer());
-
-		GetRenderer()->SetMapFile(m_gameMap);
-		GetRenderer()->SetPhysics(GetPhysics());
 	}
 
 	CGameLevel::~CGameLevel(void)
@@ -50,9 +46,6 @@ namespace VE
 
 		delete m_gameMap;
 		m_gameMap = nullptr;
-
-		//delete m_renderer;
-		//m_renderer = nullptr;
 
 		// No need to close the state. We don't own it.
 		m_scriptEnv = nullptr;
@@ -77,21 +70,6 @@ namespace VE
 			for (auto iter = m_entities.begin(); iter != m_entities.end(); ++iter)
 				(*iter)->Update(dt);
 		}
-
-		//GetPhysics()->Simulate();
-	}
-
-	void CGameLevel::HandleEvent(const ALLEGRO_EVENT& ev)
-	{
-		if (GetPlayerController())
-			GetPlayerController()->HandleEvent(ev);
-	}
-
-	void CGameLevel::Render(void)
-	{
-		if (GetRenderer())
-			GetRenderer()->Render();
-	
 	}
 
 	void CGameLevel::FreeMarkedEntities(void)
@@ -128,16 +106,14 @@ namespace VE
 
 		m_player = CreatePlayer(this, m_gameMap->GetPlayerSpawn());
 		m_playerController = new CPlayerController(m_player);
-		m_playerView = new CPlayerView(GetRenderer());
+		m_playerView = new CPlayerView();
 		m_playerView->SetPlayer(m_player);
-		//m_playerController->SetPlayer(m_player);
-		//m_playerView->SetPlayer(m_player);
-		GetRenderer()->Cam()->Watch(m_player);
+		CLocator::GetRenderer()->GetCamera()->Watch(m_player);
 	}
 
 	void CGameLevel::RemovePlayer(void)
 	{
-		GetRenderer()->Cam()->Watch(nullptr);
+		CLocator::GetRenderer()->GetCamera()->Watch(nullptr);
 		if (m_playerView)
 			m_playerView->SetPlayer(nullptr);
 		if (m_playerController)
@@ -176,7 +152,7 @@ namespace VE
 		module(L)
 			[
 				class_<CGameLevel>("CGameLevel")
-				.property("renderer", &CGameLevel::GetRenderer)
+				//.property("renderer", &CGameLevel::GetRenderer)
 				.property("physics", &CGameLevel::GetPhysics)
 				.property("map", &CGameLevel::GetMap)
 				.property("logger", &CGameLevel::GetLogger)

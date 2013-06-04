@@ -9,7 +9,7 @@
 namespace VE
 {
 	class CPlayer;
-	class CRender;
+	class IRenderService;
 	class CPlayerView: public IView, public IObserver
 	{
 	protected:
@@ -19,7 +19,7 @@ namespace VE
 
 		void OnSpeedChange(void);
 	public:
-		CPlayerView(CRender* render);
+		CPlayerView(void);
 		~CPlayerView(void);
 
 		CPlayer* Player(void) const { return m_player; }

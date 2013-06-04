@@ -3,24 +3,22 @@
 
 namespace VE
 {
-	class CRender;
-	
+	class IRenderService;
 	class IView
 	{
 	protected:
-		IView(CRender* renderer = nullptr, int drawOrder = 0);
-		virtual ~IView(void);
+		IView(int drawOrder = 0);
+
 
 	public:
+		virtual ~IView(void);
 		virtual void Draw(void) = 0;
 
 		inline int DrawOrder(void) const { return m_drawOrder; }
 		inline void SetDrawOrder(int drawOrder) { m_drawOrder = drawOrder; }
 
-		CRender* Renderer(void) const { return m_renderer; }
 	private:
 		int m_drawOrder;
-		CRender* m_renderer;
 	};
 }
 #endif

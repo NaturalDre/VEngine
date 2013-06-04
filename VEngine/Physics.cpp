@@ -3,10 +3,11 @@
 #include "DebugDraw.h"
 #include "Camera.h"
 #include <luabind\luabind.hpp>
+#include "PhysicsView.h"
 
 namespace VE
 {
-	CPhysics::CPhysics(CCamera* cam)
+	CPhysics::CPhysics(void)
 		: m_world(nullptr)
 		, m_timeStep(1.0f / 60.0f)
 		, m_velocityIters(6)
@@ -14,10 +15,8 @@ namespace VE
 		, m_drawDebugData(false)
 	{
 		m_world = new b2World(b2Vec2(0, 0));
-		m_debugDrawer = new DebugDraw(cam);
+		m_physicsView = new CPhysicsView(this);
 		m_contactListener = new CContactListener(this);
-
-		m_world->SetDebugDraw(m_debugDrawer);
 		m_world->SetContactListener(m_contactListener);
 	}
 
@@ -26,8 +25,8 @@ namespace VE
 		delete m_world;
 		m_world = nullptr;
 
-		delete m_debugDrawer;
-		m_debugDrawer = nullptr;
+		delete m_physicsView;
+		m_physicsView = nullptr;
 
 		delete m_contactListener;
 		m_contactListener = nullptr;

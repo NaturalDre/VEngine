@@ -13,7 +13,6 @@ namespace VE
 {
 	class CBitmap
 	{
-		//friend std::shared_ptr<CBitmap> CreateBitmap(void);
 		friend std::shared_ptr<CBitmap> CreateBitmap(const std::string&);
 		friend std::shared_ptr<CBitmap> CreateBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h);
 		friend std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* bitmap);
@@ -42,11 +41,6 @@ namespace VE
 		///
 		void ConvertMaskToAlpha(size_t r, size_t g, size_t b);
 		bool const IsValid(void) const { if(m_data) return true; else return false; }
-		//void SetLoaded(bool isLoaded) { m_isLoaded = isLoaded; }
-		//bool IsLoaded(void) const { return m_isLoaded; }
-
-		//void Load(void);
-		//void Unload(void);
 
 		static void Export(lua_State* L);
 		
@@ -63,9 +57,6 @@ namespace VE
 		CBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h);
 		/// Take ownership of this ALLEGRO_BITMAP
 		explicit CBitmap(ALLEGRO_BITMAP* bitmap);
-
-		//void Load(void);
-		//void Unload(void);
 
 	private:
 		// Copy
@@ -108,7 +99,6 @@ namespace VE
 	*/
 	void DrawBitmap(const CBitmap& bitmap, b2Vec2 dpos, b2Vec2 cpos, float angle = 0.0f, int flags = 0);
 
-	//inline std::shared_ptr<CBitmap> CreateBitmap(void) { return std::shared_ptr<CBitmap>(new CBitmap); }
 	std::shared_ptr<CBitmap> CreateBitmap(const std::string& filename);
 	std::shared_ptr<CBitmap> CreateBitmap(const std::shared_ptr<CBitmap>& parent, size_t x, size_t y, size_t w, size_t h);
 	std::shared_ptr<CBitmap> CreateBitmap(ALLEGRO_BITMAP* pParentBitmap);

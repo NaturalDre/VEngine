@@ -6,8 +6,8 @@
 
 namespace VE
 {
-	CPlayerView::CPlayerView(CRender* render)
-		: IView(render)
+	CPlayerView::CPlayerView(void)
+		: IView()
 		, m_player(nullptr)
 	{
 		m_anims.SetSpriteSheet("Images/player.png", 4, 3, 5); 

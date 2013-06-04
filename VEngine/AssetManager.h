@@ -3,9 +3,12 @@
 
 #include "Asset.h"
 #include <map>
+#include <list>
+#include <memory>
 #include <vector>
-
 class IAsset;
+class CBitmap;
+class CScript;
 
 class CAssetManager
 {
@@ -23,6 +26,8 @@ public:
 	static CAssetManager* Instance(void) { if (!instance) instance = new CAssetManager; return instance; }
 private:
 	size_t m_curScene;
+	std::list<std::shared_ptr<CBitmap>> m_bitmaps;
 	std::map<size_t, std::vector<std::shared_ptr<IAsset>>> m_assets;
+
 };
 #endif

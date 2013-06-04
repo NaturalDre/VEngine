@@ -19,6 +19,8 @@
 #include "Render.h"
 
 #include "Utility.h"
+#include "Locator.h"
+
 namespace VE
 {
 	CEngine::CEngine(void)
@@ -86,9 +88,7 @@ namespace VE
 		luabind::module(GetScriptEnv())
 			[
 				luabind::class_<CEngine>("CEngine")
-				//.property("scriptEnv", &CEngine::GetScriptEnv)
 				.property("physics", &CEngine::GetPhysics)
-				.property("renderer", &CEngine::GetRenderer)
 				.property("pausePhysics", &CEngine::IsPhysicsPaused, &CEngine::SetPausePhysics)
 				.property("pauseLogic", &CEngine::IsLogicPaused, &CEngine::SetPauseLogic)
 			];
@@ -119,7 +119,8 @@ namespace VE
 			m_timer = al_create_timer(1.0f / 60.0f);
 			m_display = al_create_display(800, 600);
 			m_renderer = new CRender;
-			m_physics = new CPhysics(GetRenderer()->Cam());
+			CLocator::Provide(m_renderer);
+			m_physics = new CPhysics;
 
 			m_gwenRenderer = new GwenAllegroRenderer;
 
@@ -130,7 +131,7 @@ namespace VE
 			m_canvas = new GwenCanvas(&m_gwenSkin);
 			m_canvas->SetSize(GetDisplayWidth(), GetDisplayHeight());
 			m_canvas->SetDrawBackground(false);
-			GetRenderer()->SetUICanvas(m_canvas);
+			m_renderer->SetUICanvas(m_canvas);
 			m_gwenInput.Initialize(m_canvas);
 			m_console = new CUIConsole(this, m_canvas);
 			m_console->SetHidden(true);
@@ -205,8 +206,7 @@ namespace VE
 
 	void CEngine::Render(void)
 	{
-		// Let the controller know rendering is about to begin(It should use this to know when to draw the map).
-		m_callback->Render();
+		CLocator::GetRenderer()->Render();
 	}
 
 	void CEngine::HandleEvent(ALLEGRO_EVENT& ev)
@@ -223,8 +223,6 @@ namespace VE
 			else
 					m_gwenInput.ProcessMessage(ev);
 		}
-		if (m_callback)
-			m_callback->HandleEvent(ev);
 	}
 
 

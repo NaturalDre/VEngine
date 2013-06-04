@@ -57,7 +57,7 @@ namespace VE
 		} 
 		/// Set the player for the camera to follow.
 		/// @param player The player to follow.
-		inline void Watch(CPlayer* player) { m_player = player; }
+		/*inline */void Watch(CPlayer* player) { m_player = player; }
 		/// Set the width of the camera
 		/// @param width Pixels.
 		void SetWidth(size_t width) { if (width) m_width = width; }

@@ -20,8 +20,6 @@ namespace VE
 	{
 		if (m_gameLevel)
 			m_gameLevel->RemoveEntity(this);
-
-		//SetScript(nullptr);
 	}
 
 	void IEntity::SetScript(CScript* script)

@@ -13,7 +13,6 @@
 #include "TMR\MapFile.h"
 #include "ErrorLogger.h"
 #include "ContactCallback.h"
-#include "PhysicsEntity.h"
 #include "GameMap.h"
 
 using namespace luabind;
@@ -54,7 +53,6 @@ void ExportBindings(lua_State* L)
 
 	IContactCallback::Export(L);
 	IEntity::Export(L);
-	IPhysicsEntity::Export(L);
 
 	CErrorLogger::Export(L);
 	CScript::Export(L);

@@ -81,13 +81,15 @@
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="GameMap.cpp" />
+    <ClCompile Include="GameMapView.cpp" />
+    <ClCompile Include="Locator.cpp" />
     <ClCompile Include="LuabindExport.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapParser.cpp" />
     <ClCompile Include="MultiAnimation.cpp" />
     <ClCompile Include="Observable.cpp" />
     <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="PhysicsEntity.cpp" />
+    <ClCompile Include="PhysicsView.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -117,7 +119,8 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BasicAnimation.h" />
     <ClInclude Include="BitmapAsset.h" />
-    <ClInclude Include="PhysicsEntity.h" />
+    <ClInclude Include="GameMapView.h" />
+    <ClInclude Include="Locator.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ContactCallback.h" />
@@ -138,6 +141,7 @@
     <ClInclude Include="Observable.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="PhysicsView.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="PlayerController.h" />
@@ -145,6 +149,7 @@
     <ClInclude Include="PlayerView.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="RenderService.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="EngineCallback.h" />

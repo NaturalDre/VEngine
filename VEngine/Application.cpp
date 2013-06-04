@@ -34,8 +34,6 @@ namespace VE
 		// because the state may own some objects who depend
 		// on pointers owned by the controller. 
 		m_engine->CloseScriptEnv();
-		//lua_close(m_L);
-		//m_L = nullptr;
 
 		delete m_gameLevel;
 		m_gameLevel = nullptr;
@@ -55,10 +53,9 @@ namespace VE
 		// crash the program. Make sure SetupDirectories() has
 		// been called.
 		m_gameLevel = new CGameLevel(m_engine);	
+
 		SetupScriptEnv();
 		m_gameLevel->SetScriptEnv(m_engine->GetScriptEnv());
-
-		m_engine->SetCallback(m_gameLevel);
 	}
 
 	void CApplication::SetupDirectories(void)
