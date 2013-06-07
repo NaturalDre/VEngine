@@ -7,32 +7,31 @@
 
 namespace VE
 {
-	class IEvent;
 	class IObserver;
-	typedef std::unordered_map<std::string,  std::unordered_set<IObserver*>> ObserverTopics;
+	typedef std::unordered_map<int,  std::unordered_set<IObserver*>> ObserverTopics;
 
-	class CObservable
+	class IObservable
 	{
 	protected:
 
 	public:
-		CObservable(void) { }
-		~CObservable(void) { }
+		IObservable(void) { }
+		virtual ~IObservable(void) = 0 { }
 
-		void NotifyAll(int eventType);
-
+		void Notify(int eventType);
+		void Notify(int eventType, int topic);
 		// Register with specific topic
-		void Register(const std::string& topic, IObserver* observer);
+		void Register(int topic, IObserver* observer);
 		// Deregister from specific topic
-		void Deregister(const std::string& topic, IObserver* observer);
+		void Deregister(int topic, IObserver* observer);
 		// Deregister from all topics.
 		void Deregister(IObserver* observer);
 
 	private:
 		ObserverTopics m_topics;
 
-		CObservable(const CObservable&);
-		void operator==(const CObservable&);
+		IObservable(const IObservable&);
+		void operator==(const IObservable&);
 	};
 }
 #endif

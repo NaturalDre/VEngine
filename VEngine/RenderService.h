@@ -7,6 +7,7 @@ namespace VE
 	class IRenderService
 	{
 	public:
+		virtual ~IRenderService(void) { }
 		/// \note Let every IView know it is time to render.
 		virtual void Render(void) = 0;
 		virtual void AddView(IView* view) = 0;

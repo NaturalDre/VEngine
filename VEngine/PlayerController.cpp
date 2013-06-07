@@ -102,13 +102,10 @@ namespace VE
 			return;
 
 		ProcessKeys();
-		m_player->Update(deltaTime);
 	}
 
 	void CPlayerController::SetPlayer(CPlayer* player)
 	{
-		//if (m_player)
-		//	m_player->SubscribeFromAll(this);
 		m_player = player;
 	}
 

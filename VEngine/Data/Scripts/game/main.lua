@@ -1,4 +1,35 @@
 class 'Main'
+class 'Red' (IComponent)
+
+class 'TestComponent' (IComponent);
+ 
+ function TestComponent:__init()
+	IComponent.__init(self);
+ end
+ 
+ function TestComponent:Update(dt)
+	print(gPlayer.position.x, gPlayer.position.y);
+ end
+
+
+function Red:__init()
+	IComponent.__init(self)
+end
+
+function Red:Update(dt)
+	print('Red:Update called.')
+end
+
+--function TestC:Update(dt)
+	--LuaEntity:DefaultUpdate(dt);
+	LogNote("TestC Update");
+--end
+
+function Test()
+	a = TestC();
+	a:Update(1);
+	--a:DefaultUpdate(1);
+end
 
 function Main:__init()
 	--dofile("Data/Maps/Adventure/Adventure.lua");
@@ -15,7 +46,7 @@ function Main:StartUp()
 	--map = run("Data/Maps/Adventure/Adventure.lua");
 	--self.LoadObjects();
 	--gGame:AddPlayer();
-
+	gPlayer = CreatePlayer(gGame, b2Vec2(1,2));
 	LogNote("Main:StartUp has finished executing.");
 end
 

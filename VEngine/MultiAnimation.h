@@ -31,7 +31,8 @@ namespace VE
 
 		bool AddFrameSequence(const FrameSequence& fs, const std::string ident);
 
-		const CBasicAnimation& GetCurrentAnim(void) const { return m_animation; }
+		/// \nreturn Pointer to a basic animation if there is a current animation set, null otherwise.
+		const CBasicAnimation* GetCurrentAnim(void) const { if (!GetCurrentAnimName().empty()) return &m_animation; else return nullptr; }
 		const std::string& GetCurrentAnimName(void) const { return m_currentAnim; }
 
 

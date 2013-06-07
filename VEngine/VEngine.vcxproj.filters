@@ -8,9 +8,6 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{5e37ad63-6cf6-4ef4-8097-c793b6fefe56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{40c5a998-7340-4ae9-bfb4-d586394821c7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\TMR">
       <UniqueIdentifier>{06dcd352-70f7-4ab6-886a-031aae3bb6ac}</UniqueIdentifier>
     </Filter>
@@ -40,6 +37,9 @@
     </Filter>
     <Filter Include="Header Files\Lua">
       <UniqueIdentifier>{80e5c0f7-279f-4e70-932b-9003d8ec61d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Box2DUtil\Resource Files">
+      <UniqueIdentifier>{40c5a998-7340-4ae9-bfb4-d586394821c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +334,15 @@
     <ClCompile Include="PhysicsView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -379,9 +388,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="View.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameLevel.h">
@@ -456,9 +462,6 @@
     <ClInclude Include="Process.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EngineCallback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -499,6 +502,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InputController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Spell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

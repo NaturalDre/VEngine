@@ -35,8 +35,8 @@ namespace VE
 		void AddPlayer(void);
 		void RemovePlayer(void);
 
-		CPlayer* GetPlayer(void) const;
-		inline CPlayerController* GetPlayerController(void) const { return m_playerController; }
+		//CPlayer* GetPlayer(void) const;
+		//inline CPlayerController* GetPlayerController(void) const { return m_playerController; }
 
 		CPhysics* GetPhysics(void) const { return m_engine->GetPhysics(); }
 
@@ -72,8 +72,8 @@ namespace VE
 
 		CEngine* m_engine;
 		CPlayer* m_player;
-		CPlayerView* m_playerView;
-		CPlayerController* m_playerController;
+		//CPlayerView* m_playerView;
+		//CPlayerController* m_playerController;
 		CErrorLogger* m_logger;
 
 

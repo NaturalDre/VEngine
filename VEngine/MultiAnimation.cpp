@@ -27,7 +27,8 @@ namespace VE
 
 	void CMultiAnimation::Logic(double dt)
 	{
-
+		//if (GetCurrentAnimName().empty())
+		//	this->set
 	}
 
 	void CMultiAnimation::SetAlpha(size_t r, size_t g, size_t b)

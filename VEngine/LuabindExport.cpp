@@ -14,6 +14,7 @@
 #include "ErrorLogger.h"
 #include "ContactCallback.h"
 #include "GameMap.h"
+#include "Component.h"
 
 using namespace luabind;
 using namespace VE;
@@ -63,8 +64,7 @@ void ExportBindings(lua_State* L)
 	CPlayerController::Export(L);
 
 	Export_b2Vec2(L);
-
-
+	IComponent::Export(L);
 	Tiled::CMapFile::Export(L);
 	CGameMap::Export(L);
 }

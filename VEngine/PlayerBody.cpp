@@ -39,7 +39,10 @@ namespace VE
 
 	CPlayerBody::~CPlayerBody(void)
 	{
-
+		m_world->DestroyBody(m_body);
+		m_body = nullptr;
+		m_player = nullptr;
+		m_world = nullptr;
 	}
 
 	b2Vec2 CPlayerBody::Position(void) const

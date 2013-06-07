@@ -13,11 +13,10 @@
 #include <luabind\luabind.hpp>
 #include <luabind\lua_include.hpp>
 #include <lauxlib.h>
-#include "EngineCallback.h"
 #include "Physics.h"
 #include "UIConsole.h"
 #include "Render.h"
-
+#include "InputManager.h"
 #include "Utility.h"
 #include "Locator.h"
 
@@ -33,6 +32,7 @@ namespace VE
 		, m_console(nullptr)
 		, m_canvas(nullptr)
 		, m_gwenRenderer(nullptr)
+		//, m_inputManager(nullptr)
 		, m_done(false)
 		, m_isInit(false)
 		, m_pausePhysics(true)
@@ -121,7 +121,7 @@ namespace VE
 			m_renderer = new CRender;
 			CLocator::Provide(m_renderer);
 			m_physics = new CPhysics;
-
+			//m_inputManager = new CInputManager;
 			m_gwenRenderer = new GwenAllegroRenderer;
 
 			m_gwenSkin.SetRender(m_gwenRenderer);
@@ -182,10 +182,11 @@ namespace VE
 		const double ct = al_current_time();
 		const double dt = ct - m_timeLastUpdated;
 		m_timeLastUpdated = ct;
-		
+		lua_gc(GetScriptEnv(), LUA_GCCOLLECT, 0);
 		if (!IsLogicPaused())
 		{
 			m_gameTime += dt;
+			CInputManager::Instance()->Update();
 			for(auto iter = m_processes.begin(); iter != m_processes.end(); ++iter)
 			{
 				if ((*iter)->ShouldDelete())
@@ -223,6 +224,7 @@ namespace VE
 			else
 					m_gwenInput.ProcessMessage(ev);
 		}
+		CInputManager::Instance()->PushEvent(ev);
 	}
 
 

@@ -1,7 +1,8 @@
 #ifndef PLAYERCONTROLLER_H
 #define PLAYERCONTROLLER_H
 
-#include "EntityController.h"
+#include "Component.h"
+#include "InputController.h"
 #include "Physics.h"
 #include <vector>
 
@@ -11,7 +12,7 @@ namespace VE
 {
 	class CPlayer;
 	class CPlayerView;
-	class CPlayerController: public IEntityController
+	class CPlayerController: public IComponent, public IInputController
 	{
 	protected:
 		void HandleKeyDown(const ALLEGRO_EVENT& ev);
@@ -29,7 +30,7 @@ namespace VE
 		~CPlayerController(void);
 
 		void HandleEvent(const ALLEGRO_EVENT& ev);
-		void Update(double deltaTime);
+		void Update(double dt);
 
 		void SetPlayer(CPlayer* player);
 		inline CPlayer* GetPlayer(void) const { return m_player; }

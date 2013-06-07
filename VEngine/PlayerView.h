@@ -19,7 +19,7 @@ namespace VE
 
 		void OnSpeedChange(void);
 	public:
-		CPlayerView(void);
+		CPlayerView(CPlayer* player);
 		~CPlayerView(void);
 
 		CPlayer* Player(void) const { return m_player; }

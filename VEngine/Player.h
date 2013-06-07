@@ -9,9 +9,8 @@
 namespace VE
 {
 	class CPlayerBody;
-	class IWeapon;
-
-	class CPlayer: public IEntity
+	class IView;
+	class CPlayer: public IEntity, public IObservable
 	{
 		friend CPlayer* CreatePlayer(CGameLevel* level, const b2Vec2& spawnpos);
 	protected:
@@ -43,27 +42,28 @@ namespace VE
 		DIRECTION GetDirection(void) const{ return m_dir; }
 		void SetDirection(DIRECTION dir);
 
-		/// Subscribe to a specific set of events that this object generates.
-		///
-		/// List of Topics: Currently there are none.
-		/// @param topic The kinds of events you want to listen for. 
-		/// @param observer The object who will be notified of these events.
-		void SubscribeTo(const std::string& topic, IObserver* observer);
-		/// Subscribe from a set of events that this object generates.
-		///
-		/// @param topic The topic you no longer to to be notified about.
-		/// @param observer The object that no longer wants these events.
-		void SubscribeFrom(const std::string& topic, IObserver* observer);
-		///
-		/// Subscribe from all events that this object generates.
-		///
-		/// @param observer The object that no longer wants to listen to events from this object.
-		void SubscribeFromAll(IObserver* observer);
+		///// Subscribe to a specific set of events that this object generates.
+		/////
+		///// List of Topics: Currently there are none.
+		///// @param topic The kinds of events you want to listen for. 
+		///// @param observer The object who will be notified of these events.
+		//void SubscribeTo(const std::string& topic, IObserver* observer);
+		///// Subscribe from a set of events that this object generates.
+		/////
+		///// @param topic The topic you no longer to to be notified about.
+		///// @param observer The object that no longer wants these events.
+		//void SubscribeFrom(const std::string& topic, IObserver* observer);
+		/////
+		///// Subscribe from all events that this object generates.
+		/////
+		///// @param observer The object that no longer wants to listen to events from this object.
+		//void SubscribeFromAll(IObserver* observer);
 
 		static void Export(lua_State* L);
 	private:
-		CObservable m_publisher;
+		//CObservable m_publisher;
 		CPlayerBody* m_body;
+		IView* m_view;
 		b2Vec2 m_speed;
 		b2Vec2 m_vel;
 		DIRECTION m_dir;

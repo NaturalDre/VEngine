@@ -1,11 +1,18 @@
 #include "Player.h"
+#include "PlayerController.h"
 #include <iostream>
 #include "PlayerBody.h"
 #include "GameLevel.h"
 #include "PlayerEvents.h"
 #include "Script.h"
 #include <luabind\luabind.hpp>
+#include "PlayerView.h"
+#include <luabind\adopt_policy.hpp>
+
 using namespace VE;
+
+#define EVENT_SPEEDCHANGE ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C')
+#define EVENT_DIRCHANGE ALLEGRO_GET_EVENT_TYPE('D', 'I', 'R', 'C')
 
 // Calculate impulse needed to simulate moving the desiredVel over one second.
 float ImpulseForDistanceX(float desiredVel, b2Body* body)
@@ -41,9 +48,10 @@ namespace VE
 		m_body = new CPlayerBody(this, spawnPos, GameLevel()->GetPhysics()->World());
 		// Set the initial direction of the player.
 		SetDirection(RIGHT);
-		// The script that will set the player's actions.
-		// TO DO: Add the ability to change what script is used.
-		//SetScript(new CScript(GetGameLevel()->GetScriptEnv(), "PlayerScript"));
+		CPlayerView* view = new CPlayerView(this);
+		m_view = view;
+		CPlayerController* c = new CPlayerController(this);
+		Add(c);
 	}
 
 	CPlayer::~CPlayer(void)
@@ -51,27 +59,13 @@ namespace VE
 		delete m_body;
 		m_body = nullptr;
 
-		//SetScript(nullptr);
+		delete m_view;
+		m_view = nullptr;
 	}
 
 	/////////////////////////////////////
 	////////// CPLAYER //////////////////
 	/////////////////////////////////////
-
-	void CPlayer::SubscribeTo(const std::string& topic, IObserver* observer)
-	{
-		m_publisher.Register(topic, observer);
-	}
-
-	void CPlayer::SubscribeFrom(const std::string& topic, IObserver* observer)
-	{
-		m_publisher.Deregister(topic, observer); 
-	}
-
-	void CPlayer::SubscribeFromAll(IObserver* observer)
-	{
-		m_publisher.Deregister(observer);
-	}
 
 	b2Vec2 CPlayer::GetPosition(void) const { return m_body->Position(); }
 
@@ -80,7 +74,7 @@ namespace VE
 		if (GetXSpeed() != x)
 		{
 			m_speed.x = x; 
-			m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C'));
+			Notify(EVENT_SPEEDCHANGE);
 		}
 	}
 
@@ -89,7 +83,7 @@ namespace VE
 		if (GetYSpeed() != y)
 		{
 			m_speed.y = y; 
-			m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C'));
+			Notify(EVENT_SPEEDCHANGE);
 		}
 	}
 
@@ -98,12 +92,13 @@ namespace VE
 		if (!(GetSpeed() == speed))
 		{
 			m_speed = speed; 
-			m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('S', 'P', 'D', 'C'));
+			Notify(EVENT_SPEEDCHANGE);
 		}
 	}
 
-	void CPlayer::Update(double deltaTime)
+	void CPlayer::Update(double dt)
 	{
+		IEntity::Update(dt);
 		b2Body* body = m_body->Raw();
 		body->ApplyLinearImpulse(b2Vec2(ImpulseForDistance(m_speed, body)), body->GetWorldCenter()); 
 	}
@@ -114,7 +109,7 @@ namespace VE
 		if (m_dir != dir)
 		{
 			m_dir = dir;
-			m_publisher.NotifyAll(ALLEGRO_GET_EVENT_TYPE('D', 'I', 'R', 'C'));
+			Notify(EVENT_DIRCHANGE);
 		}
 	}
 
@@ -123,11 +118,16 @@ namespace VE
 		using namespace luabind;
 		module(L)
 			[
-				class_<CPlayer, IEntity>("CPlayer")
+				class_<CPlayer, bases<IEntity>>("CPlayer")
 				.property("speedX", &CPlayer::GetXSpeed, &CPlayer::SetXSpeed)
 				.property("speedY", &CPlayer::GetYSpeed, &CPlayer::SetYSpeed)
 				.property("speed", &CPlayer::GetSpeed, &CPlayer::SetSpeed)
 				.property("position", &CPlayer::GetPosition)
+			];
+
+		module(L)
+			[
+				def("CreatePlayer", &VE::CreatePlayer, adopt(result))
 			];
 	}
 

@@ -19,8 +19,6 @@ namespace VE
 	CGameLevel::CGameLevel(CEngine* engine)
 		: IProcess(engine)
 		, m_player(nullptr)
-		, m_playerController(nullptr)
-		, m_playerView(nullptr)
 		, m_gameMap(nullptr)
 		, m_scriptEnv(nullptr)
 		, m_engine(engine)
@@ -37,12 +35,6 @@ namespace VE
 	CGameLevel::~CGameLevel(void)
 	{
 		RemovePlayer();
-
-		delete m_playerController;
-		m_playerController = nullptr;
-
-		delete m_playerView;
-		m_playerView = nullptr;
 
 		delete m_gameMap;
 		m_gameMap = nullptr;
@@ -61,9 +53,6 @@ namespace VE
 		{
 			if (m_mainScript.is_valid())
 				luabind::call_member<void>(m_mainScript, "Update", dt);
-
-			if (m_playerController)
-				m_playerController->Update(dt);
 
 			for (auto iter = m_animations.begin(); iter != m_animations.end(); ++iter)
 				(*iter)->Logic(dt);
@@ -92,33 +81,14 @@ namespace VE
 			m_player = nullptr;
 		}
 
-		if (m_playerController)
-		{
-			delete m_playerController;
-			m_playerController = nullptr;
-		}
-
-		if (m_playerView)
-		{
-			delete m_playerView;
-			m_playerView = nullptr;
-		}
-
 		m_player = CreatePlayer(this, m_gameMap->GetPlayerSpawn());
-		m_playerController = new CPlayerController(m_player);
-		m_playerView = new CPlayerView();
-		m_playerView->SetPlayer(m_player);
+
 		CLocator::GetRenderer()->GetCamera()->Watch(m_player);
 	}
 
 	void CGameLevel::RemovePlayer(void)
 	{
 		CLocator::GetRenderer()->GetCamera()->Watch(nullptr);
-		if (m_playerView)
-			m_playerView->SetPlayer(nullptr);
-		if (m_playerController)
-			m_playerController->SetPlayer(nullptr);
-
 		delete m_player;
 		m_player = nullptr;	
 	}
@@ -128,11 +98,6 @@ namespace VE
 		if (m_scriptEnv == m_mainScript.interpreter())
 			m_mainScript = luabind::object();
 		m_scriptEnv = L;
-	}
-
-	CPlayer* CGameLevel::GetPlayer(void) const
-	{
-		return m_playerController->GetPlayer();
 	}
 
 	void CGameLevel::LoadMap(const std::string& filename)
@@ -152,11 +117,9 @@ namespace VE
 		module(L)
 			[
 				class_<CGameLevel>("CGameLevel")
-				//.property("renderer", &CGameLevel::GetRenderer)
 				.property("physics", &CGameLevel::GetPhysics)
 				.property("map", &CGameLevel::GetMap)
 				.property("logger", &CGameLevel::GetLogger)
-				.property("player", &CGameLevel::GetPlayer)
 				.def("LoadMap", &CGameLevel::LoadMap)
 				.def("AddPlayer", &CGameLevel::AddPlayer)
 				.def("RemovePlayer", &CGameLevel::RemovePlayer)

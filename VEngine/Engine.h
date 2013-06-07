@@ -26,6 +26,7 @@ namespace VE
 	class CPhysics;
 	class CRender;
 	class CUIConsole;
+	class CInputManager;
 	class CEngine
 	{
 		typedef std::list<IProcess*> Processes;
@@ -76,6 +77,7 @@ namespace VE
 		lua_State* m_scriptEnv;
 		CPhysics* m_physics;
 		CRender* m_renderer;
+		//CInputManager* m_inputManager;
 		CUIConsole* m_console;
 		GwenCanvas* m_canvas;
 		GwenAllegroRenderer* m_gwenRenderer;
